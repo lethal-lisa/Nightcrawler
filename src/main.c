@@ -6,7 +6,7 @@
 #include <string.h>
 #include <getopt.h>
 
-inline void printHelp (void);
+void printHelp (void);
 
 int main (int argc, char *argv[]) {
 
@@ -35,7 +35,7 @@ int main (int argc, char *argv[]) {
 					}
 
 				case 'h': // Print out help.
-					printf("Usage: %s [OPTIONS] ...\n", argv[0]);
+					printf("Nightcrawler Text Adventure Engine\n(c) 2022 Lisa-Annette Murray\nUsage: %s [OPTIONS] ...\n", argv[0]);
 					printHelp();
 					return 0;
 					break;
@@ -54,7 +54,7 @@ int main (int argc, char *argv[]) {
 
 
 // Print help message.
-inline void printHelp (void) {
+void printHelp (void) {
 
 	puts("\n\
 \t-h, --help      Show this help.\n");

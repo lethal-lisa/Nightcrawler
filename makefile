@@ -38,7 +38,7 @@ else
 endif
 #OBJCOPY := objcopy
 
-CFLAGS   := -Wall -O3 -fno-printf-return-value -fshort-enums
+CFLAGS   := -Wall -Os -fno-printf-return-value -fshort-enums
 ifdef DEBUG
 	CFLAGS += -D_DEBUG -g
 endif
