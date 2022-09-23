@@ -1,0 +1,8 @@
+## Ignore binaries
+nightcrawler
+*.exe
+*.o
+*.elf
+
+## Ignore build folder
+build/
