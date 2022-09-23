@@ -3,8 +3,12 @@
 // (C) 2022 Lisa Murray
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <getopt.h>
+
+#include "useractions.h"
 
 void printHelp (void);
 
@@ -46,6 +50,16 @@ int main (int argc, char *argv[]) {
 					break;
 			}
 		}
+	}
+
+	char szWord[9]; // Length from src/useractions.c's MAX_WORD_LENGTH +1.
+	if (fgets(szWord, 9, stdin) == NULL) {
+		perror("fgets"); exit(errno);
+	}
+	if (useractions_inWordSet((const char *)szWord, strlen(szWord)) == 0) {
+		fprintf(stderr, "\"%s\" is not in the command set.\n", szWord);
+	} else {
+		printf("Selected \"%s\".\n", szWord);
 	}
 
 	return 0;
