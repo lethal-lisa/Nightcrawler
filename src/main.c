@@ -1,5 +1,5 @@
 
-// C CLI Project Template - Main Module
+// Nightcrawler Engine - Main Module
 // (C) 2022 Lisa Murray
 
 #include <stdio.h>
