@@ -1,8 +1,32 @@
-MOVE
-GO
-LOOK
-EXAMINE
-GET
-TALK
-USE
-INTERACT
+%ignore-case
+%struct-type
+%language=C
+%readonly-tables
+%enum
+%omit-struct-type
+%switch=2
+
+%define hash-function-name parserCmd_hash
+%define lookup-function-name parserCmd_inWordSet
+%{
+#include "parsercmds.h"
+%}
+struct parserCmd { const char *name; unsigned int uId; };
+%%
+HELP,     0
+MOVE,     1
+GO,       1
+LOOK,     2
+EXAMINE,  2
+GET,      3
+TALK,     4
+USE,      5
+INTERACT, 6
+NORTH,    100
+SOUTH,    101
+EAST,     102
+WEST,     103
+N,        100
+S,        101
+E,        102
+W,        103

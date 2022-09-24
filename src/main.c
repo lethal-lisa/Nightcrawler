@@ -8,7 +8,7 @@
 #include <errno.h>
 #include <getopt.h>
 
-#include "useractions.h"
+#include "parsercmds.h"
 
 void printHelp (void);
 
@@ -53,13 +53,27 @@ int main (int argc, char *argv[]) {
 	}
 
 	char szWord[9]; // Length from src/useractions.c's MAX_WORD_LENGTH +1.
+	struct parserCmd *pparserCmd;
+
+	// Prompt the user for their next move.
+	printf("Your next move? ");
 	if (fgets(szWord, 9, stdin) == NULL) {
 		perror("fgets"); exit(errno);
 	}
-	if (useractions_inWordSet((const char *)szWord, strlen(szWord)) == 0) {
-		fprintf(stderr, "\"%s\" is not in the command set.\n", szWord);
+
+	// Process input so there's no trailing newline (just replace the
+	// newline char with a NUL).
+	// NOTE: To be secure the rest of the string after and including the
+	// newline should be initialized to NUL. This is hacky and works for
+	// our purposes.
+	char *pszWordNewLine = strpbrk(szWord, "\r\n");
+	if (pszWordNewLine != NULL) *pszWordNewLine = 0;
+
+	// Process the user's command.
+	if ((pparserCmd = parserCmd_inWordSet((const char *)szWord, strlen(szWord))) == NULL) {
+		fprintf(stderr, "\"%s\" is not a valid option. Try HELP.\n", szWord);
 	} else {
-		printf("Selected \"%s\".\n", szWord);
+		printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);
 	}
 
 	return 0;
