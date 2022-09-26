@@ -9,6 +9,7 @@
 #include <getopt.h>
 
 #include "parsercmds.h"
+#include "idprocs.h"
 
 void printHelp (void);
 
@@ -75,6 +76,8 @@ int main (int argc, char *argv[]) {
 	} else {
 		printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);
 	}
+
+	procCmdId(pparserCmd->uId);
 
 	return 0;
 
