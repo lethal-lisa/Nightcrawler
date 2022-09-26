@@ -21,6 +21,10 @@ Command List (case does not matter):\n\
 \t               scene, or perform some other context-sensitive action.\n");
 			break;
 
+		case CI_QUIT:
+			return 1;
+			break;
+
 		default:
 			fprintf(stderr, "NYI: Command with ID %d not yet implemented.\n", uId);
 			break;

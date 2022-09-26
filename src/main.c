@@ -53,31 +53,40 @@ int main (int argc, char *argv[]) {
 		}
 	}
 
-	char szWord[9]; // Length from src/useractions.c's MAX_WORD_LENGTH +1.
-	struct parserCmd *pparserCmd;
+	while (1) {
+		static char szWord[9]; // Length from src/parsercmds.c's MAX_WORD_LENGTH +1.
+		static struct parserCmd *pparserCmd;
 
-	// Prompt the user for their next move.
-	printf("Your next move? ");
-	if (fgets(szWord, 9, stdin) == NULL) {
-		perror("fgets"); exit(errno);
+		// Clear old word out.
+		memset(szWord, 0, sizeof(szWord));
+
+		// Prompt the user for their next move.
+		printf("Your next move? ");
+		if (fgets(szWord, 9, stdin) == NULL) {
+			perror("fgets"); exit(errno);
+		}
+
+		// Process input so there's no trailing newline (just replace the
+		// newline char with a NUL).
+		// NOTE: To be secure the rest of the string after and including the
+		// newline should be initialized to NUL. This is hacky and works for
+		// our purposes.
+		static char *pszWordNewLine;
+		pszWordNewLine = strpbrk(szWord, "\r\n");
+		if (pszWordNewLine != NULL) *pszWordNewLine = 0;
+
+		// Process the user's command.
+		if ((pparserCmd = parserCmd_inWordSet((const char *)szWord, strlen(szWord))) == NULL) {
+			fprintf(stderr, "\"%s\" is not a valid option. Try HELP.\n", szWord);
+		#ifdef _DEBUG
+		} else {
+			printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);
+		#endif
+		}
+
+		// Process the returned ID.
+		if (procCmdId(pparserCmd->uId) != 0) break;
 	}
-
-	// Process input so there's no trailing newline (just replace the
-	// newline char with a NUL).
-	// NOTE: To be secure the rest of the string after and including the
-	// newline should be initialized to NUL. This is hacky and works for
-	// our purposes.
-	char *pszWordNewLine = strpbrk(szWord, "\r\n");
-	if (pszWordNewLine != NULL) *pszWordNewLine = 0;
-
-	// Process the user's command.
-	if ((pparserCmd = parserCmd_inWordSet((const char *)szWord, strlen(szWord))) == NULL) {
-		fprintf(stderr, "\"%s\" is not a valid option. Try HELP.\n", szWord);
-	} else {
-		printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);
-	}
-
-	procCmdId(pparserCmd->uId);
 
 	return 0;
 

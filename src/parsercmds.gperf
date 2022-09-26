@@ -22,6 +22,8 @@ GET,      3
 TALK,     4
 USE,      5
 INTERACT, 5
+QUIT,     99
+EXIT,     99
 NORTH,    100
 SOUTH,    101
 EAST,     102
