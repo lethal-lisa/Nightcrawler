@@ -18,7 +18,8 @@ Command List (case does not matter):\n\
 \tTALK         - Talk to a character in the scene.\n\
 \tUSE/INTERACT - Do something in the scene with an item. For example:\n\
 \t               Show a character an item, use an item with an object in the\n\
-\t               scene, or perform some other context-sensitive action.\n");
+\t               scene, or perform some other context-sensitive action.\n\
+\tQUIT/EXIT    - Quit the game.\n");
 			break;
 
 		case CI_QUIT:

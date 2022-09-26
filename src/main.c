@@ -77,7 +77,7 @@ int main (int argc, char *argv[]) {
 
 		// Process the user's command.
 		if ((pparserCmd = parserCmd_inWordSet((const char *)szWord, strlen(szWord))) == NULL) {
-			fprintf(stderr, "\"%s\" is not a valid option. Try HELP.\n", szWord);
+			fprintf(stderr, "\"%s\" is not a valid command. Try HELP.\n", szWord);
 		} else {
 			#ifdef _DEBUG
 			printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);
