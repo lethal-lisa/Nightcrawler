@@ -21,7 +21,7 @@ EXAMINE,  2
 GET,      3
 TALK,     4
 USE,      5
-INTERACT, 6
+INTERACT, 5
 NORTH,    100
 SOUTH,    101
 EAST,     102

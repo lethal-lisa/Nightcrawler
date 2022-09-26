@@ -13,7 +13,6 @@
 #define CI_GET 3
 #define CI_TALK 4
 #define CI_USE 5
-#define CI_INTERACT 6
 #define CI_NORTH 100
 #define CI_SOUTH 101
 #define CI_EAST 102

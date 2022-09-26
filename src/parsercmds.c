@@ -1,5 +1,5 @@
 /* C code produced by gperf version 3.1 */
-/* Command-line: gperf parsercmds.gperf  */
+/* Command-line: gperf src/parsercmds.gperf  */
 /* Computed positions: -k'1' */
 
 #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
@@ -29,7 +29,7 @@
 error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gperf@gnu.org>."
 #endif
 
-#line 11 "parsercmds.gperf"
+#line 11 "src/parsercmds.gperf"
 
 #include "parsercmds.h"
 /* maximum key range = 29, duplicates = 0 */
@@ -137,39 +137,39 @@ parserCmd_inWordSet (str, len)
 
   static const struct parserCmd wordlist[] =
     {
-#line 32 "parsercmds.gperf"
+#line 32 "src/parsercmds.gperf"
       {"W",        103},
-#line 18 "parsercmds.gperf"
+#line 18 "src/parsercmds.gperf"
       {"GO",       1},
-#line 21 "parsercmds.gperf"
+#line 21 "src/parsercmds.gperf"
       {"GET",      3},
-#line 28 "parsercmds.gperf"
+#line 28 "src/parsercmds.gperf"
       {"WEST",     103},
-#line 31 "parsercmds.gperf"
+#line 31 "src/parsercmds.gperf"
       {"E",        102},
-#line 23 "parsercmds.gperf"
+#line 23 "src/parsercmds.gperf"
       {"USE",      5},
-#line 27 "parsercmds.gperf"
+#line 27 "src/parsercmds.gperf"
       {"EAST",     102},
-#line 30 "parsercmds.gperf"
+#line 30 "src/parsercmds.gperf"
       {"S",        101},
-#line 20 "parsercmds.gperf"
+#line 20 "src/parsercmds.gperf"
       {"EXAMINE",  2},
-#line 24 "parsercmds.gperf"
-      {"INTERACT", 6},
-#line 22 "parsercmds.gperf"
+#line 24 "src/parsercmds.gperf"
+      {"INTERACT", 5},
+#line 22 "src/parsercmds.gperf"
       {"TALK",     4},
-#line 26 "parsercmds.gperf"
+#line 26 "src/parsercmds.gperf"
       {"SOUTH",    101},
-#line 29 "parsercmds.gperf"
+#line 29 "src/parsercmds.gperf"
       {"N",        100},
-#line 17 "parsercmds.gperf"
+#line 17 "src/parsercmds.gperf"
       {"MOVE",     1},
-#line 25 "parsercmds.gperf"
+#line 25 "src/parsercmds.gperf"
       {"NORTH",    100},
-#line 19 "parsercmds.gperf"
+#line 19 "src/parsercmds.gperf"
       {"LOOK",     2},
-#line 16 "parsercmds.gperf"
+#line 16 "src/parsercmds.gperf"
       {"HELP",     0}
     };
 
