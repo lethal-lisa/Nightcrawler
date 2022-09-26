@@ -28,16 +28,21 @@ capable of compiling on any decently modern 64 or 32-bit OS.
 Initially DOS compatibility was discussed but Lisa rejected this in favor of
 actually getting the project to release.
 
-
 ### Engine File Layout
 Binary layout of data files to come...
 
-## Proposed Keywords to be Recognized by the Engine
-`MOVE|GO [NORTH|SOUTH|EAST|WEST|N|S|E|W]` (interactive "Where?" prompt if nothing provided).
-`LOOK|EXAMINE [NORTH|SOUTH|EAST|WEST|N|S|E|W]` (special "around" field if nothing provided).
-`GET` (adds the item in the scene to the player's inventory).
-`TALK` (triggers the dialogue tree for the scene).
-`USE` (interact with the scene, optionally using an item in the inventory, selected automatically).
+## List of Keywords Recognized by the Engine
+`HELP` Shows engine help & then help included in a story file.
+`MOVE|GO [NORTH|SOUTH|EAST|WEST|N|S|E|W]` Moves to a different scene.
+`LOOK|EXAMINE` Triggers look node for the scene.
+`GET` Adds the item in the scene to the player's inventory.
+`TALK` Triggers the dialogue tree for the scene.
+`USE` Interact with the scene, optionally using an item in the inventory, selected automatically.
+`QUIT` Quits the game.
+
+### Proposed Keywords
+`SAVE` Saves to a fixed save slot.
+`LOAD` Loads from a fixed save slot.
 
 ## Internal Specifics
 Sometimes multiple items may be needed to proceed. This is handled internally
