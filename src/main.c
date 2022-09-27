@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <getopt.h>
 
+#include "wingetline.h"
 #include "parsercmds.h"
 #include "idprocs.h"
 
@@ -138,7 +139,7 @@ int main (int argc, char *argv[]) {
 
 		// Grab input from user.
 		printf("Your next move? ");
-		cbReadUserInput = getline(&pszUserInput, &cchUserInput, stdin);
+		cbReadUserInput = wingetline(&pszUserInput, &cchUserInput, stdin);
 		if (ferror(stdin)) {
 			fprintf(stderr, "ERROR: Standard input error. Try again.\n");
 			clearerr(stdin);
