@@ -85,49 +85,6 @@ int main (int argc, char *argv[]) {
 		}
 	}
 
-	// OLD-STYLE MAIN GAME LOOP
-	/*
-	while (1) {
-		//static char szWord[9]; // Length from src/parsercmds.c's MAX_WORD_LENGTH +1.
-		//static struct parserCmd *pparserCmd;
-		static char *pszUserInput;
-		static struct parserCmd *pparserCmd;
-
-		// Clear old word out.
-		//memset(szWord, 0, sizeof(szWord));
-
-		// Prompt the user for their next move.
-		printf("Your next move? ");
-		if (fgets(pszUserInput, 32, stdin) == NULL) {
-			perror("fgets"); exit(errno);
-		}
-
-		// Process input so there's no trailing newline (just replace the
-		// newline char with a NUL).
-		// NOTE: To be secure the rest of the string after and including the
-		// newline should be initialized to NUL. This is hacky and works for
-		// our purposes.
-		static char *pszWordNewLine;
-		pszWordNewLine = strpbrk(szWord, "\r\n");
-		if (pszWordNewLine == NULL) {
-			#ifdef _DEBUG
-			printf("DEBUG: Skipping excessive input.\n");
-			#endif
-			continue;
-		}
-		*pszWordNewLine = 0;
-
-		// Process the user's command.
-		if ((pparserCmd = parserCmd_inWordSet((const char *)szWord, strlen(szWord))) == NULL) {
-			fprintf(stderr, "\"%s\" is not a valid command. Try HELP.\n", szWord);
-		} else {
-			#ifdef _DEBUG
-			printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);
-			#endif
-			if (procCmdId(pparserCmd->uId) != 0) break;
-		}
-	}*/
-
 	// Main game loop
 	while (1) {
 		static char *pszUserInput; // Buffer for user input.
