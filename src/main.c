@@ -134,7 +134,7 @@ int main (int argc, char *argv[]) {
 		static size_t cchUserInput; // Bytes allocated by getline.
 		static ssize_t cbReadUserInput; // Bytes read from user.
 
-		// (re)initialize the user input buffer to NULL (free()'d at end-of-loop.
+		// (re)initialize the user input buffer to NULL (free()'d at end-of-loop).
 		pszUserInput = NULL; cchUserInput = 0;
 
 		// Grab input from user.
@@ -157,6 +157,12 @@ int main (int argc, char *argv[]) {
 		#ifdef _DEBUG
 		printf("DEBUG: CmdSubstr: \"%s\", ParamSubstr: \"%s\".\n", pszCmdSubstr, pszParamSubstr);
 		#endif
+
+		// Skip processing if nothing was passed.
+		if (pszCmdSubstr == NULL) {
+			free(pszUserInput);
+			continue;
+		}
 
 		// Process command.
 		static struct parserCmd *pparserCmd;
