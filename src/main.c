@@ -110,7 +110,7 @@ int main (int argc, char *argv[]) {
 		static char *pszCmdSubstr; // Buffer for the command.
 		static char *pszParamSubstr; // Buffer for an optional parameter.
 		pszCmdSubstr = strtok(pszUserInput, " \t\n");
-		pszParamSubstr = strtok(NULL, " \t\n");
+		pszParamSubstr = strtok(NULL, "\t\n");
 		#ifdef _DEBUG
 		printf("DEBUG: CmdSubstr: \"%s\", ParamSubstr: \"%s\".\n", pszCmdSubstr, pszParamSubstr);
 		#endif
