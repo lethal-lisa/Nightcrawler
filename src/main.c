@@ -25,6 +25,7 @@ int main (int argc, char *argv[]) {
 			// List of available options.
 			static struct option optLongOpts[] = {
 				{ "help", no_argument, 0, 'h' },
+				{ "info", no_argument, 0, 0 },
 				{ 0, 0, 0, 0 }
 			};
 
@@ -34,6 +35,34 @@ int main (int argc, char *argv[]) {
 			switch (nOpt) {
 				case 0: // Handle long options.
 					switch (iLongOpt) {
+						case 1: // Print out build information.
+							puts("Nightcrawler Build Info:");
+							printf("\tBuild Type: ");
+							#ifdef _DEBUG
+							puts("Debug");
+							#else
+							puts("Release");
+							#endif
+
+							printf("\tRelease Platform: ");
+							#ifndef _WINDOWS
+							#ifdef __amd64__
+							puts("Linux 64-bit");
+							#else
+							puts("Linux 32-bit");
+							#endif
+							#endif
+							#ifdef _WIN32
+							puts("Win32");
+							#endif
+							#ifdef _WIN64
+							puts("Win64");
+							#endif
+
+							printf("\tBuilt with GCC %s\n", __VERSION__);
+							return 0;
+							break;
+
 						default:
 							fprintf(stderr, "Warning: Unknown/unsupported long option index (%d). Attempting to proceed.\n", iLongOpt);
 							break;
@@ -45,6 +74,8 @@ int main (int argc, char *argv[]) {
 					return 0;
 					break;
 
+				case 'i':
+
 				default:
 					fprintf(stderr, "Error: Unhandled getopt result (%d).\n", nOpt);
 					return 1;
@@ -53,16 +84,20 @@ int main (int argc, char *argv[]) {
 		}
 	}
 
+	// OLD-STYLE MAIN GAME LOOP
+	/*
 	while (1) {
-		static char szWord[9]; // Length from src/parsercmds.c's MAX_WORD_LENGTH +1.
+		//static char szWord[9]; // Length from src/parsercmds.c's MAX_WORD_LENGTH +1.
+		//static struct parserCmd *pparserCmd;
+		static char *pszUserInput;
 		static struct parserCmd *pparserCmd;
 
 		// Clear old word out.
-		memset(szWord, 0, sizeof(szWord));
+		//memset(szWord, 0, sizeof(szWord));
 
 		// Prompt the user for their next move.
 		printf("Your next move? ");
-		if (fgets(szWord, 9, stdin) == NULL) {
+		if (fgets(pszUserInput, 32, stdin) == NULL) {
 			perror("fgets"); exit(errno);
 		}
 
@@ -73,7 +108,13 @@ int main (int argc, char *argv[]) {
 		// our purposes.
 		static char *pszWordNewLine;
 		pszWordNewLine = strpbrk(szWord, "\r\n");
-		if (pszWordNewLine != NULL) *pszWordNewLine = 0;
+		if (pszWordNewLine == NULL) {
+			#ifdef _DEBUG
+			printf("DEBUG: Skipping excessive input.\n");
+			#endif
+			continue;
+		}
+		*pszWordNewLine = 0;
 
 		// Process the user's command.
 		if ((pparserCmd = parserCmd_inWordSet((const char *)szWord, strlen(szWord))) == NULL) {
@@ -84,6 +125,52 @@ int main (int argc, char *argv[]) {
 			#endif
 			if (procCmdId(pparserCmd->uId) != 0) break;
 		}
+	}*/
+
+	// Main game loop
+	while (1) {
+		static char *pszUserInput; // Buffer for user input.
+		static size_t cchUserInput; // Bytes allocated by getline.
+		static ssize_t cbReadUserInput; // Bytes read from user.
+
+		// (re)initialize the user input buffer to NULL (free()'d at end-of-loop.
+		pszUserInput = NULL; cchUserInput = 0;
+
+		// Grab input from user.
+		printf("Your next move? ");
+		cbReadUserInput = getline(&pszUserInput, &cchUserInput, stdin);
+		if (ferror(stdin)) {
+			fprintf(stderr, "ERROR: Standard input error. Try again.\n");
+			clearerr(stdin);
+			continue;
+		}
+		#ifdef _DEBUG
+		printf("DEBUG: Allocated %zu chars & read %zu bytes from user: \"%s\".\n", cchUserInput, cbReadUserInput, pszUserInput);
+		#endif
+
+		// Tokenize input strings.
+		static char *pszCmdSubstr; // Buffer for the command.
+		static char *pszParamSubstr; // Buffer for an optional parameter.
+		pszCmdSubstr = strtok(pszUserInput, " \t\n");
+		pszParamSubstr = strtok(NULL, " \t\n");
+		#ifdef _DEBUG
+		printf("DEBUG: CmdSubstr: \"%s\", ParamSubstr: \"%s\".\n", pszCmdSubstr, pszParamSubstr);
+		#endif
+
+		// Process command.
+		static struct parserCmd *pparserCmd;
+		if ((pparserCmd = parserCmd_inWordSet(pszUserInput, strlen(pszCmdSubstr)))  == NULL) {
+			fprintf(stderr, "\"%s\" is not a valid command. Try HELP.\n", pszCmdSubstr);
+		} else {
+			#ifdef _DEBUG
+			printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);
+			#endif
+			if (procCmdId(pparserCmd->uId) != 0) {
+				free(pszUserInput); break;
+			}
+		}
+
+		free(pszUserInput);
 	}
 
 	return 0;
@@ -95,7 +182,8 @@ int main (int argc, char *argv[]) {
 void printHelp (void) {
 
 	puts("\n\
-\t-h, --help      Show this help.\n");
+\t-h, --help      Show this help.\n\
+\t    --info      Display build info.");
 
 }
 
