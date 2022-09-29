@@ -1,5 +1,5 @@
 
-// Nightcrawler Engine - Scene File Header
+// Nightcrawler Engine - Scene Node Header
 
 #ifndef __SCENE_H__
 #define __SCENE_H__ 1

@@ -11,7 +11,7 @@
 
 #include <stdint.h>
 
-extern const g_szStoryMagicId;
+// extern const char *g_pszStoryMagicId;
 
 struct storyFileHdr
 {
@@ -20,7 +20,9 @@ struct storyFileHdr
 	uint32_t uGameTitleOffset; // Offset into the file where game title string begins.
 	uint16_t uMaskUsedItems; // Mask of used items (also used as a count of the items).
 	uint32_t uItemNameOffset; // Offset into the file where item name cluster begins.
-	uint32_t uInitialSceneOffset; // Offset into the file where the file name for the initial scene can be found.
+	uint32_t uInitialSceneOffset; // Offset into the file where the file name for the initial scene node is found.
 };
+
+struct storyFileHdr *loadStoryFile(const char *pszFileName);
 
 #endif /* __STORY_H__ */
