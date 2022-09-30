@@ -3,6 +3,10 @@ nightcrawler
 *.exe
 *.o
 *.elf
+*.bin
+
+## Ignore story files
+*.nst
 
 ## Ignore build folder
 build/

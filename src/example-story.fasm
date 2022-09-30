@@ -1,0 +1,17 @@
+; Header:
+db 'NST', 00h ; magic.
+dd 00000000h  ; version.
+dd gameTitle  ; title addr.
+dw 0000h      ; used item mask.
+dd itemNames  ; item name addr.
+dd initScene  ; initial scene addr.
+
+
+gameTitle:
+db 'Example Nightcrawler Story File', 10
+db 'Title String', 00h
+
+itemNames:
+db 00h
+initScene:
+db 'NSC', 00h ; Scene node header.
