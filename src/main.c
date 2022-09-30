@@ -31,7 +31,7 @@ int main (int argc, char *argv[]) {
 			};
 
 			iLongOpt = 0;
-			if ((nOpt = getopt_long(argc, argv, "hf:m:", optLongOpts, &iLongOpt)) == -1) break;
+			if ((nOpt = getopt_long(argc, argv, "h", optLongOpts, &iLongOpt)) == -1) break;
 
 			switch (nOpt) {
 				case 0: // Handle long options.
@@ -74,8 +74,6 @@ int main (int argc, char *argv[]) {
 					printHelp();
 					return 0;
 					break;
-
-				case 'i':
 
 				default:
 					fprintf(stderr, "Error: Unhandled getopt result (%d).\n", nOpt);
