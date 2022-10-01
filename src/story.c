@@ -15,7 +15,7 @@ const char s_pszStoryMagicId[4] = "NST";
 // the user to open their own file and pass a FILE * to loadStoryHeader, but
 // it's defined here as its own function in case special handling is required
 // later, and to keep things consistent.
-inline FILE *openStoryFile (const char *pszFileName) {
+FILE *openStoryFile (const char *pszFileName) {
 
 	// Open the file spec'd by pszFileName.
 	FILE *fp;
@@ -28,7 +28,7 @@ inline FILE *openStoryFile (const char *pszFileName) {
 
 }
 
-inline int closeStoryFile (FILE *fp) {
+int closeStoryFile (FILE *fp) {
 
 	if (fclose(fp) != 0) {
 		perror("Failed to close the story file");
@@ -48,14 +48,14 @@ struct storyFileHdr *loadStoryHdr (FILE *fp) {
 
 	// Allocate memory space for the story file header object.
 	struct storyFileHdr *pStory;
-	pStory = malloc(sizeof(pStory));
+	pStory = malloc(sizeof(struct storyFileHdr));
 	if (pStory == NULL) {
 		perror("malloc");
 		return NULL;
 	}
 
 	// Read file header into the structure.
-	if (fread(pStory, sizeof(pStory), 1, fp) != 1) {
+	if (fread(pStory, sizeof(struct storyFileHdr), 1, fp) != 1) {
 		if (ferror(fp)) perror("Read error");
 		if (feof(fp)) fprintf(stderr, "Invalid story file.\n");
 		free(pStory);

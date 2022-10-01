@@ -11,6 +11,7 @@
 #include "wingetline.h"
 #include "parsercmds.h"
 #include "idprocs.h"
+#include "story.h"
 
 void printHelp (void);
 
@@ -82,6 +83,31 @@ int main (int argc, char *argv[]) {
 			}
 		}
 	}
+
+	// Load game file.
+	FILE *fpStory;
+	struct storyFileHdr *pStory;
+	if ((fpStory = openStoryFile("example-story.nst")) == NULL) return 1;
+	if ((pStory = loadStoryHdr(fpStory)) == NULL) {
+		if (closeStoryFile(fpStory)) exit(EXIT_FAILURE); // On total failure.
+		return 1;
+	}
+	#ifdef _DEBUG
+	printf("DEBUG: Story File Header Info:\nMagic: %s\tVersion: 0x%X\tTitle: 0x%X\n", pStory->szMagic, pStory->uVersion, pStory->uGameTitleAddr);
+	printf("I.Mask: 0x%X\tI.Addr: 0x%X\tInitScene: 0x%X\n", pStory->uMaskUsedItems, pStory->uItemNameAddr, pStory->uInitSceneAddr);
+	#endif
+
+	// Display game title.
+	if (fseek(fpStory, pStory->uGameTitleAddr, SEEK_SET)) {
+		perror("fseek failed");
+		exit(EXIT_FAILURE);
+	}
+	printf("%c\n", fgetc(fpStory));
+
+	// Close story file for debugging purposes
+	// later on this will be handled after a QUIT event.
+	free(pStory);
+	closeStoryFile(fpStory);
 
 	// Main game loop
 	while (1) {

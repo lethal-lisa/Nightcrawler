@@ -21,8 +21,8 @@ struct storyFileHdr
 	uint32_t uInitSceneAddr; // Address in the file where the file name for the initial scene node is found.
 };
 
-inline FILE *openStoryFile (const char *pszFileName);
-inline int closeStoryFile (FILE *fp);
+FILE *openStoryFile (const char *pszFileName);
+int closeStoryFile (FILE *fp);
 struct storyFileHdr *loadStoryHdr (FILE *fp);
 
 #endif /* __STORY_H__ */
