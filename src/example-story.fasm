@@ -1,3 +1,6 @@
+; Nightcrawler Example Story File
+; Assemble with fasm
+
 ; Header:
 db 'NST', 00h ; magic.
 dd 00000000h  ; version.
@@ -6,12 +9,33 @@ dw 0000h      ; used item mask.
 dd itemNames  ; item name addr.
 dd initScene  ; initial scene addr.
 
-
-gameTitle:
+gameTitle:    ; Game title string.
 db 'Example Nightcrawler Story File', 10
 db 'Title String', 00h
 
-itemNames:
-db 00h
-initScene:
-db 'NSC', 00h ; Scene node header.
+itemNames:    ; Item name node.
+db 'ITM', 00h ; Magic.
+dw 0001h      ; Item count.
+db "Hi I'm an item! :D", 00h
+
+initScene:         ; Initial scene node.
+db 'NSC', 00h      ; Scene node header.
+dd .initScene_Move ; Move cluster address.
+dd .initScene_Look ; Look cluster address.
+dw 0000h           ; GET item mask.
+dd .initScene_Talk ; TALK cluster address.
+dd .initScene_Use  ; Use cluster offset.
+
+.initScene_Move:
+db 'MOV', 00h ; Magic.
+
+.initScene_Look:
+db 'LOK', 00h ; Magic.
+
+.initScene_Talk:
+db 'TLK', 00h ; Magic.
+
+.initScene_Use:
+db 'USE', 00h ; Magic.
+
+; End-of-File
