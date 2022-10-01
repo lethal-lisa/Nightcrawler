@@ -12,6 +12,7 @@
 #include "parsercmds.h"
 #include "idprocs.h"
 #include "story.h"
+#include "gamestate.h"
 
 void printHelp (void);
 
@@ -131,33 +132,51 @@ int main (int argc, char *argv[]) {
 	printf("DEBUG: Selected \"%s\".\n", pszStoryFileName);
 	#endif
 
+	// Initialize game state struct.
+	if (initGameState()) exit(EXIT_FAILURE);
+
+	#ifdef _DEBUG
+	printf("DEBUG: Initialized game state struct.\n");
+	#endif
+
 	// Load game file.
-	FILE *fpStory; // Story file pointer.
-	storyFileHdr *pStory; // Story file header struct.
-	if ((fpStory = openStoryFile(pszStoryFileName)) == NULL) return 1;
+	if ((g_pGameState->fpStory = openStoryFile(pszStoryFileName)) == NULL) return 1;
 	if (cchStoryFileName != 0) free(pszStoryFileName); // Free if user defined.
-	if ((pStory = loadStoryHdr(fpStory)) == NULL) {
-		closeStoryFile(fpStory); // Don't check for error code since we're exiting anyways.
+	if ((g_pGameState->pStory = loadStoryHdr(g_pGameState->fpStory)) == NULL) {
+		//closeStoryFile(g_pGameState->fpStory); // Don't check for error code since we're exiting anyways.
+		killGameState();
 		return 1;
 	}
 
 	// Print debug info about the header.
 	#ifdef _DEBUG
-	printf("DEBUG: Story File Header Info:\nMagic: %s\tVersion: 0x%X\tTitle: 0x%X\n", pStory->szMagic, pStory->uVersion, pStory->uGameTitleAddr);
-	printf("I.Mask: 0x%X\tI.Addr: 0x%X\tInitScene: 0x%X\n", pStory->uMaskUsedItems, pStory->uItemNameAddr, pStory->uInitSceneAddr);
+	printf("DEBUG: Story File Header Info:\nMagic: %s\tVersion: 0x%X\tTitle: 0x%X\n", g_pGameState->pStory->szMagic, g_pGameState->pStory->uVersion, g_pGameState->pStory->uGameTitleAddr);
+	printf("I.Mask: 0x%X\tI.Addr: 0x%X\tInitScene: 0x%X\n", g_pGameState->pStory->uMaskUsedItems, g_pGameState->pStory->uItemNameAddr,  g_pGameState->pStory->uInitSceneAddr);
 	#endif
 
 	// Display game title.
-	if (fseek(fpStory, pStory->uGameTitleAddr, SEEK_SET)) {
+	if (fseek(g_pGameState->fpStory, g_pGameState->pStory->uGameTitleAddr, SEEK_SET)) {
 		perror("fseek failed");
+		killGameState();
 		exit(EXIT_FAILURE);
 	}
-	printf("%c\n", fgetc(fpStory));
+	char *pszTitleScreen = NULL;
+	size_t cchTitleScreen;
+	ssize_t cbReadTitleScreen;
+	cbReadTitleScreen = wingetdelim(&pszTitleScreen, &cchTitleScreen, '\0', g_pGameState->fpStory);
+	if (ferror(g_pGameState->fpStory)) {
+		fprintf(stderr, "ERROR: Failed to display title screen.\n");
+		killGameState();
+		exit(EXIT_FAILURE);
+	}
+	puts(pszTitleScreen);
+	free(pszTitleScreen);
 
-	// Close story file for debugging purposes.
-	// later on this will be handled after a QUIT event.
-	free(pStory);
-	closeStoryFile(fpStory);
+	// Load necessary strings from the file.
+	if (getStrsFromStoryFile()) {
+		killGameState();
+		exit(EXIT_FAILURE);
+	}
 
 	// Main game loop
 	while (1) {
@@ -169,7 +188,8 @@ int main (int argc, char *argv[]) {
 		pszUserInput = NULL; cchUserInput = 0;
 
 		// Grab input from user.
-		printf("Your next move? "); // TODO: This string may be obtained from the NST file later.
+		//printf("Your next move? "); // TODO: This string may be obtained from the NST file later.
+		printf("%s", g_pGameState->pszPromptString);
 		cbReadUserInput = wingetline(&pszUserInput, &cchUserInput, stdin);
 		if (ferror(stdin)) {
 			fprintf(stderr, "ERROR: Standard input error. Try again.\n");
@@ -211,6 +231,9 @@ int main (int argc, char *argv[]) {
 
 		free(pszUserInput);
 	}
+
+	// Destroy game state object.
+	killGameState();
 
 	return 0;
 

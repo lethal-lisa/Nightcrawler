@@ -9,7 +9,7 @@
 #include <errno.h>
 #include <stdint.h>
 
-ssize_t wingetline(char **lineptr, size_t *n, FILE *stream) {
+ssize_t wingetdelim (char **lineptr, size_t *n, int delim, FILE *stream)  {
 	size_t pos;
 	int c;
 
@@ -39,10 +39,14 @@ ssize_t wingetline(char **lineptr, size_t *n, FILE *stream) {
 		}
 
 		((unsigned char *)(*lineptr))[pos ++] = c;
-		if (c == '\n') break;
+		if (c == delim) break;
 		c = getc(stream);
 	}
 
 	(*lineptr)[pos] = '\0';
 	return pos;
+}
+
+ssize_t wingetline (char **lineptr, size_t *n, FILE *stream) {
+	return wingetdelim(lineptr, n, '\n', stream);
 }

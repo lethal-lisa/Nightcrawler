@@ -21,6 +21,7 @@ Command List (case does not matter):\n\
 \t               Show a character an item, use an item with an object in the\n\
 \t               scene, or perform some other context-sensitive action.\n\
 \tQUIT/EXIT    - Quit the game.\n");
+			if (g_pGameState->pszHelpString) puts(g_pGameState->pszHelpString);
 			break;
 
 		case CI_QUIT: // Quit the game.

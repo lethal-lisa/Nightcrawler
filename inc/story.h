@@ -16,6 +16,8 @@ typedef struct tagStoryFileHdr
 	char szMagic[4]; // Magic number identifer "NST".
 	uint32_t uVersion; // Must be set to 0 for now.
 	uint32_t uGameTitleAddr; // Address in the file where game title string begins.
+	uint32_t uPromptStrAddr; // Address in the file where the prompt string begins (0 for none).
+	uint32_t uHelpStrAddr; // Address in the file where the help string begins (0 for none).
 	uint16_t uMaskUsedItems; // Mask of used items (also used as a count of the items).
 	uint32_t uItemNameAddr; // Address in the file where item name cluster begins.
 	uint32_t uInitSceneAddr; // Address in the file where the file name for the initial scene node is found.

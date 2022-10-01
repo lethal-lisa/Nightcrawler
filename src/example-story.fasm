@@ -5,13 +5,24 @@
 db 'NST', 00h ; magic.
 dd 00000000h  ; version.
 dd gameTitle  ; title addr.
+dd promptStr  ; prompt string addr.
+dd helpStr    ; help string addr.
 dw 0000h      ; used item mask.
 dd itemNames  ; item name addr.
 dd initScene  ; initial scene addr.
 
 gameTitle:    ; Game title string.
 db 'Example Nightcrawler Story File', 10
-db 'Title String', 00h
+db 'Title String', 10
+db '(c)2022 Lisa-Annette Murray, part of the Nightcrawler codebase.', 10, 00h
+
+promptStr:    ; Prompt string.
+db 'N> ', 0
+
+helpStr:      ; Help string.
+db 'Nightcrawler Example Story File', 10
+db '(c)2022 Lisa-Annette Murray', 10
+db 'This story file contains two scenes used to debug the Nightcrawler engine.', 10, 00h
 
 itemNames:    ; Item name node.
 db 'ITM', 00h ; Magic.
