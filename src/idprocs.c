@@ -2,13 +2,14 @@
 // Nightcrawler Engine - Parser Command ID Processer
 
 #include <stdio.h>
-// #include "gamestate.h"
+
+#include "gamestate.h"
 #include "parsercmds.h"
 
 int procCmdId (const unsigned int uId) {
 
 	switch (uId) {
-		case CI_HELP:
+		case CI_HELP: // Show help.
 			puts("-- Nightcrawler Engine Help --\n\
 Command List (case does not matter):\n\
 \tHELP         - You're looking at it.\n\
@@ -22,7 +23,7 @@ Command List (case does not matter):\n\
 \tQUIT/EXIT    - Quit the game.\n");
 			break;
 
-		case CI_QUIT:
+		case CI_QUIT: // Quit the game.
 			return 1;
 			break;
 

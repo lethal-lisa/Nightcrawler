@@ -17,6 +17,11 @@ void printHelp (void);
 
 int main (int argc, char *argv[]) {
 
+	// Vars used for story file name.
+	// A file given by the user can be detected by the values of the vars. If
+	// pszStoryFileName is NULL then no user file is used. Later on if no file
+	// is supplied pszStoryFileName is set to point to pszDefStoryFileName and
+	// cchStoryFileName is set to 0.
 	size_t cchStoryFileName;
 	char *pszStoryFileName = NULL;
 	const char pszDefStoryFileName[] = "default.nst";
@@ -84,15 +89,21 @@ int main (int argc, char *argv[]) {
 				case 'f': // Select another file.
 					if (pszStoryFileName) break; // Skip if already selected.
 
-					// Allocate space for & copy file name from optarg.
+					// Check to make sure the file name is of a valid length.
+					// This is determined by "X.nst", or any character as well
+					// as the file extension.
 					if ((cchStoryFileName = strlen(optarg)) < 5) {
 						fprintf(stderr, "Invalid file: File name too short.\n");
 						exit(EXIT_FAILURE);
 					}
+
+					// Allocate space for the name.
 					if ((pszStoryFileName = malloc(cchStoryFileName * sizeof(char))) == NULL) {
 						perror("Failed to obtain file name: malloc");
 						exit(EXIT_FAILURE);
 					}
+
+					// Copy the name into the allocated buffer.
 					if (!strncpy(pszStoryFileName, optarg, cchStoryFileName)) {
 						perror("Failed to obtain file name: strncpy");
 						free(pszStoryFileName);
@@ -109,6 +120,8 @@ int main (int argc, char *argv[]) {
 	}
 
 	// If a file is specified use that, otherwise use default.
+	// If no user file is specified set the story file name's buffer's pointer
+	// to the (constant) default string.
 	if (pszStoryFileName == NULL) {
 		pszStoryFileName = pszDefStoryFileName;
 		cchStoryFileName = 0; // Set to zero to indicate the fallback to default.
@@ -127,6 +140,8 @@ int main (int argc, char *argv[]) {
 		closeStoryFile(fpStory); // Don't check for error code since we're exiting anyways.
 		return 1;
 	}
+
+	// Print debug info about the header.
 	#ifdef _DEBUG
 	printf("DEBUG: Story File Header Info:\nMagic: %s\tVersion: 0x%X\tTitle: 0x%X\n", pStory->szMagic, pStory->uVersion, pStory->uGameTitleAddr);
 	printf("I.Mask: 0x%X\tI.Addr: 0x%X\tInitScene: 0x%X\n", pStory->uMaskUsedItems, pStory->uItemNameAddr, pStory->uInitSceneAddr);
@@ -139,7 +154,7 @@ int main (int argc, char *argv[]) {
 	}
 	printf("%c\n", fgetc(fpStory));
 
-	// Close story file for debugging purposes
+	// Close story file for debugging purposes.
 	// later on this will be handled after a QUIT event.
 	free(pStory);
 	closeStoryFile(fpStory);
@@ -154,7 +169,7 @@ int main (int argc, char *argv[]) {
 		pszUserInput = NULL; cchUserInput = 0;
 
 		// Grab input from user.
-		printf("Your next move? ");
+		printf("Your next move? "); // TODO: This string may be obtained from the NST file later.
 		cbReadUserInput = wingetline(&pszUserInput, &cchUserInput, stdin);
 		if (ferror(stdin)) {
 			fprintf(stderr, "ERROR: Standard input error. Try again.\n");
@@ -180,6 +195,7 @@ int main (int argc, char *argv[]) {
 			continue;
 		}
 
+		// TODO: Pass pszParamSubstr to procCmdId.
 		// Process command.
 		static struct parserCmd *pparserCmd;
 		if ((pparserCmd = parserCmd_inWordSet(pszUserInput, strlen(pszCmdSubstr)))  == NULL) {

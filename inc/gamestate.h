@@ -13,4 +13,6 @@ struct gameState
 	uint32_t uCurScene;
 };
 
+extern struct gameState *g_pGameState;
+
 #endif /* __GAMESTATE_H__ */
