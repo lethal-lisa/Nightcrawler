@@ -11,7 +11,7 @@
 
 #include <stdint.h>
 
-struct storyFileHdr
+typedef struct tagStoryFileHdr
 {
 	char szMagic[4]; // Magic number identifer "NST".
 	uint32_t uVersion; // Must be set to 0 for now.
@@ -19,10 +19,10 @@ struct storyFileHdr
 	uint16_t uMaskUsedItems; // Mask of used items (also used as a count of the items).
 	uint32_t uItemNameAddr; // Address in the file where item name cluster begins.
 	uint32_t uInitSceneAddr; // Address in the file where the file name for the initial scene node is found.
-};
+} __attribute__((packed, aligned(4))) storyFileHdr;
 
 FILE *openStoryFile (const char *pszFileName);
 int closeStoryFile (FILE *fp);
-struct storyFileHdr *loadStoryHdr (FILE *fp);
+storyFileHdr *loadStoryHdr (FILE *fp);
 
 #endif /* __STORY_H__ */

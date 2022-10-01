@@ -57,6 +57,11 @@ CFLAGS   += -I$(INCLUDE)
 ## Compilation rules.
 ## ---------------------------------------------------------------------
 
+## Generate a release archive.
+release: all
+	md5sum -b default.nst $(TARGET) | tee nightcrawler.md5
+	7z a nightcrawler.7z nightcrawler.md5 default.nst $(TARGET)
+
 ## Compile all targets.
 all: $(TARGET)
 	-@chmod +x $<

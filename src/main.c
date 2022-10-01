@@ -17,6 +17,10 @@ void printHelp (void);
 
 int main (int argc, char *argv[]) {
 
+	size_t cchStoryFileName;
+	char *pszStoryFileName = NULL;
+	const char pszDefStoryFileName[] = "default.nst";
+
 	// Process args.
 	if (argc > 1) {
 		while (1) {
@@ -28,11 +32,12 @@ int main (int argc, char *argv[]) {
 			static struct option optLongOpts[] = {
 				{ "help", no_argument, 0, 'h' },
 				{ "info", no_argument, 0, 0 },
+				{ "file", required_argument, 0, 'f' },
 				{ 0, 0, 0, 0 }
 			};
 
 			iLongOpt = 0;
-			if ((nOpt = getopt_long(argc, argv, "h", optLongOpts, &iLongOpt)) == -1) break;
+			if ((nOpt = getopt_long(argc, argv, "hf:", optLongOpts, &iLongOpt)) == -1) break;
 
 			switch (nOpt) {
 				case 0: // Handle long options.
@@ -53,12 +58,12 @@ int main (int argc, char *argv[]) {
 							#else
 							puts("Linux 32-bit");
 							#endif
-							#endif
-							#ifdef _WIN32
+							#else
+							#ifndef _WIN64
 							puts("Win32");
-							#endif
-							#ifdef _WIN64
+							#else
 							puts("Win64");
+							#endif
 							#endif
 
 							printf("\tBuilt with GCC %s\n", __VERSION__);
@@ -76,6 +81,25 @@ int main (int argc, char *argv[]) {
 					return 0;
 					break;
 
+				case 'f': // Select another file.
+					if (pszStoryFileName) break; // Skip if already selected.
+
+					// Allocate space for & copy file name from optarg.
+					if ((cchStoryFileName = strlen(optarg)) < 5) {
+						fprintf(stderr, "Invalid file: File name too short.\n");
+						exit(EXIT_FAILURE);
+					}
+					if ((pszStoryFileName = malloc(cchStoryFileName * sizeof(char))) == NULL) {
+						perror("Failed to obtain file name: malloc");
+						exit(EXIT_FAILURE);
+					}
+					if (!strncpy(pszStoryFileName, optarg, cchStoryFileName)) {
+						perror("Failed to obtain file name: strncpy");
+						free(pszStoryFileName);
+						exit(EXIT_FAILURE);
+					}
+					break;
+
 				default:
 					fprintf(stderr, "Error: Unhandled getopt result (%d).\n", nOpt);
 					return 1;
@@ -84,12 +108,23 @@ int main (int argc, char *argv[]) {
 		}
 	}
 
+	// If a file is specified use that, otherwise use default.
+	if (pszStoryFileName == NULL) {
+		pszStoryFileName = pszDefStoryFileName;
+		cchStoryFileName = 0; // Set to zero to indicate the fallback to default.
+	}
+
+	#ifdef _DEBUG
+	printf("DEBUG: Selected \"%s\".\n", pszStoryFileName);
+	#endif
+
 	// Load game file.
-	FILE *fpStory;
-	struct storyFileHdr *pStory;
-	if ((fpStory = openStoryFile("example-story.nst")) == NULL) return 1;
+	FILE *fpStory; // Story file pointer.
+	storyFileHdr *pStory; // Story file header struct.
+	if ((fpStory = openStoryFile(pszStoryFileName)) == NULL) return 1;
+	if (cchStoryFileName != 0) free(pszStoryFileName); // Free if user defined.
 	if ((pStory = loadStoryHdr(fpStory)) == NULL) {
-		if (closeStoryFile(fpStory)) exit(EXIT_FAILURE); // On total failure.
+		closeStoryFile(fpStory); // Don't check for error code since we're exiting anyways.
 		return 1;
 	}
 	#ifdef _DEBUG
@@ -171,7 +206,8 @@ void printHelp (void) {
 
 	puts("\n\
 \t-h, --help      Show this help.\n\
-\t    --info      Display build info.");
+\t    --info      Display build info.\n\
+\t-f, --file      Select a story file to load.\n");
 
 }
 

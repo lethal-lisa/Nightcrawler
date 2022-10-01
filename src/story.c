@@ -39,7 +39,7 @@ int closeStoryFile (FILE *fp) {
 
 }
 
-struct storyFileHdr *loadStoryHdr (FILE *fp) {
+storyFileHdr *loadStoryHdr (FILE *fp) {
 
 	if (fp == NULL) {
 		fprintf(stderr, "ERROR: loadStoryHdr: file pointer invalid.\n");
@@ -47,15 +47,15 @@ struct storyFileHdr *loadStoryHdr (FILE *fp) {
 	}
 
 	// Allocate memory space for the story file header object.
-	struct storyFileHdr *pStory;
-	pStory = malloc(sizeof(struct storyFileHdr));
+	storyFileHdr *pStory;
+	pStory = malloc(sizeof(storyFileHdr));
 	if (pStory == NULL) {
 		perror("malloc");
 		return NULL;
 	}
 
 	// Read file header into the structure.
-	if (fread(pStory, sizeof(struct storyFileHdr), 1, fp) != 1) {
+	if (fread(pStory, sizeof(storyFileHdr), 1, fp) != 1) {
 		if (ferror(fp)) perror("Read error");
 		if (feof(fp)) fprintf(stderr, "Invalid story file.\n");
 		free(pStory);
