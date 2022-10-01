@@ -6,15 +6,14 @@
 
 #include <stdint.h>
 
-struct sceneFileHdr
+struct sceneNodeHdr
 {
 	char szMagic[4]; // Magic number identifier "NSC".
-	uint32_t uVersion; // Must be set to 0 for now.
-	uint32_t uMoveClustOff; // MOVE cluster offset.
-	uint32_t uLookClustOff; // LOOK cluster offset.
+	uint32_t uMoveClustAddr; // MOVE cluster address.
+	uint32_t uLookClustAddr; // LOOK cluster address.
 	uint16_t uGetMask; // GET item mask;
-	uint32_t uDialogueClustOff; // TALK cluster offset.
-	uint32_t uUseClustOff; // USE cluster offset.
+	uint32_t uTalkClustAddr; // TALK cluster address.
+	uint32_t uUseClustAddr; // USE cluster address.
 };
 
 #endif /* __SCENE_H__ */
