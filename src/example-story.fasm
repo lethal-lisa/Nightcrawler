@@ -29,6 +29,10 @@ db 'ITM', 00h ; Magic.
 dw 0001h      ; Item count.
 db "Hi I'm an item! :D", 00h
 
+; ----------------------------------------------------------------------------
+; Initial Scene Node
+; ----------------------------------------------------------------------------
+
 initScene:         ; Initial scene node.
 db 'NSC', 00h      ; Scene node header.
 dd .initScene_Move ; Move cluster address.
@@ -39,14 +43,75 @@ dd .initScene_Use  ; Use cluster offset.
 
 .initScene_Move:
 db 'MOV', 00h ; Magic.
+dd sceneMainRoom ; North.
+dd 0             ; South.
+dd 0             ; East.
+dd 0             ; West.
 
 .initScene_Look:
 db 'LOK', 00h ; Magic.
+dd .initScene_LookAroundStr ; Around.
+dd .initScene_LookMainRoom ; North.
+dd .initScene_LookWall ; South.
+dd .initScene_LookWall ; East.
+dd .initScene_LookWall ; West.
+
+.initScene_LookAroundStr:
+db 'You find yourself standing in an empty hallway with an open door at the', 10
+db 'North end. The hallway is dimly lit and a bright light pours from the', 10
+db 'doorway. Looking around there are no other exits.', 00h
+.initScene_LookMainRoom:
+db 'Beyond the open door is a blinding light.', 00h
+.initScene_LookWall:
+db 'There is nothing but the wall with a faint tiled pattern.', 00h
 
 .initScene_Talk:
 db 'TLK', 00h ; Magic.
 
 .initScene_Use:
 db 'USE', 00h ; Magic.
+
+; ----------------------------------------------------------------------------
+; Main Room Node
+; ----------------------------------------------------------------------------
+
+sceneMainRoom:
+db 'NSC', 00h     ; Magic.
+dd .mainRoom_Move ; MOVE cluster.
+dd .mainRoom_Look ; LOOK cluster.
+dw 0000h          ; GET item mask.
+dd .mainRoom_Talk ; TALK cluster
+dd .mainRoom_Use  ; USE cluster.
+
+.mainRoom_Move:
+db 'MOV', 00h
+dd 0          ; N
+dd initScene  ; S
+dd 0          ; E
+dd 0          ; W
+
+.mainRoom_Look:
+db 'LOK', 00h
+dd .mainRoom_LookAround ; Around.
+dd .mainRoom_LookWall   ; N
+dd .mainRoom_LookBack   ; S
+dd .mainRoom_LookWall   ; E
+dd .mainRoom_LookWall   ; W
+
+.mainRoom_LookAround:
+db 'A massive room swells around you; its expanse towering 12 feet all around', 10
+db 'you. In the center is a plain dummy in the shape of a teddy bear mounted', 10
+db 'to the floor.', 00h
+.mainRoom_LookWall:
+db 'To this side there is only a large tiled wall filling your vision.', 00h
+.mainRoom_LookBack:
+db 'Breaking up the tiled walls is the door to the small passage you entered', 10
+db 'from.', 00h
+
+.mainRoom_Talk:
+db 'TLK', 00h
+
+.mainRoom_Use:
+db 'USE', 00h
 
 ; End-of-File
