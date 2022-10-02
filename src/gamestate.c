@@ -26,7 +26,7 @@ int killGameState () {
 	closeStoryFile(g_pGameState->fpStory);
 
 	if (g_pGameState->pStory) free(g_pGameState->pStory);
-	if (g_pGameState->pScene) free(g_pGameState->pScene)
+	if (g_pGameState->pScene) free(g_pGameState->pScene);
 	if (g_pGameState->pszPromptString) free(g_pGameState->pszPromptString);
 	if (g_pGameState->pszHelpString) free(g_pGameState->pszHelpString);
 
