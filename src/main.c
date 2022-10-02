@@ -215,16 +215,15 @@ int main (int argc, char *argv[]) {
 			continue;
 		}
 
-		// TODO: Pass pszParamSubstr to procCmdId.
 		// Process command.
 		static struct parserCmd *pparserCmd;
-		if ((pparserCmd = parserCmd_inWordSet(pszUserInput, strlen(pszCmdSubstr)))  == NULL) {
+		if ((pparserCmd = parserCmd_inWordSet(pszCmdSubstr, strlen(pszCmdSubstr)))  == NULL) {
 			fprintf(stderr, "\"%s\" is not a valid command. Try HELP.\n", pszCmdSubstr);
 		} else {
 			#ifdef _DEBUG
 			printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);
 			#endif
-			if (procCmdId(pparserCmd->uId) != 0) {
+			if (procCmdId(pparserCmd->uId, pszParamSubstr) != 0) {
 				free(pszUserInput); break;
 			}
 		}

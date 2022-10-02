@@ -6,7 +6,7 @@
 #include "gamestate.h"
 #include "parsercmds.h"
 
-int procCmdId (const unsigned int uId) {
+int procCmdId (const unsigned int uId, const char *pszParam) {
 
 	switch (uId) {
 		case CI_HELP: // Show help.

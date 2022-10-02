@@ -11,15 +11,16 @@
 
 struct gameState
 {
-	storyFileHdr *pStory;
-	uint16_t uStoryFlags;
-	uint16_t uItemFlags;
-	uint32_t uCurScene;
-	FILE *fpStory;
-	size_t cchPromptString;
-	char *pszPromptString;
-	size_t cchHelpString;
-	char *pszHelpString;
+	storyFileHdr *pStory; // Story file header object.
+	FILE *fpStory; // Story file stream.
+	uint32_t uCurSceneAddr; // Address of the current scene's node.
+	sceneNodeHdr *pScene; // Current scene node object.
+	uint16_t uStoryFlags; // Current story flags.
+	uint16_t uItemFlags; // Current item flags.
+	size_t cchPromptString; // Length of pszPromptString.
+	char *pszPromptString; // Prompt string.
+	size_t cchHelpString; // Length of pszHelpString.
+	char *pszHelpString; // Help string.
 };
 
 extern struct gameState *g_pGameState;

@@ -23,11 +23,15 @@ int initGameState () {
 
 int killGameState () {
 
-	//if (fclose(g_pGameState->fpStory) == EOF) perror("killGameState");
 	closeStoryFile(g_pGameState->fpStory);
+
 	if (g_pGameState->pStory) free(g_pGameState->pStory);
+	if (g_pGameState->pScene) free(g_pGameState->pScene)
 	if (g_pGameState->pszPromptString) free(g_pGameState->pszPromptString);
 	if (g_pGameState->pszHelpString) free(g_pGameState->pszHelpString);
+
+	if (g_pGameState) free(g_pGameState);
+
 	return 0;
 
 }
