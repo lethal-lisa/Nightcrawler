@@ -27,16 +27,18 @@ ifdef WINDOWS
 ifdef WIN64
 	CC   := x86_64-w64-mingw32-gcc
 	LD   := x86_64-w64-mingw32-gcc
+	STRIP := x86_64-w64-mingw32-strip
 else
 	CC   := i686-w64-mingw32-gcc
 	LD   := i686-w64-mingw32-gcc
+	STRIP := i686-w64-mingw32-strip
 endif
 	TARGET := $(TARGET).exe
 else
 	CC   := gcc
 	LD   := gcc
+	STRIP := strip
 endif
-#OBJCOPY := objcopy
 
 CFLAGS   := -Wall -Os -fno-printf-return-value -fshort-enums
 ifdef DEBUG
@@ -64,6 +66,7 @@ release: all
 
 ## Compile all targets.
 all: $(TARGET)
+	$(STRIP) -vs $<
 	-@chmod +x $<
 
 ## Link objects.
