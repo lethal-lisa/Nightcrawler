@@ -61,12 +61,12 @@ CFLAGS   += -I$(INCLUDE)
 
 ## Generate a release archive.
 release: all
+	$(STRIP) -vs $<
 	md5sum -b default.nst $(TARGET) | tee nightcrawler.md5
 	7z a nightcrawler.7z nightcrawler.md5 default.nst $(TARGET)
 
 ## Compile all targets.
 all: $(TARGET)
-	$(STRIP) -vs $<
 	-@chmod +x $<
 
 ## Link objects.
