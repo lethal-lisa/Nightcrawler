@@ -7,8 +7,10 @@
 #include <errno.h>
 
 #include "story.h"
+#include "scene.h"
 
 const char s_pszStoryMagicId[4] = "NST";
+const char s_pszSceneMagicId[4] = "NSC";
 
 // Open story file.
 // Normally this kind of thing would be handled elsewhere and you'd just ask
@@ -54,6 +56,12 @@ storyFileHdr *loadStoryHdr (FILE *fp) {
 		return NULL;
 	}
 
+	// Set file position to zero.
+	if (fseek(fp, 0, SEEK_SET)) {
+		perror("fseek");
+		return NULL;
+	}
+
 	// Read file header into the structure.
 	if (fread(pStory, sizeof(storyFileHdr), 1, fp) != 1) {
 		if (ferror(fp)) perror("Read error");
@@ -70,5 +78,46 @@ storyFileHdr *loadStoryHdr (FILE *fp) {
 	}
 
 	return pStory;
+
+}
+
+sceneNodeHdr *loadSceneHdr (FILE *fp, const int uSceneAddr) {
+
+	if (fp == NULL) {
+		fprintf(stderr, "ERROR: loadSceneHdr: file pointer invalid.\n");
+		return NULL;
+	}
+
+	// Allocate memory for the scene node structure.
+	sceneNodeHdr *pScene;
+	pScene = malloc(sizeof(sceneNodeHdr));
+	if (pScene == NULL) {
+		perror("malloc");
+		return NULL;
+	}
+
+	// Set file position to start of node.
+	if (fseek(fp, uSceneAddr, SEEK_SET)) {
+		perror("fseek");
+		free(pScene);
+		return NULL;
+	}
+
+	// Read node in.
+	if (fread(pScene, sizeof(sceneNodeHdr), 1, fp) != 1) {
+		if (ferror(fp)) perror("Read error");
+		if (feof(fp)) fprintf(stderr, "Invalid scene node address.\n");
+		free(pScene);
+		return NULL;
+	}
+
+	// Verify as scene node.
+	if (strcmp(pScene->szMagic, s_pszSceneMagicId) != 0) {
+		fprintf(stderr, "Invalid scene node ID.\n");
+		free(pScene);
+		return NULL;
+	}
+
+	return pScene;
 
 }
