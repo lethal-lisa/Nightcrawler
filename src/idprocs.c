@@ -6,6 +6,48 @@
 #include "gamestate.h"
 #include "parsercmds.h"
 
+int procLook (const char *pszParam) {
+
+	// Load LOK node.
+	// ...
+
+	if (pszParam == NULL || strlen(pszParam) == 0) {
+		puts("Selected AROUND.");
+		return 0;
+	}
+
+	struct parserCmd *pparserCmd;
+	if ((pparserCmd = parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
+		fprintf(stderr, "ERROR: Invalid look direction.\n");
+		return 0;
+	}
+
+	switch (pparserCmd->uId) {
+		case CI_NORTH:
+			puts("Selected NORTH.");
+			break;
+
+		case CI_SOUTH:
+			puts("Selected SOUTH.");
+			break;
+
+		case CI_EAST:
+			puts("Selected EAST.");
+			break;
+
+		case CI_WEST:
+			puts("Selected WEST.");
+			break;
+
+		default:
+			fprintf(stderr, "ERROR: Bad directional value.\n");
+
+	}
+
+	return 0;
+
+}
+
 int procCmdId (const unsigned int uId, const char *pszParam) {
 
 	switch (uId) {
@@ -24,6 +66,10 @@ Command List (case does not matter):\n\
 			if (g_pGameState->pszHelpString) puts(g_pGameState->pszHelpString);
 			break;
 
+		case CI_LOOK: // Look around.
+			procLook(pszParam);
+			break;
+
 		case CI_QUIT: // Quit the game.
 			return 1;
 			break;
@@ -37,5 +83,4 @@ Command List (case does not matter):\n\
 	return 0;
 
 }
-
 

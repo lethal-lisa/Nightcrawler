@@ -178,7 +178,15 @@ int main (int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
-	// Main game loop
+	// Load initial scene.
+	g_pGameState->uCurSceneAddr = g_pGameState->pStory->uInitSceneAddr;
+	g_pGameState->pScene = loadSceneHdr(g_pGameState->fpStory, g_pGameState->uCurSceneAddr);
+	if (g_pGameState->pScene == NULL) {
+		killGameState();
+		exit(EXIT_FAILURE);
+	}
+
+	// Main game loop.
 	while (1) {
 		static char *pszUserInput; // Buffer for user input.
 		static size_t cchUserInput; // Bytes allocated by getline.
@@ -188,7 +196,6 @@ int main (int argc, char *argv[]) {
 		pszUserInput = NULL; cchUserInput = 0;
 
 		// Grab input from user.
-		//printf("Your next move? "); // TODO: This string may be obtained from the NST file later.
 		printf("%s", g_pGameState->pszPromptString);
 		cbReadUserInput = wingetline(&pszUserInput, &cchUserInput, stdin);
 		if (ferror(stdin)) {
