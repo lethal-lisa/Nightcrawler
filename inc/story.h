@@ -13,6 +13,13 @@
 
 #include "scene.h"
 
+#define NT_STORY 0
+#define NT_SCENE 1
+#define NT_MOVE 2
+#define NT_LOOK 3
+#define NT_TALK 4
+#define NT_DIA 5
+
 typedef struct tagStoryFileHdr
 {
 	char szMagic[4]; // Magic number identifer "NST".
@@ -27,7 +34,7 @@ typedef struct tagStoryFileHdr
 
 FILE *openStoryFile (const char *pszFileName);
 int closeStoryFile (FILE *fp);
-storyFileHdr *loadStoryHdr (FILE *fp);
-sceneNodeHdr *loadSceneHdr (FILE *fp, const int uSceneAddr);
+void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType);
+int printStrFromStory (FILE *fpStory, const int strAddr);
 
 #endif /* __STORY_H__ */

@@ -6,6 +6,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include "wingetline.h"
 #include "story.h"
 #include "scene.h"
 
@@ -41,83 +42,116 @@ int closeStoryFile (FILE *fp) {
 
 }
 
-storyFileHdr *loadStoryHdr (FILE *fp) {
+void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 
-	if (fp == NULL) {
-		fprintf(stderr, "ERROR: loadStoryHdr: file pointer invalid.\n");
+	if (fpStory == NULL) {
+		fprintf(stderr, "ERROR: loadNode: Bad FILE pointer.\n");
 		return NULL;
 	}
 
-	// Allocate memory space for the story file header object.
-	storyFileHdr *pStory;
-	pStory = malloc(sizeof(storyFileHdr));
-	if (pStory == NULL) {
-		perror("malloc");
+	// Error checking for this array is done by the default statement of the
+	// following switch block.
+	static char *szMagic[] = {
+		"NST",
+		"NSC",
+		"MOV",
+		"LOK",
+		"TLK",
+		"DIA"
+	};
+	size_t cbNode; // Size of node struct.
+	void *pNode; // Pointer to node struct.
+
+	switch (nodeType) {
+		case NT_STORY:
+			cbNode = sizeof(storyFileHdr);
+			break;
+
+		case NT_SCENE:
+			cbNode = sizeof(sceneNodeHdr);
+			break;
+
+		case NT_MOVE:
+			cbNode = sizeof(scene_MoveCluster);
+			break;
+
+		case NT_LOOK:
+			cbNode = sizeof(scene_LookCluster);
+			break;
+
+		case NT_TALK:
+			cbNode = sizeof(scene_TalkCluster);
+			break;
+
+		case NT_DIA:
+			cbNode = sizeof(talk_DiaNode);
+			break;
+
+		default:
+			fprintf(stderr, "ERROR: loadNode: Unknown node type (%d).\n", nodeType);
+			return NULL;
+	}
+
+	// Seek to the specified offset in the file.
+	if (fseek(fpStory, nodeAddr, SEEK_SET)) {
+		perror("ERROR: loadNode: fseek fail.");
 		return NULL;
 	}
 
-	// Set file position to zero.
-	if (fseek(fp, 0, SEEK_SET)) {
-		perror("fseek");
+	// Allocate space for the node.
+	if ((pNode = malloc(cbNode)) == NULL) {
+		perror("ERROR: loadNode: malloc fail.");
 		return NULL;
 	}
 
-	// Read file header into the structure.
-	if (fread(pStory, sizeof(storyFileHdr), 1, fp) != 1) {
-		if (ferror(fp)) perror("Read error");
-		if (feof(fp)) fprintf(stderr, "Invalid story file.\n");
-		free(pStory);
+	// Read in the node.
+	if (fread(pNode, cbNode, 1, fpStory) != 1) {
+		if (ferror(fpStory)) perror("ERROR: loadNode: fread tripped file error.");
+		if (feof(fpStory)) fprintf(stderr, "ERROR: loadNode: fread reached EOF.\n");
+		free(pNode);
 		return NULL;
 	}
 
-	// Verify as story file.
-	if (strcmp(pStory->szMagic, s_pszStoryMagicId) != 0) {
-		fprintf(stderr, "Invalid story file.\n");
-		free(pStory);
+	// Verify node as type.
+	if (strncmp((const char *)pNode, szMagic[nodeType], 4) != 0) {
+		fprintf(stderr, "ERROR: loadNode: Node's magic ID is invalid for its type.\n");
+		free(pNode);
 		return NULL;
 	}
 
-	return pStory;
+	return pNode;
 
 }
 
-sceneNodeHdr *loadSceneHdr (FILE *fp, const int uSceneAddr) {
+int printStrFromStory (FILE *fpStory, const int strAddr) {
 
-	if (fp == NULL) {
-		fprintf(stderr, "ERROR: loadSceneHdr: file pointer invalid.\n");
-		return NULL;
+	// Verify file pointer.
+	if (fpStory == NULL) {
+		fprintf(stderr, "ERROR: printStrFromStory: Bad FILE pointer.\n");
+		return 1;
 	}
 
-	// Allocate memory for the scene node structure.
-	sceneNodeHdr *pScene;
-	pScene = malloc(sizeof(sceneNodeHdr));
-	if (pScene == NULL) {
-		perror("malloc");
-		return NULL;
+	// Seek to string position.
+	if (fseek(fpStory, strAddr, SEEK_SET)) {
+		perror("ERROR: printStrFromStory: fseek failed");
+		return 1;
 	}
 
-	// Set file position to start of node.
-	if (fseek(fp, uSceneAddr, SEEK_SET)) {
-		perror("fseek");
-		free(pScene);
-		return NULL;
+	char *pszString = NULL;
+	size_t cchString;
+	ssize_t cbReadString;
+
+	// Read string.
+	if ((cbReadString = wingetdelim(&pszString, &cchString, '\0', fpStory)) == -1) {
+		if (ferror(fpStory)) perror("ERROR: printStrFromStory: Error reading string");
+		if (feof(fpStory)) fprintf(stderr, "WARN: printStrFromStory: Error reading string: End of file reached.\n");
+		return 1;
 	}
 
-	// Read node in.
-	if (fread(pScene, sizeof(sceneNodeHdr), 1, fp) != 1) {
-		if (ferror(fp)) perror("Read error");
-		if (feof(fp)) fprintf(stderr, "Invalid scene node address.\n");
-		free(pScene);
-		return NULL;
-	}
+	// Write string out to stdout.
+	puts(pszString);
+	free(pszString);
 
-	// Verify as scene node.
-	if (strcmp(pScene->szMagic, s_pszSceneMagicId) != 0) {
-		fprintf(stderr, "Invalid scene node ID.\n");
-		free(pScene);
-		return NULL;
-	}
-
-	return pScene;
+	return 0;
 
 }

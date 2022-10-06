@@ -129,7 +129,7 @@ int main (int argc, char *argv[]) {
 	}
 
 	#ifdef _DEBUG
-	printf("DEBUG: Selected \"%s\".\n", pszStoryFileName);
+	printf("DEBUG: Selected story file: \"%s\".\n", pszStoryFileName);
 	#endif
 
 	// Initialize game state struct.
@@ -142,8 +142,7 @@ int main (int argc, char *argv[]) {
 	// Load game file.
 	if ((g_pGameState->fpStory = openStoryFile(pszStoryFileName)) == NULL) return 1;
 	if (cchStoryFileName != 0) free(pszStoryFileName); // Free if user defined.
-	if ((g_pGameState->pStory = loadStoryHdr(g_pGameState->fpStory)) == NULL) {
-		//closeStoryFile(g_pGameState->fpStory); // Don't check for error code since we're exiting anyways.
+	if ((g_pGameState->pStory = loadNode(g_pGameState->fpStory, 0, NT_STORY)) == NULL) {
 		killGameState();
 		return 1;
 	}
@@ -155,22 +154,10 @@ int main (int argc, char *argv[]) {
 	#endif
 
 	// Display game title.
-	if (fseek(g_pGameState->fpStory, g_pGameState->pStory->uGameTitleAddr, SEEK_SET)) {
-		perror("fseek failed");
+	if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uGameTitleAddr)) {
 		killGameState();
 		exit(EXIT_FAILURE);
 	}
-	char *pszTitleScreen = NULL;
-	size_t cchTitleScreen;
-	ssize_t cbReadTitleScreen;
-	cbReadTitleScreen = wingetdelim(&pszTitleScreen, &cchTitleScreen, '\0', g_pGameState->fpStory);
-	if (ferror(g_pGameState->fpStory)) {
-		fprintf(stderr, "ERROR: Failed to display title screen.\n");
-		killGameState();
-		exit(EXIT_FAILURE);
-	}
-	puts(pszTitleScreen);
-	free(pszTitleScreen);
 
 	// Load necessary strings from the file.
 	if (getStrsFromStoryFile()) {
@@ -180,7 +167,7 @@ int main (int argc, char *argv[]) {
 
 	// Load initial scene.
 	g_pGameState->uCurSceneAddr = g_pGameState->pStory->uInitSceneAddr;
-	g_pGameState->pScene = loadSceneHdr(g_pGameState->fpStory, g_pGameState->uCurSceneAddr);
+	g_pGameState->pScene = loadNode(g_pGameState->fpStory, g_pGameState->uCurSceneAddr, NT_SCENE);
 	if (g_pGameState->pScene == NULL) {
 		killGameState();
 		exit(EXIT_FAILURE);
