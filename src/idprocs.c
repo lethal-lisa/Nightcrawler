@@ -9,10 +9,12 @@
 int procLook (const char *pszParam) {
 
 	// Load LOK node.
-	// ...
+	scene_LookCluster *pLook;
+	pLook = loadNode(g_pGameState->fpStory, g_pGameState->pScene->uLookClustAddr, NT_LOOK);
+	if (pLook == NULL) return 0;
 
 	if (pszParam == NULL || strlen(pszParam) == 0) {
-		puts("Selected AROUND.");
+		if (printStrFromStory(g_pGameState->fpStory, pLook->uAroundAddr)) return 1;
 		return 0;
 	}
 
@@ -24,19 +26,19 @@ int procLook (const char *pszParam) {
 
 	switch (pparserCmd->uId) {
 		case CI_NORTH:
-			puts("Selected NORTH.");
+			if (printStrFromStory(g_pGameState->fpStory, pLook->uNorthAddr)) return 1;
 			break;
 
 		case CI_SOUTH:
-			puts("Selected SOUTH.");
+			if (printStrFromStory(g_pGameState->fpStory, pLook->uSouthAddr)) return 1;
 			break;
 
 		case CI_EAST:
-			puts("Selected EAST.");
+			if (printStrFromStory(g_pGameState->fpStory, pLook->uEastAddr)) return 1;
 			break;
 
 		case CI_WEST:
-			puts("Selected WEST.");
+			if (printStrFromStory(g_pGameState->fpStory, pLook->uWestAddr)) return 1;
 			break;
 
 		default:
