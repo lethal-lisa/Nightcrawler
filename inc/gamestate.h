@@ -26,8 +26,11 @@ struct gameState
 
 extern struct gameState *g_pGameState;
 
+// Initialize & destroy g_pGameState.
 int initGameState ();
 int killGameState ();
+
+// Loads global strings from the story file, part of initialization.
 int getStrsFromStoryFile ();
 
 #endif /* __GAMESTATE_H__ */

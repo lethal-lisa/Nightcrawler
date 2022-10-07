@@ -32,9 +32,18 @@ typedef struct tagStoryFileHdr
 	uint32_t uInitSceneAddr; // Address in the file where the file name for the initial scene node is found.
 } __attribute__((packed, aligned(4))) storyFileHdr;
 
+// Handlers for opening and closing story files.
 FILE *openStoryFile (const char *pszFileName);
 int closeStoryFile (FILE *fp);
+
+// Loads a node from address nodeAddr of type nodeType from file fpStory.
+// Returns an pointer to the newly loaded struct, or NULL on failure. This
+// routine prints its own error information to stderr.
 void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType);
+
+// Prints a string from the story file fpStory at address strAddr to stdout.
+// Returns 0 on success and 1 on failure. This routine prints its own error
+// information to stderr.
 int printStrFromStory (FILE *fpStory, const int strAddr);
 
 #endif /* __STORY_H__ */
