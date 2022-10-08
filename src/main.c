@@ -194,6 +194,12 @@ int main (int argc, char *argv[]) {
 		printf("DEBUG: Allocated %zu chars & read %zu bytes from user: \"%s\".\n", cchUserInput, cbReadUserInput, pszUserInput);
 		#endif
 
+		// End game if EOF sent.
+		if (feof(stdin)) {
+			free(pszUserInput);
+			break;
+		}
+
 		// Tokenize input strings.
 		static char *pszCmdSubstr; // Buffer for the command.
 		static char *pszParamSubstr; // Buffer for an optional parameter.
@@ -218,7 +224,8 @@ int main (int argc, char *argv[]) {
 			printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);
 			#endif
 			if (procCmdId(pparserCmd->uId, pszParamSubstr) != 0) {
-				free(pszUserInput); break;
+				free(pszUserInput);
+				break;
 			}
 		}
 
