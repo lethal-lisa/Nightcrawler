@@ -8,7 +8,6 @@
 #include <stdio.h>
 
 #include "story.h"
-#include "scene.h"
 
 struct gameState
 {

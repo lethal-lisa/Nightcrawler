@@ -19,6 +19,7 @@
 #define CI_EAST 102
 #define CI_WEST 103
 
+// Parser command result structure.
 struct parserCmd
 {
 	const char *name;

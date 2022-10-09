@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 ssize_t wingetdelim (char **lineptr, size_t *n, int delim, FILE *stream)  {
-	#ifdef _WINDOWS
+#ifdef _WINDOWS
 	size_t pos;
 	int c;
 
@@ -19,12 +19,10 @@ ssize_t wingetdelim (char **lineptr, size_t *n, int delim, FILE *stream)  {
 		return -1;
 	}
 
-	c = getc(stream);
-	if (c == EOF) return -1;
+	if ((c = getc(stream)) == EOF) return -1;
 
 	if (*lineptr == NULL) {
-		*lineptr = malloc(128);
-		if (*lineptr == NULL) return -1;
+		if ((*lineptr = malloc(128)) == NULL) return -1;
 		*n = 128;
 	}
 
@@ -46,11 +44,15 @@ ssize_t wingetdelim (char **lineptr, size_t *n, int delim, FILE *stream)  {
 
 	(*lineptr)[pos] = '\0';
 	return pos;
-	#else
+#else
 	return getdelim(lineptr, n, delim, stream);
-	#endif
+#endif
 }
 
 ssize_t wingetline (char **lineptr, size_t *n, FILE *stream) {
+#ifdef _WINDOWS
 	return wingetdelim(lineptr, n, '\n', stream);
+#else
+	return getline(lineptr, n, stream);
+#endif
 }

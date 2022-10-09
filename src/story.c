@@ -8,10 +8,6 @@
 
 #include "wingetline.h"
 #include "story.h"
-#include "scene.h"
-
-const char s_pszStoryMagicId[4] = "NST";
-const char s_pszSceneMagicId[4] = "NSC";
 
 // Open story file.
 // Normally this kind of thing would be handled elsewhere and you'd just ask
@@ -31,10 +27,11 @@ FILE *openStoryFile (const char *pszFileName) {
 
 }
 
+// Counterpart to openStoryFile.
 int closeStoryFile (FILE *fp) {
 
 	if (fclose(fp) != 0) {
-		perror("Failed to close the story file");
+		perror("Failed to close story file");
 		return 1;
 	}
 
@@ -42,6 +39,10 @@ int closeStoryFile (FILE *fp) {
 
 }
 
+
+// NOTE: Be extra sure you know what you're doing before you start playing
+// around with this one. This function can return an arbitrary pointer if
+// something goes wrong.
 void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 
 	if (fpStory == NULL) {
@@ -59,9 +60,11 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 		"TLK",
 		"DIA"
 	};
+
 	size_t cbNode; // Size of node struct.
 	void *pNode; // Pointer to node struct.
 
+	// Get size of the node per node type.
 	switch (nodeType) {
 		case NT_STORY:
 			cbNode = sizeof(storyFileHdr);

@@ -1,6 +1,9 @@
 
 // Nightcrawler Engine - Windows Getline Kludge Header
 
+// This serves to implement getline and getdelim on platforms that
+// normally don't support them and wrap them on platforms that do.
+
 #ifndef __WINGETLINE_H__
 #define __WINGETLINE_H__ 1
 

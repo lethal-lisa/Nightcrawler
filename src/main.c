@@ -15,6 +15,7 @@
 #include "gamestate.h"
 
 void printHelp (void);
+void printBuildInfo (void);
 
 int main (int argc, char *argv[]) {
 
@@ -49,6 +50,7 @@ int main (int argc, char *argv[]) {
 				case 0: // Handle long options.
 					switch (iLongOpt) {
 						case 1: // Print out build information.
+							/*
 							puts("Nightcrawler Build Info:");
 							printf("\tBuild Type: ");
 							#ifdef _DEBUG
@@ -73,6 +75,10 @@ int main (int argc, char *argv[]) {
 							#endif
 
 							printf("\tBuilt with GCC %s\n", __VERSION__);
+							return 0;
+							break;
+							*/
+							printBuildInfo();
 							return 0;
 							break;
 
@@ -128,16 +134,16 @@ int main (int argc, char *argv[]) {
 		cchStoryFileName = 0; // Set to zero to indicate the fallback to default.
 	}
 
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	printf("DEBUG: Selected story file: \"%s\".\n", pszStoryFileName);
-	#endif
+#endif
 
 	// Initialize game state struct.
 	if (initGameState()) exit(EXIT_FAILURE);
 
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	printf("DEBUG: Initialized game state struct.\n");
-	#endif
+#endif
 
 	// Load game file.
 	if ((g_pGameState->fpStory = openStoryFile(pszStoryFileName)) == NULL) return 1;
@@ -146,12 +152,6 @@ int main (int argc, char *argv[]) {
 		killGameState();
 		return 1;
 	}
-
-	// Print debug info about the header.
-	#ifdef _DEBUG
-	printf("DEBUG: Story File Header Info:\nMagic: %s\tVersion: 0x%X\tTitle: 0x%X\n", g_pGameState->pStory->szMagic, g_pGameState->pStory->uVersion, g_pGameState->pStory->uGameTitleAddr);
-	printf("I.Mask: 0x%X\tI.Addr: 0x%X\tInitScene: 0x%X\n", g_pGameState->pStory->uMaskUsedItems, g_pGameState->pStory->uItemNameAddr,  g_pGameState->pStory->uInitSceneAddr);
-	#endif
 
 	// Display game title.
 	if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uGameTitleAddr)) {
@@ -190,9 +190,9 @@ int main (int argc, char *argv[]) {
 			clearerr(stdin);
 			continue;
 		}
-		#ifdef _DEBUG
+#ifdef _DEBUG
 		printf("DEBUG: Allocated %zu chars & read %zu bytes from user: \"%s\".\n", cchUserInput, cbReadUserInput, pszUserInput);
-		#endif
+#endif
 
 		// End game if EOF sent.
 		if (feof(stdin)) {
@@ -205,9 +205,9 @@ int main (int argc, char *argv[]) {
 		static char *pszParamSubstr; // Buffer for an optional parameter.
 		pszCmdSubstr = strtok(pszUserInput, " \t\n");
 		pszParamSubstr = strtok(NULL, "\t\n");
-		#ifdef _DEBUG
+#ifdef _DEBUG
 		printf("DEBUG: CmdSubstr: \"%s\", ParamSubstr: \"%s\".\n", pszCmdSubstr, pszParamSubstr);
-		#endif
+#endif
 
 		// Skip processing if nothing was passed.
 		if (pszCmdSubstr == NULL) {
@@ -220,9 +220,9 @@ int main (int argc, char *argv[]) {
 		if ((pparserCmd = parserCmd_inWordSet(pszCmdSubstr, strlen(pszCmdSubstr)))  == NULL) {
 			fprintf(stderr, "\"%s\" is not a valid command. Try HELP.\n", pszCmdSubstr);
 		} else {
-			#ifdef _DEBUG
+#ifdef _DEBUG
 			printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);
-			#endif
+#endif
 			if (procCmdId(pparserCmd->uId, pszParamSubstr) != 0) {
 				free(pszUserInput);
 				break;
@@ -239,7 +239,6 @@ int main (int argc, char *argv[]) {
 
 };
 
-
 // Print help message.
 void printHelp (void) {
 
@@ -247,6 +246,42 @@ void printHelp (void) {
 \t-h, --help      Show this help.\n\
 \t    --info      Display build info.\n\
 \t-f, --file      Select a story file to load.\n");
+
+}
+
+// Prints out build info.
+void printBuildInfo (void) {
+
+	puts("Nightcrawler Build Info:");
+
+	// Print build type.
+	printf("\tBuild Type: ");
+#ifdef _DEBUG
+	puts("Debug");
+#else
+	puts("Release");
+#endif
+
+	// Release platform.
+	printf("\tRelease Platform: ");
+#ifndef _WINDOWS
+	puts("Linux");
+#else
+#	ifdef _WIN32
+	puts("Win32");
+#	else
+	puts("Win64");
+#	endif
+#endif
+
+	// Compiler version.
+	printf("\tBuilt with: ");
+#ifdef __clang__
+	// Clang includes "Clang <ver>" in its definition of __VERSION__.
+	printf(__VERSION__);
+#else
+	printf("GCC %s\n", __VERSION__);
+#endif
 
 }
 
