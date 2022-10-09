@@ -50,34 +50,6 @@ int main (int argc, char *argv[]) {
 				case 0: // Handle long options.
 					switch (iLongOpt) {
 						case 1: // Print out build information.
-							/*
-							puts("Nightcrawler Build Info:");
-							printf("\tBuild Type: ");
-							#ifdef _DEBUG
-							puts("Debug");
-							#else
-							puts("Release");
-							#endif
-
-							printf("\tRelease Platform: ");
-							#ifndef _WINDOWS
-							#ifdef __amd64__
-							puts("Linux 64-bit");
-							#else
-							puts("Linux 32-bit");
-							#endif
-							#else
-							#ifndef _WIN64
-							puts("Win32");
-							#else
-							puts("Win64");
-							#endif
-							#endif
-
-							printf("\tBuilt with GCC %s\n", __VERSION__);
-							return 0;
-							break;
-							*/
 							printBuildInfo();
 							return 0;
 							break;
@@ -150,7 +122,7 @@ int main (int argc, char *argv[]) {
 	if (cchStoryFileName != 0) free(pszStoryFileName); // Free if user defined.
 	if ((g_pGameState->pStory = loadNode(g_pGameState->fpStory, 0, NT_STORY)) == NULL) {
 		killGameState();
-		return 1;
+		exit(EXIT_FAILURE);
 	}
 
 	// Display game title.
@@ -185,20 +157,21 @@ int main (int argc, char *argv[]) {
 		// Grab input from user.
 		printf("%s", g_pGameState->pszPromptString);
 		cbReadUserInput = wingetline(&pszUserInput, &cchUserInput, stdin);
-		if (ferror(stdin)) {
-			fprintf(stderr, "ERROR: Standard input error. Try again.\n");
-			clearerr(stdin);
-			continue;
+		if (cbReadUserInput == -1) {
+			if (feof(stdin)) {
+				fprintf(stderr, "Exiting due to EOF character.\n");
+				free(pszUserInput);
+				break;
+			}
+			if (ferror(stdin)) {
+				fprintf(stderr, "ERROR: Standard input error. Try again.\n");
+				clearerr(stdin);
+				continue;
+			}
 		}
 #ifdef _DEBUG
 		printf("DEBUG: Allocated %zu chars & read %zu bytes from user: \"%s\".\n", cchUserInput, cbReadUserInput, pszUserInput);
 #endif
-
-		// End game if EOF sent.
-		if (feof(stdin)) {
-			free(pszUserInput);
-			break;
-		}
 
 		// Tokenize input strings.
 		static char *pszCmdSubstr; // Buffer for the command.
@@ -267,10 +240,10 @@ void printBuildInfo (void) {
 #ifndef _WINDOWS
 	puts("Linux");
 #else
-#	ifdef _WIN32
-	puts("Win32");
-#	else
+#	ifdef _WIN64
 	puts("Win64");
+#	else
+	puts("Win32");
 #	endif
 #endif
 

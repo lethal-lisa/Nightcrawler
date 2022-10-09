@@ -13,11 +13,13 @@
 #define CI_GET 3
 #define CI_TALK 4
 #define CI_USE 5
+#define CI_ITEMS 6
 #define CI_QUIT 99
-#define CI_NORTH 100
-#define CI_SOUTH 101
-#define CI_EAST 102
-#define CI_WEST 103
+#define CI_AROUND 100
+#define CI_NORTH 101
+#define CI_SOUTH 102
+#define CI_EAST 103
+#define CI_WEST 104
 
 // Parser command result structure.
 struct parserCmd

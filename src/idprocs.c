@@ -11,10 +11,22 @@ int procLook (const char *pszParam) {
 	// Load LOK node.
 	scene_LookCluster *pLook;
 	pLook = loadNode(g_pGameState->fpStory, g_pGameState->pScene->uLookClustAddr, NT_LOOK);
-	if (pLook == NULL) return 0;
+	if (pLook == NULL) return 1;
 
+	uint32_t uStrAddr;
+
+	// If no parameter use the "around" string.
 	if (pszParam == NULL || strlen(pszParam) == 0) {
-		if (printStrFromStory(g_pGameState->fpStory, pLook->uAroundAddr)) return 1;
+		// TODO: This works but it's hella messy and I don't wanna copy it
+		// everywhere. Find a way to make this more legible.
+		if ((g_pGameState->fItem & pLook->fReqdStory) &&
+			(g_pGameState->fStory & pLook->fReqdItem) &&
+			(pLook->uAltAroundAddr != 0)) {
+			uStrAddr = pLook->uAltAroundAddr;
+		} else {
+			uStrAddr = pLook->uAroundAddr;
+		}
+		if (printStrFromStory(g_pGameState->fpStory, uStrAddr)) return 1;
 		return 0;
 	}
 
@@ -25,26 +37,33 @@ int procLook (const char *pszParam) {
 	}
 
 	switch (pparserCmd->uId) {
+		case CI_AROUND:
+			uStrAddr = pLook->uAroundAddr;
+			break;
+
 		case CI_NORTH:
-			if (printStrFromStory(g_pGameState->fpStory, pLook->uNorthAddr)) return 1;
+			uStrAddr = pLook->uNorthAddr;
 			break;
 
 		case CI_SOUTH:
-			if (printStrFromStory(g_pGameState->fpStory, pLook->uSouthAddr)) return 1;
+			uStrAddr = pLook->uSouthAddr;
 			break;
 
 		case CI_EAST:
-			if (printStrFromStory(g_pGameState->fpStory, pLook->uEastAddr)) return 1;
+			uStrAddr = pLook->uEastAddr;
 			break;
 
 		case CI_WEST:
-			if (printStrFromStory(g_pGameState->fpStory, pLook->uWestAddr)) return 1;
+			uStrAddr = pLook->uWestAddr;
 			break;
 
 		default:
 			fprintf(stderr, "ERROR: Bad directional value.\n");
+			return 0;
 
 	}
+
+	if (printStrFromStory(g_pGameState->fpStory, uStrAddr)) return 1;
 
 	return 0;
 
