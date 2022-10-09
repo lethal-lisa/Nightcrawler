@@ -49,7 +49,7 @@ ssize_t wingetdelim (char **lineptr, size_t *n, int delim, FILE *stream)  {
 
 			// Set new size and pointer.
 			*n = cbNew;
-			*lineptr = pchNew
+			*lineptr = pchNew;
 		}
 
 		//((unsigned char *)(*lineptr))[pos++] = c;
