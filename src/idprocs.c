@@ -75,15 +75,17 @@ int procCmdId (const unsigned int uId, const char *pszParam) {
 		case CI_HELP: // Show help.
 			puts("-- Nightcrawler Engine Help --\n\
 Command List (case does not matter):\n\
-\tHELP         - You're looking at it.\n\
-\tMOVE/GO      - Move to another scene.\n\
-\tLOOK/EXAMINE - Look around the current scene.\n\
-\tGET          - Grab an item in the scene.\n\
-\tTALK         - Talk to a character in the scene.\n\
-\tUSE/INTERACT - Do something in the scene with an item. For example:\n\
-\t               Show a character an item, use an item with an object in the\n\
-\t               scene, or perform some other context-sensitive action.\n\
-\tQUIT/EXIT    - Quit the game.\n");
+\tHELP            - You're looking at it.\n\
+\tMOVE/GO         - Move to another scene.\n\
+\tLOOK/EXAMINE    - Look around the current scene.\n\
+\tGET             - Grab an item in the scene.\n\
+\tTALK            - Talk to a character in the scene.\n\
+\tUSE/INTERACT    - Do something in the scene with an item. For example:\n\
+\t                  Show a character an item, use an item with an object\n\
+\t                  in the scene, or perform some other context-\n\
+\t                  sensitive action.\n\
+\tITEMS/INVENTORY - Show a list of the items in your posession.\n\
+\tQUIT/EXIT       - Quit the game.\n");
 			if (g_pGameState->pszHelpString) puts(g_pGameState->pszHelpString);
 			break;
 
