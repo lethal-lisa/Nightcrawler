@@ -98,11 +98,11 @@ parserCmd_hash (str, len)
       35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
       35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
       35, 35, 35, 35, 35, 10, 35, 35, 35,  0,
-      35,  0,  8,  0, 35, 35, 30, 25, 15,  0,
-      35, 20, 35, 10,  5,  0, 35,  5,  0, 35,
+      35,  0, 13,  0, 35, 35,  8, 30, 15,  0,
+      35, 25,  5, 10,  5,  0, 35,  5,  0, 35,
       35, 35, 35, 35, 35, 35, 35, 10, 35, 35,
-      35,  0, 35,  0,  8,  0, 35, 35, 30, 25,
-      15,  0, 35, 20, 35, 10,  5,  0, 35,  5,
+      35,  0, 35,  0, 13,  0, 35, 35,  8, 30,
+      15,  0, 35, 25,  5, 10,  5,  0, 35,  5,
        0, 35, 35, 35, 35, 35, 35, 35, 35, 35,
       35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
       35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
@@ -139,53 +139,59 @@ parserCmd_inWordSet (str, len)
 {
   enum
     {
-      TOTAL_KEYWORDS = 19,
+      TOTAL_KEYWORDS = 22,
       MIN_WORD_LENGTH = 1,
-      MAX_WORD_LENGTH = 8,
+      MAX_WORD_LENGTH = 9,
       MIN_HASH_VALUE = 1,
       MAX_HASH_VALUE = 34
     };
 
   static const struct parserCmd wordlist[] =
     {
-#line 33 "src/parsercmds.gperf"
-      {"E",        102},
+#line 36 "src/parsercmds.gperf"
+      {"E",         103},
 #line 18 "src/parsercmds.gperf"
-      {"GO",       1},
+      {"GO",        1},
 #line 21 "src/parsercmds.gperf"
-      {"GET",      3},
-#line 26 "src/parsercmds.gperf"
-      {"EXIT",     99},
-#line 34 "src/parsercmds.gperf"
-      {"W",        103},
-#line 20 "src/parsercmds.gperf"
-      {"EXAMINE",  2},
-#line 30 "src/parsercmds.gperf"
-      {"WEST",     103},
-#line 32 "src/parsercmds.gperf"
-      {"S",        101},
-#line 16 "src/parsercmds.gperf"
-      {"HELP",     0},
-#line 23 "src/parsercmds.gperf"
-      {"USE",      5},
-#line 29 "src/parsercmds.gperf"
-      {"EAST",     102},
+      {"GET",       3},
 #line 28 "src/parsercmds.gperf"
-      {"SOUTH",    101},
-#line 31 "src/parsercmds.gperf"
-      {"N",        100},
-#line 22 "src/parsercmds.gperf"
-      {"TALK",     4},
-#line 27 "src/parsercmds.gperf"
-      {"NORTH",    100},
-#line 24 "src/parsercmds.gperf"
-      {"INTERACT", 5},
-#line 25 "src/parsercmds.gperf"
-      {"QUIT",     99},
-#line 17 "src/parsercmds.gperf"
-      {"MOVE",     1},
+      {"EXIT",      99},
+#line 37 "src/parsercmds.gperf"
+      {"W",         104},
+#line 20 "src/parsercmds.gperf"
+      {"EXAMINE",   2},
+#line 33 "src/parsercmds.gperf"
+      {"WEST",      104},
+#line 26 "src/parsercmds.gperf"
+      {"ITEMS",     6},
+#line 35 "src/parsercmds.gperf"
+      {"S",         102},
 #line 19 "src/parsercmds.gperf"
-      {"LOOK",     2}
+      {"LOOK",      2},
+#line 23 "src/parsercmds.gperf"
+      {"USE",       5},
+#line 32 "src/parsercmds.gperf"
+      {"EAST",      103},
+#line 31 "src/parsercmds.gperf"
+      {"SOUTH",     102},
+#line 34 "src/parsercmds.gperf"
+      {"N",         101},
+#line 16 "src/parsercmds.gperf"
+      {"HELP",      0},
+#line 22 "src/parsercmds.gperf"
+      {"TALK",      4},
+#line 30 "src/parsercmds.gperf"
+      {"NORTH",     101},
+#line 29 "src/parsercmds.gperf"
+      {"AROUND",    100},
+#line 24 "src/parsercmds.gperf"
+      {"INTERACT",  5},
+#line 25 "src/parsercmds.gperf"
+      {"INVENTORY", 6},
+#line 27 "src/parsercmds.gperf"
+      {"QUIT",      99},
+#line 17 "src/parsercmds.gperf"
+      {"MOVE",      1}
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
@@ -221,14 +227,17 @@ parserCmd_inWordSet (str, len)
                   case 8:
                     resword = &wordlist[6];
                     goto compare;
-                  case 10:
+                  case 9:
                     resword = &wordlist[7];
                     goto compare;
-                  case 11:
+                  case 10:
                     resword = &wordlist[8];
                     goto compare;
-                  case 12:
+                  case 11:
                     resword = &wordlist[9];
+                    goto compare;
+                  case 12:
+                    resword = &wordlist[10];
                     goto compare;
                 }
             }
@@ -237,31 +246,37 @@ parserCmd_inWordSet (str, len)
               switch (key - 14)
                 {
                   case 0:
-                    resword = &wordlist[10];
-                    goto compare;
-                  case 1:
                     resword = &wordlist[11];
                     goto compare;
-                  case 2:
+                  case 1:
                     resword = &wordlist[12];
                     goto compare;
-                  case 5:
+                  case 2:
                     resword = &wordlist[13];
                     goto compare;
-                  case 6:
+                  case 3:
                     resword = &wordlist[14];
                     goto compare;
-                  case 9:
+                  case 5:
                     resword = &wordlist[15];
                     goto compare;
-                  case 10:
+                  case 6:
                     resword = &wordlist[16];
                     goto compare;
-                  case 15:
+                  case 7:
                     resword = &wordlist[17];
                     goto compare;
-                  case 20:
+                  case 9:
                     resword = &wordlist[18];
+                    goto compare;
+                  case 10:
+                    resword = &wordlist[19];
+                    goto compare;
+                  case 15:
+                    resword = &wordlist[20];
+                    goto compare;
+                  case 20:
+                    resword = &wordlist[21];
                     goto compare;
                 }
             }

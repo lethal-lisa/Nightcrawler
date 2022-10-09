@@ -13,22 +13,25 @@
 %}
 struct parserCmd { const char *name; unsigned int uId; };
 %%
-HELP,     0
-MOVE,     1
-GO,       1
-LOOK,     2
-EXAMINE,  2
-GET,      3
-TALK,     4
-USE,      5
-INTERACT, 5
-QUIT,     99
-EXIT,     99
-NORTH,    100
-SOUTH,    101
-EAST,     102
-WEST,     103
-N,        100
-S,        101
-E,        102
-W,        103
+HELP,      0
+MOVE,      1
+GO,        1
+LOOK,      2
+EXAMINE,   2
+GET,       3
+TALK,      4
+USE,       5
+INTERACT,  5
+INVENTORY, 6
+ITEMS,     6
+QUIT,      99
+EXIT,      99
+AROUND,    100
+NORTH,     101
+SOUTH,     102
+EAST,      103
+WEST,      104
+N,         101
+S,         102
+E,         103
+W,         104
