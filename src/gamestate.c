@@ -41,6 +41,7 @@ int getStrsFromStoryFile () {
 	ssize_t cbBytesRead;
 	const char pszDefPrompt[] = "Your next move? ";
 
+	// TODO: Better error checking & checking for EOF.
 	// Get prompt string.
 	if (g_pGameState->pStory->uPromptStrAddr != 0) {
 		if (fseek(g_pGameState->fpStory, g_pGameState->pStory->uPromptStrAddr, SEEK_SET)) {
