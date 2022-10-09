@@ -9,39 +9,56 @@
 #include <errno.h>
 #include <stdint.h>
 
+// Size to allocate to when using Windows version.
+#ifdef _WINDOWS
+#	define WGL_DEF_CBLINEALLOC 128
+#endif
+
 ssize_t wingetdelim (char **lineptr, size_t *n, int delim, FILE *stream)  {
 #ifdef _WINDOWS
-	size_t pos;
+	size_t pos = 0;
 	int c;
 
+	// Verify input.
 	if (lineptr == NULL || stream == NULL || n == NULL) {
 		errno = EINVAL;
 		return -1;
 	}
 
+	// Get char & exit if EOF.
 	if ((c = getc(stream)) == EOF) return -1;
 
+	// Allocate space for lineptr if lineptr isn't already a pointer.
 	if (*lineptr == NULL) {
-		if ((*lineptr = malloc(128)) == NULL) return -1;
-		*n = 128;
+		if ((*lineptr = malloc(WGL_DEF_CBLINEALLOC)) == NULL) return -1;
+		*n = WGL_DEF_CBLINEALLOC;
 	}
 
-	pos = 0;
-	while(c != EOF) {
+	//pos = 0;
+	while (c != EOF) {
+
+		// Reallocate if buffer too small.
 		if (pos + 1 >= *n) {
-			size_t new_size = *n + (*n >> 2);
-			if (new_size < 128) new_size = 128;
-			char *new_ptr = realloc(*lineptr, new_size);
-			if (new_ptr == NULL) return -1;
-			*n = new_size;
-			*lineptr = new_ptr;
+			// Get the size to realloc to by doubling the original buffer.
+			size_t cbNew = *n + (*n >> 2);
+			if (cbNew < WGL_DEF_CBLINEALLOC) cbNew = WGL_DEF_CBLINEALLOC;
+
+			// Perform realloc.
+			char *pchNew = realloc(*lineptr, cbNew);
+			if (pchNew == NULL) return -1;
+
+			// Set new size and pointer.
+			*n = cbNew;
+			*lineptr = pchNew
 		}
 
-		((unsigned char *)(*lineptr))[pos ++] = c;
-		if (c == delim) break;
+		//((unsigned char *)(*lineptr))[pos++] = c;
+		//if (c == delim) break;
+		if ((((unsigned char *)(*lineptr))[pos++] = c) == delim) break;
 		c = getc(stream);
 	}
 
+	// Set last byte to NUL and return bytes read.
 	(*lineptr)[pos] = '\0';
 	return pos;
 #else
