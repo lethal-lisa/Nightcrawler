@@ -55,6 +55,7 @@ dd 0             ; Alt West.
 
 .initScene_Look:
 db 'LOK', 00h               ; Magic.
+dw 0000h                    ; Story flags to set.
 dw 0000h                    ; Required story flags for alt text.
 dw 0001h                    ; Required item flags for alt text.
 dd .initScene_LookAroundStr ; Around.
@@ -113,6 +114,7 @@ dd 0          ; Alt West.
 
 .mainRoom_Look:
 db 'LOK', 00h
+dw 0000h                ; Story flags to set.
 dw 0000h                ; Required story flags for alt text.
 dw 0000h                ; Required item flags for alt text.
 dd .mainRoom_LookAround ; Around.
