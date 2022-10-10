@@ -85,8 +85,8 @@ typedef struct tagTalk_DiaNode
 {
 	char szMagic[4]; // Magic "DIA".
 	uint16_t cOpts; // Count of OPT nodes (if any).
-	uint16_t fItems; // Item flags to set.
 	uint16_t fStory; // Story flags to set.
+	uint16_t fItem; // Item flags to set.
 	uint16_t fReqItems; // Required item flags.
 	uint16_t fReqStory; // Required story flags.
 	uint32_t uTextAddr; // Address of primary text.
