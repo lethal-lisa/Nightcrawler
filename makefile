@@ -4,7 +4,7 @@
 ## Set phony & default targets, and override the default suffix rules.
 ## ---------------------------------------------------------------------
 
-.PHONY: all clean
+.PHONY: all clean release
 .SUFFIXES:
 
 .DEFAULT_GOAL := all
