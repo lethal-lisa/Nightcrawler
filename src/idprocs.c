@@ -6,6 +6,12 @@
 #include "gamestate.h"
 #include "parsercmds.h"
 
+uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr) {
+	return (((pLook->fReqdStory == 0) || (g_pGameState->fStory & pLook->fReqdStory)) &&
+		((pLook->fReqdItem == 0) || (g_pGameState->fItem & pLook->fReqdItem)) &&
+		(uAltAddr != 0)) ? uAltAddr : uStrAddr;
+}
+
 int procLook (const char *pszParam) {
 
 	// Load LOK node.
@@ -17,16 +23,16 @@ int procLook (const char *pszParam) {
 
 	// If no parameter use the "around" string.
 	if (pszParam == NULL || strlen(pszParam) == 0) {
-		// TODO: This works but it's hella messy and I don't wanna copy it
-		// everywhere. Find a way to make this more legible.
-		if ((g_pGameState->fItem & pLook->fReqdStory) &&
-			(g_pGameState->fStory & pLook->fReqdItem) &&
+		/*
+		if ((g_pGameState->fStory & pLook->fReqdStory) &&
+			(g_pGameState->fItem & pLook->fReqdItem) &&
 			(pLook->uAltAroundAddr != 0)) {
 			uStrAddr = pLook->uAltAroundAddr;
 		} else {
 			uStrAddr = pLook->uAroundAddr;
 		}
-		if (printStrFromStory(g_pGameState->fpStory, uStrAddr)) return 1;
+		*/
+		if (printStrFromStory(g_pGameState->fpStory, isAltLookTxtAvailable(pLook, pLook->uAroundAddr, pLook->uAltAroundAddr))) return 1;
 		return 0;
 	}
 
@@ -38,23 +44,28 @@ int procLook (const char *pszParam) {
 
 	switch (pparserCmd->uId) {
 		case CI_AROUND:
-			uStrAddr = pLook->uAroundAddr;
+			// uStrAddr = pLook->uAroundAddr;
+			uStrAddr = isAltLookTxtAvailable(pLook, pLook->uAroundAddr, pLook->uAltAroundAddr);
 			break;
 
 		case CI_NORTH:
-			uStrAddr = pLook->uNorthAddr;
+			// uStrAddr = pLook->uNorthAddr;
+			uStrAddr = isAltLookTxtAvailable(pLook, pLook->uNorthAddr, pLook->uAltNorthAddr);
 			break;
 
 		case CI_SOUTH:
-			uStrAddr = pLook->uSouthAddr;
+			// uStrAddr = pLook->uSouthAddr;
+			uStrAddr = isAltLookTxtAvailable(pLook, pLook->uSouthAddr, pLook->uAltSouthAddr);
 			break;
 
 		case CI_EAST:
-			uStrAddr = pLook->uEastAddr;
+			// uStrAddr = pLook->uEastAddr;
+			uStrAddr = isAltLookTxtAvailable(pLook, pLook->uEastAddr, pLook->uAltEastAddr);
 			break;
 
 		case CI_WEST:
-			uStrAddr = pLook->uWestAddr;
+			// uStrAddr = pLook->uWestAddr;
+			uStrAddr = isAltLookTxtAvailable(pLook, pLook->uWestAddr, pLook->uAltWestAddr);
 			break;
 
 		default:
