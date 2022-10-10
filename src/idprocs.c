@@ -138,7 +138,12 @@ int procMove (const char *pszParam) {
 	if (uNewSceneAddr != 0) {
 		free(g_pGameState->pScene);
 		g_pGameState->pScene = loadNode(g_pGameState->fpStory, uNewSceneAddr, NT_SCENE);
-		if (g_pGameState->pScene == NULL) return 1;
+
+		// Run LOOK AROUND after changing scenes.
+		if ((g_pGameState->pScene == NULL) || procLook(NULL)) {
+			free(pMove);
+			return 1;
+		}
 	} else {
 		fprintf(stderr, "Unable to move that way.\n");
 	}
