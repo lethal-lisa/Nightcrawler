@@ -59,6 +59,7 @@ typedef struct tagScene_MoveCluster
 typedef struct tagScene_LookCluster
 {
 	char szMagic[4]; // Magic number ID "LOK".
+	uint16_t fStory; // Story flags to set.
 	uint16_t fReqdStory; // Required story flags to display alt text.
 	uint16_t fReqdItem; // Required item flags to display alt text.
 	uint32_t uAroundAddr; // Look around str addr.
