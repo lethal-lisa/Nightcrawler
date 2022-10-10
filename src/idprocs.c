@@ -8,7 +8,7 @@
 
 uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr);
 int procLook (const char *pszParam);
-int isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr);
+uint32_t isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr);
 int procMove (const char *pszParam);
 
 // Determine if alternate look text is to be shown.
@@ -81,7 +81,7 @@ int procLook (const char *pszParam) {
 
 }
 
-int isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr) {
+uint32_t isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr) {
 	return (((pMove->fReqdStory == 0) || (g_pGameState->fStory & pMove->fReqdStory)) &&
 		((pMove->fReqdItem == 0) || (g_pGameState->fItem & pMove->fReqdItem)) &&
 		(uAltAddr != 0)) ? uAltAddr : uAddr;
