@@ -2,6 +2,7 @@
 // Nightcrawler Engine - Parser Command ID Processer
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "gamestate.h"
 #include "parsercmds.h"
