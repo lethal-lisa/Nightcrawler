@@ -17,7 +17,8 @@ struct gameState
 	sceneNodeHdr *pScene; // Current scene node object.
 	uint16_t fStory; // Current story flags.
 	uint16_t fItem; // Current item flags.
-	unsigned int cItems; // Count of pointers in ppszItemName.
+	// uint16_t cItems; // Count of pointers in ppszItemName. This is actually found in pStory now.
+	size_t *pcchItemName; // Lengths of strings in ppszItemName.
 	char **ppszItemName; // Pointers to item name strings.
 	size_t cchPromptString; // Length of pszPromptString.
 	char *pszPromptString; // Prompt string.

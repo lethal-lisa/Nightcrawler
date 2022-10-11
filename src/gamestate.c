@@ -25,6 +25,12 @@ int killGameState () {
 
 	closeStoryFile(g_pGameState->fpStory);
 
+	for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
+		if ((g_pGameState->ppszItemName) && (g_pGameState->ppszItemName[iItem])) free(g_pGameState->ppszItemName[iItem]);
+	}
+	if (g_pGameState->pcchItemName) free(g_pGameState->pcchItemName);
+	if (g_pGameState->ppszItemName) free(g_pGameState->ppszItemName);
+
 	if (g_pGameState->pStory) free(g_pGameState->pStory);
 	if (g_pGameState->pScene) free(g_pGameState->pScene);
 	if (g_pGameState->pszPromptString) free(g_pGameState->pszPromptString);
@@ -59,10 +65,6 @@ int getStrsFromStoryFile () {
 			return 1;
 		}
 		cbBytesRead = wingetdelim(&g_pGameState->pszPromptString, &g_pGameState->cchPromptString, '\0', g_pGameState->fpStory);
-		/* if (ferror(g_pGameState->fpStory)) {
-			fprintf(stderr, "ERROR: Couldn't read prompt string.\n");
-			return 1;
-		} */
 		if (getStrsFromStory_handleError(cbBytesRead, "Failed to load prompt string due to file error")) return 1;
 
 	} else {
@@ -81,17 +83,29 @@ int getStrsFromStoryFile () {
 			return 1;
 		}
 		cbBytesRead = wingetdelim(&g_pGameState->pszHelpString, &g_pGameState->cchPromptString, '\0', g_pGameState->fpStory);
-		/* if (ferror(g_pGameState->fpStory)) {
-			fprintf(stderr, "ERROR: Couldn't read help string.\n");
-			return 1;
-		} */
 		if (getStrsFromStory_handleError(cbBytesRead, "Failed to load help string due to file error")) return 1;
 	}
 
 	// Load item names.
-	// ...oh boy... here we go... If I actually get this done tonight I'll be a...
-	// VERY surprised.
+	if (g_pGameState->pStory->cItems != 0) {
 
+		// Allocate space for each item.
+		g_pGameState->pcchItemName = calloc(g_pGameState->pStory->cItems, sizeof(size_t));
+		g_pGameState->ppszItemName = calloc(g_pGameState->pStory->cItems, sizeof(char *));
+		if ((g_pGameState->pcchItemName == NULL) || (g_pGameState->ppszItemName == NULL)) {
+			perror("Failed to allocate space for item names");
+			return 1;
+		}
+
+		// Load in each item.
+		for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
+#ifdef _DEBUG
+			printf("DEBUG: Loaded item #%d.\n", iItem);
+#endif
+			cbBytesRead = wingetdelim(&g_pGameState->ppszItemName[iItem], &g_pGameState->pcchItemName[iItem], '\0', g_pGameState->fpStory);
+			if (getStrsFromStory_handleError(cbBytesRead, "Failed to load an item")) return 1;
+		}
+	}
 
 	return 0;
 
