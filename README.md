@@ -2,29 +2,30 @@
 (c) 2022 Lisa-Annette Murray Commissioned by Dan Butler/Technomage
 
 ## Summary
-A simplistic text-adventure engine designed primarily to fit within a
-miniscule binary footprint (i.e. a floppy disk).
+A simplistic text-adventure engine designed primarily to fit within a miniscule 
+binary footprint (i.e. a floppy disk).
 
-Prompt based interaction with predefined keywords used to crawl through a
+Prompt based interaction with predefined keywords used to crawl through a 
 binary story file containing the game information.
 
 
 ### Restrictions
 - Data files are limited to 2GiB in size due to using 32-bit absolute addresses.
-- Engine is built around 32/64-bit little-endian architectures using GCC. Other systems may not function.
+- Engine is built around 32/64-bit little-endian architectures using GCC. Other 
+systems may not function.
 
 
 ### Platform
-As for the actual platform of the engine. The release included by default will
-be for Win32, tested against Wine on Linux & Mac, though the source code will
-be in C and built against Linux GCC for testing, and should be capable of
+As for the actual platform of the engine. The release included by default will 
+be for Win32, tested against Wine on Linux & Mac, though the source code will 
+be in C and built against Linux GCC for testing, and should be capable of 
 compiling on any decently modern 64 or 32-bit OS.
 
-Initially DOS compatibility was discussed but Lisa rejected this in favor of
+Initially DOS compatibility was discussed but Lisa rejected this in favor of 
 actually getting the project to release.
 
-You may be able to get the engine to compile on platforms besides these with
-GCC installed. Early versions were proven to work on Termux with some minor
+You may be able to get the engine to compile on platforms besides these with 
+GCC installed. Early versions were proven to work on Termux with some minor 
 makefile changes.
 
 ### Tools Needed/Used
@@ -34,23 +35,26 @@ makefile changes.
 - fasm used to build story files.
 
 ## List of Keywords Recognized by the Engine
-`HELP` Shows engine help & then help included in a story file.
-`MOVE|GO NORTH|SOUTH|EAST|WEST|N|S|E|W` Moves to a different scene.
-`LOOK|EXAMINE [AROUND|NORTH|SOUTH|EAST|WEST|N|S|E|W]` Triggers look node for the scene.
-`GET` Adds the item in the scene to the player's inventory.
-`TALK` Triggers the dialogue tree for the scene.
-`USE` Interact with the scene, optionally using an item in the inventory, selected automatically.
-`ITEMS|INVENTORY` Displays your inventory.
-`QUIT` Quits the game.
+- `HELP` Shows engine help & then help included in a story file.
+- `MOVE|GO NORTH|SOUTH|EAST|WEST|N|S|E|W` Moves to a different scene.
+- `LOOK|EXAMINE [AROUND|NORTH|SOUTH|EAST|WEST|N|S|E|W]` Triggers look node for 
+the scene.
+- `GET` Adds the item in the scene to the player's inventory.
+- `TALK` Triggers the dialogue tree for the scene.
+- `USE` Interact with the scene, optionally using an item in the inventory, 
+selected automatically.
+- `ITEMS|INVENTORY` Displays your inventory.
+- `QUIT` Quits the game.
 
 
 ### Proposed Keywords
-`SAVE` Saves to a fixed save slot.
-`LOAD` Loads from a fixed save slot.
+- `SAVE` Saves to a fixed save slot.
+- `LOAD` Loads from a fixed save slot.
 
 
-## Internal Specifics
-Sometimes multiple items may be needed to proceed. This is handled internally
-by bitmask operations on the game flags.
+# License
+The Nightcrawler engine is licensed under the BSD 3-Clause license (see 
+LICENSE). Story files compatible with Nightcrawler may be licensed however the 
+author of these files sees fit.
 
 *This document is adapted from the original project pitch. See doc/pitch.txt*
