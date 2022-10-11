@@ -34,48 +34,51 @@ initScene:         ; Initial scene node.
 db 'NSC', 00h      ; Scene node header.
 dd .initScene_Move ; Move cluster address.
 dd .initScene_Look ; Look cluster address.
-dw 0000h           ; GET item mask.
+dw 0001h           ; GET item mask.
 dd .initScene_Talk ; TALK cluster address.
 dd .initScene_Use  ; Use cluster offset.
 
 .initScene_Move:
 db 'MOV', 00h    ; Magic.
 dw 0000h         ; Required story flags for alt addresses.
-dw 0000h         ; Required item flags for alt addresses.
-dd sceneMainRoom ; North.
+dw 0001h         ; Required item flags for alt addresses.
+dd 0             ; North.
 dd 0             ; South.
 dd 0             ; East.
 dd 0             ; West.
-dd 0             ; Alt North.
+dd sceneMainRoom ; Alt North.
 dd 0             ; Alt South.
 dd 0             ; Alt East.
 dd 0             ; Alt West.
 
 .initScene_Look:
-db 'LOK', 00h               ; Magic.
-dw 0000h                    ; Story flags to set.
-dw 0000h                    ; Required story flags for alt text.
-dw 0001h                    ; Required item flags for alt text.
-dd .initScene_LookAroundStr ; Around.
-dd .initScene_LookMainRoom  ; North.
-dd .initScene_LookWall      ; South.
-dd .initScene_LookWall      ; East.
-dd .initScene_LookWall      ; West.
-dd .altLookStr              ; Around alt.
-dd 0                        ; North alt.
-dd 0                        ; South alt.
-dd 0                        ; East alt.
-dd 0                        ; West alt.
+db 'LOK', 00h                ; Magic.
+dw 0000h                     ; Story flags to set.
+dw 0000h                     ; Required story flags for alt text.
+dw 0001h                     ; Required item flags for alt text.
+dd .initScene_LookAroundC    ; Around.
+dd .initScene_LookClosedDoor ; North.
+dd .initScene_LookWall       ; South.
+dd .initScene_LookWall       ; East.
+dd .initScene_LookWall       ; West.
+dd .initScene_LookAroundO    ; Around alt.
+dd .initScene_LookOpenDoor   ; North alt.
+dd 0                         ; South alt.
+dd 0                         ; East alt.
+dd 0                         ; West alt.
 
-.altLookStr:
-db 'Alternative text found!', 00h
-
-.initScene_LookAroundStr:
-db 'You find yourself standing in an empty hallway with an open door at the', 10
-db 'North end. The hallway is dimly lit and a bright light pours from the', 10
-db 'doorway. Looking around there are no other exits.', 00h
-.initScene_LookMainRoom:
-db 'Beyond the open door is a blinding light.', 00h
+.initScene_LookAroundO:
+db 'The door at the end of the hall is open now, and bright light fills the', 10
+db 'empty passage.', 00h
+.initScene_LookAroundC:
+db 'You find yourself standing in an empty hallway with an closed door at the', 10
+db 'North end. The hallway is dimly lit and a bright light pours from', 10
+db 'underneath the doorway. Looking around there are no other exits.', 00h
+.initScene_LookClosedDoor:
+db 'There is a closed and locked door at the end of the hallway. There is a', 10
+db 'key on the floor next to the door.', 00h
+.initScene_LookOpenDoor:
+db 'Beyond the now open door is a blinding light.', 00h
 .initScene_LookWall:
 db 'There is nothing but the wall with a faint tiled pattern.', 00h
 
