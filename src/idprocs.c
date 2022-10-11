@@ -7,10 +7,12 @@
 #include "gamestate.h"
 #include "parsercmds.h"
 
+// Local procs.
 uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr);
 int procLook (const char *pszParam);
 uint32_t isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr);
 int procMove (const char *pszParam);
+int procGet (const char *pszParam);
 
 // Determine if alternate look text is to be shown.
 // Returns an address of either the normal or alternate string.
@@ -154,6 +156,16 @@ int procMove (const char *pszParam) {
 
 }
 
+// Process CI_GET.
+int procGet (const char *pszParam) {
+
+	// TODO: Write the rest of this. Checking item names and such, being able
+	// to grab items from multiple sources.
+	g_pGameState->fItem |= g_pGameState->pScene->uGetMask;
+	return 0;
+
+}
+
 int procCmdId (const unsigned int uId, const char *pszParam) {
 
 	switch (uId) {
@@ -180,6 +192,10 @@ Command List (case does not matter):\n\
 
 		case CI_LOOK: // Look around.
 			return procLook(pszParam);
+			break;
+
+		case CI_GET: // Get the item(s) in the scene.
+			return procGet(pszParam);
 			break;
 
 		case CI_QUIT: // Quit the game.

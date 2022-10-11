@@ -58,7 +58,10 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 		"MOV",
 		"LOK",
 		"TLK",
-		"DIA"
+		"DIA",
+		"DOL",
+		"OPT",
+		"USE"
 	};
 
 	size_t cbNode; // Size of node struct.
@@ -88,6 +91,18 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 
 		case NT_DIA:
 			cbNode = sizeof(talk_DiaNode);
+			break;
+
+		case NT_DOL:
+			cbNode = sizeof(dia_OptList);
+			break;
+
+		case NT_OPT:
+			cbNode = sizeof(dia_OptNode);
+			break;
+
+		case NT_USE:
+			cbNode = sizeof(scene_UseCluster);
 			break;
 
 		default:

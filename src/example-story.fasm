@@ -2,17 +2,17 @@
 ; Assemble with fasm
 
 ; Header:
-db 'NST', 00h ; magic.
-dd 00000000h  ; version.
-dd gameTitle  ; title addr.
-dd promptStr  ; prompt string addr.
-dd helpStr    ; help string addr.
-dd itemNames  ; item name addr.
-dd initScene  ; initial scene addr.
+db 'NST', 00h ; Magic.
+dd 00000000h  ; NST format version.
+dd gameTitle  ; Title string addr.
+dd promptStr  ; Prompt string addr.
+dd helpStr    ; Help string addr.
+dw 1          ; Count of item names.
+dd itemNames  ; Item name addr.
+dd initScene  ; Initial scene addr.
 
 gameTitle:    ; Game title string.
 db 'Example Nightcrawler Story File', 10
-db 'Title String', 10
 db '(c)2022 Lisa-Annette Murray, part of the Nightcrawler codebase.', 10, 00h
 
 promptStr:    ; Prompt string.
@@ -23,10 +23,8 @@ db 'Nightcrawler Example Story File', 10
 db '(c)2022 Lisa-Annette Murray', 10
 db 'This story file contains two scenes used to debug the Nightcrawler engine.', 10, 00h
 
-itemNames:    ; Item name node.
-db 'ITM', 00h ; Magic.
-dw 0001h      ; Item count.
-db "Hi I'm an item! :D", 00h
+itemNames:    ; Item name list.
+db 'Door key', 00h
 
 ; ----------------------------------------------------------------------------
 ; Initial Scene Node
@@ -83,9 +81,16 @@ db 'There is nothing but the wall with a faint tiled pattern.', 00h
 
 .initScene_Talk:
 db 'TLK', 00h ; Magic.
+dw 0000h      ; Required story flags.
+dw 0000h      ; Required item flags.
+dd 0          ; Addr of initial DIA node.
 
 .initScene_Use:
 db 'USE', 00h ; Magic.
+dw 0000h      ; Required story flags.
+dw 0000h      ; Required item flags.
+dw 0000h      ; Story flags to set.
+dd 0          ; Addr of string to print.
 
 ; ----------------------------------------------------------------------------
 ; Main Room Node
@@ -97,7 +102,7 @@ dd .mainRoom_Move ; MOVE cluster.
 dd .mainRoom_Look ; LOOK cluster.
 dw 0000h          ; GET item mask.
 dd .mainRoom_Talk ; TALK cluster
-dd .mainRoom_Use  ; USE cluster.
+dd 0 ;dd .mainRoom_Use  ; USE cluster.
 
 .mainRoom_Move:
 db 'MOV', 00h ; Magic.
@@ -113,15 +118,15 @@ dd 0          ; Alt East.
 dd 0          ; Alt West.
 
 .mainRoom_Look:
-db 'LOK', 00h
+db 'LOK', 00h           ; Magic.
 dw 0000h                ; Story flags to set.
 dw 0000h                ; Required story flags for alt text.
 dw 0000h                ; Required item flags for alt text.
 dd .mainRoom_LookAround ; Around.
-dd .mainRoom_LookWall   ; N
-dd .mainRoom_LookBack   ; S
-dd .mainRoom_LookWall   ; E
-dd .mainRoom_LookWall   ; W
+dd .mainRoom_LookWall   ; North.
+dd .mainRoom_LookBack   ; South.
+dd .mainRoom_LookWall   ; East.
+dd .mainRoom_LookWall   ; West.
 dd 0                    ; Around alt.
 dd 0                    ; North alt.
 dd 0                    ; South alt.
@@ -139,9 +144,29 @@ db 'Breaking up the tiled walls is the door to the small passage you entered', 1
 db 'from.', 00h
 
 .mainRoom_Talk:
-db 'TLK', 00h
+db 'TLK', 00h     ; Magic.
+dw 0000h          ; Required story flags.
+dw 0000h          ; Required item flags.
+dd .teddyInitTalk ; Initial DIA node addr.
 
-.mainRoom_Use:
-db 'USE', 00h
+.teddyInitTalk:
+db 'DIA', 00h     ; Magic.
+dw 0001h          ; Story flags to set.
+dw 0000h          ; Item flags to set.
+dw 0000h          ; Required story flags for alt text.
+dw 0000h          ; Required item flags for alt text.
+dd .teddyInitText ; String to print.
+dd 0              ; Alt string to print.
+dd 0              ; Opt node list addr.
+
+.teddyInitText:
+db '"Hi, I', "'m a teddy bear!", '" the bear speaks with a squeak.', 00h
+
+;.mainRoom_Use:
+;db 'USE', 00h ; Magic.
+;dw 0000h      ; Required story flags.
+;dw 0000h      ; Required item flags.
+;dw 0000h      ; Story flags to set.
+;dd 0          ; Addr of string to print.
 
 ; End-of-File

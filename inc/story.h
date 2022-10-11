@@ -15,6 +15,9 @@
 #define NT_LOOK 3
 #define NT_TALK 4
 #define NT_DIA 5
+#define NT_DOL 6
+#define NT_OPT 7
+#define NT_USE 8
 
 // Toplevel story node struct.
 typedef struct tagStoryFileHdr
@@ -24,7 +27,8 @@ typedef struct tagStoryFileHdr
 	uint32_t uGameTitleAddr; // Address in the file where game title string begins.
 	uint32_t uPromptStrAddr; // Address in the file where the prompt string begins (0 for none).
 	uint32_t uHelpStrAddr; // Address in the file where the help string begins (0 for none).
-	uint32_t uItemNameAddr; // Address in the file where item name cluster begins.
+	uint16_t cItems; // Count of items.
+	uint32_t uItemNameAddr; // Address in the file where item name list begins.
 	uint32_t uInitSceneAddr; // Address in the file where the file name for the initial scene node is found.
 } __attribute__((packed, aligned(4))) storyFileHdr;
 
@@ -78,21 +82,44 @@ typedef struct tagScene_LookCluster
 typedef struct tagScene_TalkCluster
 {
 	char szMagic[4]; // Magic "TLK".
-	uint16_t cDiaNodes; // Count of DIA nodes.
+	uint16_t fReqStory; // Required story flags.
+	uint16_t fReqItems; // Required item flags.
+	uint32_t uInitAddr; // Initial DIA node addr.
 } __attribute((packed, aligned(4))) scene_TalkCluster;
 
-// Individual dialogue section node.
+// Individual dialogue section node struct.
 typedef struct tagTalk_DiaNode
 {
 	char szMagic[4]; // Magic "DIA".
-	uint16_t cOpts; // Count of OPT nodes (if any).
 	uint16_t fStory; // Story flags to set.
 	uint16_t fItem; // Item flags to set.
-	uint16_t fReqItems; // Required item flags.
 	uint16_t fReqStory; // Required story flags.
+	uint16_t fReqItems; // Required item flags.
 	uint32_t uTextAddr; // Address of primary text.
-	uint32_t uAltTextAddr; // Address of text to display when Req'd flags not met.
+	uint32_t uAltTextAddr; // Address of text to display when Req'd flags met (0 if none).
+	uint32_t uOptList; // OPT node list node addr (0 if none).
 } __attribute((packed, aligned(4))) talk_DiaNode;
+
+// OPT node list node struct.
+typedef struct tagDia_OptList
+{
+	char szMagic[4]; // Magic "DOL".
+	uint16_t cOpts; // Count of OPT nodes.
+} __attribute((packed, aligned(4))) dia_OptList;
+
+// OPT node struct.
+typedef struct tagDia_OptNode
+{
+	char szMagic[4]; // Magic "OPT".
+} __attribute((packed, aligned(4))) dia_OptNode;
+
+// Use node struct.
+typedef struct tagScene_UseCluster
+{
+	char szMagic[4]; // Magic "USE".
+	uint16_t fStory; // Story flags to set.
+	uint32_t uStrAddr; // Addr of string to print.
+} __attribute((packed, aligned(4))) scene_UseCluster;
 
 // Handlers for opening and closing story files.
 FILE *openStoryFile (const char *pszFileName);
