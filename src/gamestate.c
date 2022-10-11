@@ -99,9 +99,6 @@ int getStrsFromStoryFile () {
 
 		// Load in each item.
 		for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
-#ifdef _DEBUG
-			printf("DEBUG: Loaded item #%d.\n", iItem);
-#endif
 			cbBytesRead = wingetdelim(&g_pGameState->ppszItemName[iItem], &g_pGameState->pcchItemName[iItem], '\0', g_pGameState->fpStory);
 			if (getStrsFromStory_handleError(cbBytesRead, "Failed to load an item")) return 1;
 		}
