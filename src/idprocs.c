@@ -199,10 +199,10 @@ Command List (case does not matter):\n\
 			break;
 
 		case CI_ITEMS: // Show a list of items.
-			if (g_pGameState->pStory->cItems == 0) break;
+			if ((g_pGameState->pStory->cItems == 0) || (g_pGameState->fItem == 0)) break;
 			puts("-- Inventory --");
 			for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
-				puts(g_pGameState->ppszItemName[iItem]);
+				if (g_pGameState->fItem & (1 << iItem)) puts(g_pGameState->ppszItemName[iItem]);
 			}
 			break;
 
