@@ -198,6 +198,14 @@ Command List (case does not matter):\n\
 			return procGet(pszParam);
 			break;
 
+		case CI_ITEMS: // Show a list of items.
+			if (g_pGameState->pStory->cItems == 0) break;
+			puts("-- Inventory --");
+			for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
+				puts(g_pGameState->ppszItemName[iItem]);
+			}
+			break;
+
 		case CI_QUIT: // Quit the game.
 			return 1;
 			break;
