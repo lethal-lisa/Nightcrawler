@@ -118,6 +118,9 @@ typedef struct tagScene_UseCluster
 {
 	char szMagic[4]; // Magic "USE".
 	uint16_t fStory; // Story flags to set.
+	uint16_t fItem; // Item flags to set.
+	uint16_t fReqStory; // Required story flags.
+	uint16_t fReqItems; // Required item flags.
 	uint32_t uStrAddr; // Addr of string to print.
 } __attribute((packed, aligned(4))) scene_UseCluster;
 

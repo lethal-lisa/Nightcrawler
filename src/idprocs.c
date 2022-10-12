@@ -161,7 +161,33 @@ int procGet (const char *pszParam) {
 
 	// TODO: Write the rest of this. Checking item names and such, being able
 	// to grab items from multiple sources.
+	for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
+		if (g_pGameState->pScene->uGetMask & (1 << iItem)) printf("Got %s\n", g_pGameState->ppszItemName[iItem]);
+	}
 	g_pGameState->fItem |= g_pGameState->pScene->uGetMask;
+	return 0;
+
+}
+
+// Process CI_USE.
+int procUse (const char *pszParam) {
+
+	// Load USE node.
+	scene_UseCluster *pUse;
+	pUse = loadNode(g_pGameState->fpStory, g_pGameState->pScene->uUseClustAddr, NT_USE);
+	if (pUse == NULL) return 1;
+
+	if (((pUse->fReqStory == 0) || (pUse->fReqStory & g_pGameState->fStory)) &&
+		((pUse->fReqItems == 0) || (pUse->fReqItems & g_pGameState->fItem))) {
+		g_pGameState->fStory |= pUse->fStory;
+		g_pGameState->fItem |= pUse->fItem;
+		if ((pUse->uStrAddr != 0) && (printStrFromStory(g_pGameState->fpStory, pUse->uStrAddr))) {
+			free(pUse);
+			return 1;
+		}
+	}
+
+	free(pUse);
 	return 0;
 
 }
@@ -196,6 +222,10 @@ Command List (case does not matter):\n\
 
 		case CI_GET: // Get the item(s) in the scene.
 			return procGet(pszParam);
+			break;
+
+		case CI_USE: // Use an item to set flags based on scene.
+			return procUse(pszParam);
 			break;
 
 		case CI_ITEMS: // Show a list of items.

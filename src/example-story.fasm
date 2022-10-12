@@ -35,13 +35,13 @@ db 'NSC', 00h      ; Scene node header.
 dd .initScene_Move ; Move cluster address.
 dd .initScene_Look ; Look cluster address.
 dw 0001h           ; GET item mask.
-dd .initScene_Talk ; TALK cluster address.
+dd 0               ; TALK cluster address.
 dd .initScene_Use  ; Use cluster offset.
 
 .initScene_Move:
 db 'MOV', 00h    ; Magic.
-dw 0000h         ; Required story flags for alt addresses.
-dw 0001h         ; Required item flags for alt addresses.
+dw 0001h         ; Required story flags for alt addresses.
+dw 0000h         ; Required item flags for alt addresses.
 dd 0             ; North.
 dd 0             ; South.
 dd 0             ; East.
@@ -54,8 +54,8 @@ dd 0             ; Alt West.
 .initScene_Look:
 db 'LOK', 00h                ; Magic.
 dw 0000h                     ; Story flags to set.
-dw 0000h                     ; Required story flags for alt text.
-dw 0001h                     ; Required item flags for alt text.
+dw 0001h                     ; Required story flags for alt text.
+dw 0000h                     ; Required item flags for alt text.
 dd .initScene_LookAroundC    ; Around.
 dd .initScene_LookClosedDoor ; North.
 dd .initScene_LookWall       ; South.
@@ -82,18 +82,16 @@ db 'Beyond the now open door is a blinding light.', 00h
 .initScene_LookWall:
 db 'There is nothing but the wall with a faint tiled pattern.', 00h
 
-.initScene_Talk:
-db 'TLK', 00h ; Magic.
-dw 0000h      ; Required story flags.
-dw 0000h      ; Required item flags.
-dd 0          ; Addr of initial DIA node.
-
 .initScene_Use:
 db 'USE', 00h ; Magic.
+dw 0001h      ; Story flags to set.
+dw 0000h      ; Item flags to set.
 dw 0000h      ; Required story flags.
-dw 0000h      ; Required item flags.
-dw 0000h      ; Story flags to set.
-dd 0          ; Addr of string to print.
+dw 0001h      ; Required item flags.
+dd .iS_UseKey ; Addr of string to print.
+
+.iS_UseKey:
+db 'You insert the key into the door and turn. With a click the door opens.', 00h
 
 ; ----------------------------------------------------------------------------
 ; Main Room Node
