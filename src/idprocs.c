@@ -160,10 +160,24 @@ int procMove (const char *pszParam) {
 int procGet (const char *pszParam) {
 
 	// TODO: Write the rest of this. Checking item names and such, being able
-	// to grab items from multiple sources.
-	for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
-		if (g_pGameState->pScene->uGetMask & (1 << iItem)) printf("Got %s\n", g_pGameState->ppszItemName[iItem]);
+	// to grab items from multiple sources besides scenes.
+
+	// Print special string if there's nothing to grab, or items already
+	// grabbed.
+	if ((g_pGameState->pScene->uGetMask == 0) ||
+		(g_pGameState->pStory->cItems == 0) ||
+		(g_pGameState->fItem & g_pGameState->pScene->uGetMask)) {
+		puts("Nothing to get.");
+		return 0;
 	}
+
+	// Print string(s) of items grabbed.
+	for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
+		if (g_pGameState->pScene->uGetMask & (1 << iItem)) {
+			printf("Got %s.\n", g_pGameState->ppszItemName[iItem]);
+		}
+	}
+
 	g_pGameState->fItem |= g_pGameState->pScene->uGetMask;
 	return 0;
 
@@ -172,6 +186,12 @@ int procGet (const char *pszParam) {
 // Process CI_USE.
 int procUse (const char *pszParam) {
 
+	// Reject with no error if no use cluster.
+	if (g_pGameState->pScene->uUseClustAddr == 0) {
+		puts("No effect.");
+		return 0;
+	}
+
 	// Load USE node.
 	scene_UseCluster *pUse;
 	pUse = loadNode(g_pGameState->fpStory, g_pGameState->pScene->uUseClustAddr, NT_USE);
@@ -179,12 +199,17 @@ int procUse (const char *pszParam) {
 
 	if (((pUse->fReqStory == 0) || (pUse->fReqStory & g_pGameState->fStory)) &&
 		((pUse->fReqItems == 0) || (pUse->fReqItems & g_pGameState->fItem))) {
+
 		g_pGameState->fStory |= pUse->fStory;
 		g_pGameState->fItem |= pUse->fItem;
+
+		// Print string of USE node.
 		if ((pUse->uStrAddr != 0) && (printStrFromStory(g_pGameState->fpStory, pUse->uStrAddr))) {
 			free(pUse);
 			return 1;
 		}
+	} else {
+		puts("No effect.");
 	}
 
 	free(pUse);
