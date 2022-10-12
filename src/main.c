@@ -287,7 +287,7 @@ void printBuildInfo (void) {
 	printf("\tBuilt with: ");
 #ifdef __clang__
 	// Clang includes "Clang <ver>" in its definition of __VERSION__.
-	printf(__VERSION__);
+	printf("%s\n\n", __VERSION__);
 #else
 	printf("GCC %s\n\n", __VERSION__);
 #endif
