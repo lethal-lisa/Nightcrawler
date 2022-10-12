@@ -271,6 +271,9 @@ void printBuildInfo (void) {
 	puts("Release");
 #endif
 
+	// Print build date.
+	printf("\tBuild Date: %s\n", __DATE__);
+
 	// Release platform.
 	printf("\tRelease Platform: ");
 #ifndef _WINDOWS
