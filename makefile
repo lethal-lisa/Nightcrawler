@@ -25,33 +25,42 @@ OBJS     := $(patsubst $(SOURCES)%.c,$(BUILD)%.o,$(wildcard src/*.c))
 
 ifdef WINDOWS
 ifdef WIN64
-	CC   := x86_64-w64-mingw32-gcc
-	LD   := x86_64-w64-mingw32-gcc
-	STRIP := x86_64-w64-mingw32-strip
+	GCCPREFIX := x86_64-w64-mingw32-
 else
-	CC   := i686-w64-mingw32-gcc
-	LD   := i686-w64-mingw32-gcc
-	STRIP := i686-w64-mingw32-strip
+	GCCPREFIX := i686-w64-mingw32-
 endif
-	TARGET := $(TARGET).exe
-else
-	CC   := gcc
-	LD   := gcc
-	STRIP := strip
+	TARGET    := $(TARGET).exe
 endif
 
-CFLAGS   := -Wall -Os -fno-printf-return-value -fshort-enums
+ifndef CLANG
+	CC        := $(GCCPREFIX)gcc
+	LD        := $(GCCPREFIX)gcc
+	STRIP     := $(GCCPREFIX)strip
+else
+	CC        := clang
+	LD        := clang
+	STRIP     := strip
+endif
+
+CFLAGS   := -Wall -Os -fshort-enums
+ifndef CLANG
+	# -fno-printf-return-value unsupported on clang.
+	CFLAGS += -fno-printf-return-value
+endif
+
 ifdef DEBUG
 	CFLAGS += -D_DEBUG -g
 endif
+
 ifdef WINDOWS
 	CFLAGS += -D_WINDOWS
 ifdef WIN64
-CFLAGS += -D_WIN64
+	CFLAGS += -D_WIN64
 else
-CFLAGS += -D_WIN32
+	CFLAGS += -D_WIN32
 endif
 endif
+
 LDFLAGS  := $(CFLAGS)
 CFLAGS   += -I$(INCLUDE)
 
