@@ -71,8 +71,8 @@ CFLAGS   += -I$(INCLUDE)
 ## Generate a release archive.
 release: all
 	$(STRIP) -vs $(TARGET)
-	md5sum -b default.nst $(TARGET) | tee nightcrawler.md5
-	7z a nightcrawler.7z nightcrawler.md5 default.nst $(TARGET)
+	md5sum -b default.nst LICENSE README.md $(TARGET) | tee nightcrawler.md5
+	7z a nightcrawler.7z nightcrawler.md5 default.nst LICENSE README.md $(TARGET)
 
 ## Compile all targets.
 all: $(TARGET)
