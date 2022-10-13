@@ -154,8 +154,10 @@ dd .teddyInitTalk ; Initial DIA node addr.
 db 'DIA', 00h     ; Magic.
 dw 0001h          ; Story flags to set.
 dw 0000h          ; Item flags to set.
-dw 0000h          ; Required story flags for alt text.
-dw 0000h          ; Required item flags for alt text.
+dw 0000h          ; Alt story flags to set.
+dw 0000h          ; Alt item flags to set.
+dw 0000h          ; Required story flags for alt text & flags.
+dw 0000h          ; Required item flags for alt text & flags.
 dd .teddyInitText ; String to print.
 dd 0              ; Alt string to print.
 dd 0              ; Opt node list addr.
