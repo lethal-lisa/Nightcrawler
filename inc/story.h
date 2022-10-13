@@ -113,6 +113,12 @@ typedef struct tagDia_OptList
 typedef struct tagDia_OptNode
 {
 	char szMagic[4]; // Magic "OPT".
+	uint16_t fStory; // Story flags to set.
+	uint16_t fItem; // Item flags to set.
+	uint16_t fReqStory; // Required story flags to set.
+	uint16_t fReqItems; // Required item flags to set.
+	uint32_t uTextAddr; // Address to the name of the option.
+	uint32_t uDiaAddr; // Address of the DIA node to branch to.
 } __attribute((packed, aligned(4))) dia_OptNode;
 
 // Use node struct.

@@ -148,28 +148,56 @@ db 'from.', 00h
 db 'TLK', 00h     ; Magic.
 dw 0000h          ; Required story flags.
 dw 0000h          ; Required item flags.
-dd .teddyInitTalk ; Initial DIA node addr.
+dd .teddyInitDia  ; Initial DIA node addr.
 
-.teddyInitTalk:
+; ----------------------------------------------------------------------------
+; Teddy Bear Dialogue Nodes
+; ----------------------------------------------------------------------------
+
+.teddyInitDia:
 db 'DIA', 00h     ; Magic.
 dw 0001h          ; Story flags to set.
 dw 0000h          ; Item flags to set.
 dw 0000h          ; Alt story flags to set.
 dw 0000h          ; Alt item flags to set.
 dw 0000h          ; Required story flags for alt text & flags.
-dw 0000h          ; Required item flags for alt text & flags.
+dw 0002h          ; Required item flags for alt text & flags.
 dd .teddyInitText ; String to print.
-dd 0              ; Alt string to print.
-dd 0              ; Opt node list addr.
+dd .tedThankTxt   ; Alt string to print.
+dd .teddyOptList1 ; Opt node list addr.
+
+.teddyOptList1:
+db 'DOL', 00h ; Magic.
+dw 1          ; Count of option node addrs.
+dd .tedOptHug ; Option node addr.
+
+.tedOptHug:
+db 'OPT', 00h    ; Magic.
+dw 0002h         ; Story flags to set.
+dw 0000h         ; Item flags to set.
+dw 0000h         ; Required story flags.
+dw 0000h         ; Required item flags.
+dd .tedOptHugTxt ; Text this should print out.
+dd .tedDiaThank  ; DIA node this branches to.
+
+.tedDiaThank:
+db 'DIA', 00h ; Magic.
+dw 0000h      ; Story flags to set.
+dw 0000h      ; Item flags to set.
+dw 0000h      ; Alt story flags to set.
+dw 0000h      ; Alt item flags to set.
+dw 0002h      ; Required story flags.
+dw 0000h      ; Required item flags.
+dd .tedThankTxt 
+dd 0
+dd 0
+
 
 .teddyInitText:
 db '"Hi, I', "'m a teddy bear!", '" the bear speaks with a squeak.', 00h
-
-;.mainRoom_Use:
-;db 'USE', 00h ; Magic.
-;dw 0000h      ; Required story flags.
-;dw 0000h      ; Required item flags.
-;dw 0000h      ; Story flags to set.
-;dd 0          ; Addr of string to print.
+.tedOptHugTxt:
+db 'Hug the teddy bear.', 00h
+.tedThankTxt:
+db '"Thank you very much!" the bear blushes and smiles.', 00h
 
 ; End-of-File
