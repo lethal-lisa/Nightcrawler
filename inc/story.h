@@ -93,6 +93,8 @@ typedef struct tagTalk_DiaNode
 	char szMagic[4]; // Magic "DIA".
 	uint16_t fStory; // Story flags to set.
 	uint16_t fItem; // Item flags to set.
+	uint16_t fAltStory; // Alt story flags to set.
+	uint16_t fAltItem; // Alt item flags to set.
 	uint16_t fReqStory; // Required story flags.
 	uint16_t fReqItems; // Required item flags.
 	uint32_t uTextAddr; // Address of primary text.

@@ -6,6 +6,7 @@
 
 #include "gamestate.h"
 #include "parsercmds.h"
+#include "dialogue.h"
 
 // Local procs.
 uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr);
@@ -307,7 +308,10 @@ int procTalk (const char *pszParam) {
 		// TODO: Implement beginDialogue() in another file. The Dialogue
 		// system is so complex that inserting it into this file would
 		// severely dampen the legibility of this file.
-		puts("NYI: beginDialogue not implemented.");
+		if (beginDialogue(pTalk->uInitAddr)) {
+			free(pTalk);
+			return 1;
+		}
 
 	}
 
