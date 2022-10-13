@@ -9,10 +9,77 @@
 
 // Local procs.
 uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr);
-int procLook (const char *pszParam);
 uint32_t isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr);
+
+int procLook (const char *pszParam);
 int procMove (const char *pszParam);
 int procGet (const char *pszParam);
+int procUse (const char *pszParam);
+int procTalk (const char *pszParam);
+
+// Process a command based on its ID.
+// IDs are defined in parsercmds.h, and returned by the gperf parser.
+int procCmdId (const unsigned int uId, const char *pszParam) {
+
+	switch (uId) {
+		case CI_HELP: // Show help.
+			puts("-- Nightcrawler Engine Help --\n\
+Command List (case does not matter):\n\
+\tHELP            - You're looking at it.\n\
+\tMOVE/GO         - Move to another scene.\n\
+\tLOOK/EXAMINE    - Look around the current scene.\n\
+\tGET             - Grab an item in the scene.\n\
+\tTALK            - Talk to a character in the scene.\n\
+\tUSE/INTERACT    - Do something in the scene with an item. For example:\n\
+\t                  Show a character an item, use an item with an object\n\
+\t                  in the scene, or perform some other context-\n\
+\t                  sensitive action.\n\
+\tITEMS/INVENTORY - Show a list of the items in your posession.\n\
+\tQUIT/EXIT       - Quit the game.\n");
+			if (g_pGameState->pszHelpString) puts(g_pGameState->pszHelpString);
+			break;
+
+		case CI_MOVE: // Move to a new scene.
+			return procMove(pszParam);
+			break;
+
+		case CI_LOOK: // Look around.
+			return procLook(pszParam);
+			break;
+
+		case CI_GET: // Get the item(s) in the scene.
+			return procGet(pszParam);
+			break;
+
+		case CI_USE: // Use an item to set flags based on scene.
+			return procUse(pszParam);
+			break;
+
+		case CI_ITEMS: // Show a list of items.
+			if ((g_pGameState->pStory->cItems == 0) || (g_pGameState->fItem == 0)) break;
+			puts("-- Inventory --");
+			for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
+				if (g_pGameState->fItem & (1 << iItem)) puts(g_pGameState->ppszItemName[iItem]);
+			}
+			break;
+
+		case CI_TALK: // Begin talk mode.
+			procTalk(pszParam);
+			break;
+
+		case CI_QUIT: // Quit the game.
+			return 1;
+			break;
+
+		default:
+			fprintf(stderr, "NYI: Command with ID %d not yet implemented.\n", uId);
+			break;
+
+	}
+
+	return 0;
+
+}
 
 // Determine if alternate look text is to be shown.
 // Returns an address of either the normal or alternate string.
@@ -20,6 +87,14 @@ uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t u
 	return (((pLook->fReqdStory == 0) || (g_pGameState->fStory & pLook->fReqdStory)) &&
 		((pLook->fReqdItem == 0) || (g_pGameState->fItem & pLook->fReqdItem)) &&
 		(uAltAddr != 0)) ? uAltAddr : uStrAddr;
+}
+
+// Determine if alternate movement addresses are to be used.
+// Returns an address of either the normal or alternate string.
+uint32_t isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr) {
+	return (((pMove->fReqdStory == 0) || (g_pGameState->fStory & pMove->fReqdStory)) &&
+		((pMove->fReqdItem == 0) || (g_pGameState->fItem & pMove->fReqdItem)) &&
+		(uAltAddr != 0)) ? uAltAddr : uAddr;
 }
 
 // Process CI_LOOK.
@@ -82,12 +157,6 @@ int procLook (const char *pszParam) {
 	free(pLook);
 	return 0;
 
-}
-
-uint32_t isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr) {
-	return (((pMove->fReqdStory == 0) || (g_pGameState->fStory & pMove->fReqdStory)) &&
-		((pMove->fReqdItem == 0) || (g_pGameState->fItem & pMove->fReqdItem)) &&
-		(uAltAddr != 0)) ? uAltAddr : uAddr;
 }
 
 // Process CI_MOVE.
@@ -159,8 +228,7 @@ int procMove (const char *pszParam) {
 // Process CI_GET.
 int procGet (const char *pszParam) {
 
-	// TODO: Write the rest of this. Checking item names and such, being able
-	// to grab items from multiple sources besides scenes.
+	// TODO: Potentially implement checking against item names.
 
 	// Print special string if there's nothing to grab, or items already
 	// grabbed.
@@ -217,60 +285,33 @@ int procUse (const char *pszParam) {
 
 }
 
-int procCmdId (const unsigned int uId, const char *pszParam) {
+// Process CI_TALK.
+int procTalk (const char *pszParam) {
 
-	switch (uId) {
-		case CI_HELP: // Show help.
-			puts("-- Nightcrawler Engine Help --\n\
-Command List (case does not matter):\n\
-\tHELP            - You're looking at it.\n\
-\tMOVE/GO         - Move to another scene.\n\
-\tLOOK/EXAMINE    - Look around the current scene.\n\
-\tGET             - Grab an item in the scene.\n\
-\tTALK            - Talk to a character in the scene.\n\
-\tUSE/INTERACT    - Do something in the scene with an item. For example:\n\
-\t                  Show a character an item, use an item with an object\n\
-\t                  in the scene, or perform some other context-\n\
-\t                  sensitive action.\n\
-\tITEMS/INVENTORY - Show a list of the items in your posession.\n\
-\tQUIT/EXIT       - Quit the game.\n");
-			if (g_pGameState->pszHelpString) puts(g_pGameState->pszHelpString);
-			break;
+	// Reject with no error if no talk cluster.
+	if (g_pGameState->pScene->uTalkClustAddr == 0) {
+		puts("There is no one here to talk to.");
+		return 0;
+	}
 
-		case CI_MOVE: // Move to a new scene.
-			return procMove(pszParam);
-			break;
+	// Load TLK node.
+	scene_TalkCluster *pTalk;
+	pTalk = loadNode(g_pGameState->fpStory, g_pGameState->pScene->uTalkClustAddr, NT_TALK);
+	if (pTalk == NULL) return 1;
 
-		case CI_LOOK: // Look around.
-			return procLook(pszParam);
-			break;
+	// Gate based on required flags.
+	if (((pTalk->fReqStory == 0) || (pTalk->fReqStory & g_pGameState->fStory)) &&
+		((pTalk->fReqItems == 0) || (pTalk->fReqItems & g_pGameState->fItem))) {
 
-		case CI_GET: // Get the item(s) in the scene.
-			return procGet(pszParam);
-			break;
-
-		case CI_USE: // Use an item to set flags based on scene.
-			return procUse(pszParam);
-			break;
-
-		case CI_ITEMS: // Show a list of items.
-			if ((g_pGameState->pStory->cItems == 0) || (g_pGameState->fItem == 0)) break;
-			puts("-- Inventory --");
-			for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
-				if (g_pGameState->fItem & (1 << iItem)) puts(g_pGameState->ppszItemName[iItem]);
-			}
-			break;
-
-		case CI_QUIT: // Quit the game.
-			return 1;
-			break;
-
-		default:
-			fprintf(stderr, "NYI: Command with ID %d not yet implemented.\n", uId);
-			break;
+		// Process DIA node.
+		// TODO: Implement beginDialogue() in another file. The Dialogue
+		// system is so complex that inserting it into this file would
+		// severely dampen the legibility of this file.
+		puts("NYI: beginDialogue not implemented.");
 
 	}
 
+	free(pTalk);
 	return 0;
 
 }
