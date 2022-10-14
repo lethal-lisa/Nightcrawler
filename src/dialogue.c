@@ -92,6 +92,9 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	// Load DOL node.
 	optsData.pDol = loadNode(g_pGameState->fpStory, uDolAddr, NT_DOL);
 	if (optsData.pDol == NULL) return 1;
+#ifdef _DEBUG
+	printf("DEBUG: Loaded DOL node.\n");
+#endif
 
 	// If no options, return without error.
 	// NOTE: This technically means the story file is invalid, but there is no
@@ -108,7 +111,10 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		return 1;
 	}
 
-	// Read in OPT nodes.
+	// Read in OPT node addresses.
+	// TODO: Debug this. puOptAddrs is filled with erroneous values.
+	// The ones it does fill are closeby the real values, so it shouldn't be too hard.
+	// Actual problem may be in story file as well.
 	size_t cAddrsRead;
 	cAddrsRead = fread(optsData.puOptAddrs, sizeof(uint32_t), optsData.pDol->cOpts, g_pGameState->fpStory);
 	if (cAddrsRead < optsData.pDol->cOpts) {
@@ -119,7 +125,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		return 1;
 	}
 
-	// Allocate space for each opt node.
+	// Allocate space for the list of opt nodes.
 	if ((optsData.ppOpt = calloc(optsData.pDol->cOpts, sizeof(uint32_t))) == NULL) {
 		killOptsData(&optsData);
 		return 1;
@@ -128,6 +134,9 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	// Load each opt node and print out strings.
 	optsData.cOptsLoaded = 0;
 	for (int iOpt = 0; iOpt < optsData.pDol->cOpts; iOpt++) {
+#ifdef _DEBUG
+		printf("DEBUG: Loading option #%d from 0x%X.\n", iOpt, optsData.puOptAddrs[iOpt]);
+#endif
 		optsData.ppOpt[iOpt] = loadNode(g_pGameState->fpStory, optsData.puOptAddrs[iOpt], NT_OPT);
 		if (optsData.ppOpt[iOpt] == NULL) {
 			killOptsData(&optsData);
@@ -146,11 +155,13 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		}
 	}
 
+	// Get user input.
 	int nUserInput;
 	if (promptUserForOpt(&nUserInput)) {
 		killOptsData(&optsData);
 		return 1;
 	}
+	printf("Selected %d\n", nUserInput);
 
 	return 0;
 
