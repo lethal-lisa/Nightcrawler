@@ -6,6 +6,7 @@
 #include <errno.h>
 
 #include "gamestate.h"
+#include "dialogue.h"
 
 // Variables for beginOptsMode and error handling.
 // Stored as a struct to make error handling cheaper.
@@ -13,10 +14,16 @@ struct optsModeData
 {
 	dia_OptList *pDol;
 	uint32_t *puOptAddrs;
-	size_t cAddrsRead;
+	//size_t cAddrsRead;
 	dia_OptNode **ppOpt;
-	int cNodesLoaded;
+	int cOptsLoaded;
 };
+
+// Local procs:
+void killOptsData (struct optsModeData *pOptsData);
+int beginOptsMode(const uint32_t uDolAddr);
+int promptUserForOpt (int *pnUserInput);
+
 
 int beginDialogue (const uint32_t uDiaAddr) {
 
@@ -61,6 +68,18 @@ int beginDialogue (const uint32_t uDiaAddr) {
 
 }
 
+// Destroy an optsModeData struct.
+void killOptsData (struct optsModeData *pOptsData) {
+	if (pOptsData->pDol) free(pOptsData->pDol);
+	if (pOptsData->puOptAddrs) free(pOptsData->puOptAddrs);
+	if (pOptsData->cOptsLoaded > 0) {
+		while (pOptsData->cOptsLoaded > 0) {
+			free(pOptsData->ppOpt[pOptsData->cOptsLoaded]);
+			--pOptsData->cOptsLoaded;
+		}
+	}
+}
+
 int beginOptsMode(const uint32_t uDolAddr) {
 
 	// TODO: Error handling is mad expensive here on space. Consider moving
@@ -71,32 +90,29 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	struct optsModeData optsData;
 
 	// Load DOL node.
-	dia_OptList *pDol;
-	pDol = loadNode(g_pGameState->fpStory, uDolAddr, NT_DOL);
-	if (pDol == NULL) return 1;
+	optsData.pDol = loadNode(g_pGameState->fpStory, uDolAddr, NT_DOL);
+	if (optsData.pDol == NULL) return 1;
 
 	// If no options, return without error.
 	// NOTE: This technically means the story file is invalid, but there is no
 	// reason to treat this as a fatal error.
-	if (pDol->cOpts == 0) {
+	if (optsData.pDol->cOpts == 0) {
 		fprintf(stderr, "WARN: Ignoring DOL node with no entries.\n");
-		free(pDol);
+		killOptsData(&optsData);
 		return 0;
 	}
 
 	// Allocate an array of OPT node addresses.
-	uint32_t *puOptAddrs;
-	if ((puOptAddrs = calloc(pDol->cOpts, sizeof(uint32_t))) == NULL) {
-		free(pDol);
+	if ((optsData.puOptAddrs = calloc(optsData.pDol->cOpts, sizeof(uint32_t))) == NULL) {
+		killOptsData(&optsData);
 		return 1;
 	}
 
 	// Read in OPT nodes.
 	size_t cAddrsRead;
-	cAddrsRead = fread(puOutAddrs, sizeof(uint32_t), pDol->cOpts, g_pGameState->fpStory);
-	if (cAddrsRead < pDol->cOpts) {
-		free(pDol);
-		free(puOptAddrs);
+	cAddrsRead = fread(optsData.puOptAddrs, sizeof(uint32_t), optsData.pDol->cOpts, g_pGameState->fpStory);
+	if (cAddrsRead < optsData.pDol->cOpts) {
+		killOptsData(&optsData);
 		fprintf(stderr, "ERROR: Failed to read OPT nodes from DOL node: ");
 		if (ferror(g_pGameState->fpStory)) fprintf(stderr, "File I/O.\n");
 		if (feof(g_pGameState->fpStory)) fprintf(stderr, "Premature EOF.\n");
@@ -104,68 +120,40 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	}
 
 	// Allocate space for each opt node.
-	dia_OptNode **ppOpt;
-	if ((ppOpt = calloc(pDol->cOpts, sizeof(uint32_t))) == NULL) {
-		free(pDol);
-		free(puOptAddrs);
+	if ((optsData.ppOpt = calloc(optsData.pDol->cOpts, sizeof(uint32_t))) == NULL) {
+		killOptsData(&optsData);
 		return 1;
 	}
 
 	// Load each opt node and print out strings.
-	int cNodesLoaded = 0;
-	for (int iOpt = 0; iOpt < pDol->cOpts; iOpt++) {
-		ppOpt[iOpt] = loadNode(g_pGameState->fpStory, puOptAddrs[iOpt], NT_OPT);
-		if (ppOpt[iOpt] == NULL) {
-			free(pDol);
-			free(puOptAddrs);
-			// TODO: Review this.
-			// Free each loaded OPT node.
-			while (cNodesLoaded > 0) {
-				free(ppOpt[cNodesLoaded]);
-				--cNodesLoaded;
-			}
-			free(ppOpt);
+	optsData.cOptsLoaded = 0;
+	for (int iOpt = 0; iOpt < optsData.pDol->cOpts; iOpt++) {
+		optsData.ppOpt[iOpt] = loadNode(g_pGameState->fpStory, optsData.puOptAddrs[iOpt], NT_OPT);
+		if (optsData.ppOpt[iOpt] == NULL) {
+			killOptsData(&optsData);
 			return 1;
 		}
-		cNodesLoaded++;
+		optsData.cOptsLoaded++;
 
 		// Print out each string.
-		if (((ppOpt[iOpt]->fReqStory == 0) || (ppOpt[iOpt]->fReqStory & g_pGameState->fStory)) &&
-			((ppOpt[iOpt]->fReqItems == 0) || (ppOpt[iOpt]->fReqItems & g_pGameState->fItem))) {
+		if (((optsData.ppOpt[iOpt]->fReqStory == 0) || (optsData.ppOpt[iOpt]->fReqStory & g_pGameState->fStory)) &&
+			((optsData.ppOpt[iOpt]->fReqItems == 0) || (optsData.ppOpt[iOpt]->fReqItems & g_pGameState->fItem))) {
 			printf("%d: ", iOpt);
-			if (printStrFromStory(g_pGameState->fpStory, ppOpt[iOpt]->uTextAddr)) {
-				free(pDol);
-				free(puOptAddrs);
-				while (cNodesLoaded > 0) {
-					free(ppOpt[cNodesLoaded]);
-					--cNodesLoaded;
-				}
-				free(ppOpt);
+			if (printStrFromStory(g_pGameState->fpStory, optsData.ppOpt[iOpt]->uTextAddr)) {
+				killOptsData(&optsData);
 				return 1;
 			}
 		}
 	}
 
-	// Prompt user for input.
-	// char pchUserInput[2] = "\0";
-	// int nUserInput;
-	// char *pEnd;
-	// if ((pchUserInput[0] = getchar()) == EOF) {
-	// 	free(pDol);
-	// 	free(puOptAddrs);
-	// 	while (cNodesLoaded > 0) {
-	// 		free(ppOpt[cNodesLoaded]);
-	// 		--cNodesLoaded;
-	// 	}
-	// 	free(ppOpt);
-	// 	return 1;
-	// }
-
 	int nUserInput;
-	if (promptUserForOpt(&nUserInput))
+	if (promptUserForOpt(&nUserInput)) {
+		killOptsData(&optsData);
+		return 1;
+	}
 
-	//nUserInput = strtol(pchUserInput, &pEnd, 10);
-	//nUserInput = promptUserForOpt();
+	return 0;
+
 }
 
 int promptUserForOpt (int *pnUserInput) {
@@ -189,5 +177,7 @@ int promptUserForOpt (int *pnUserInput) {
 		break;
 
 	}
+
+	return 0;
 
 }
