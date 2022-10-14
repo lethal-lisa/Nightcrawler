@@ -3,8 +3,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include "gamestate.h"
+
+// Variables for beginOptsMode and error handling.
+// Stored as a struct to make error handling cheaper.
+struct optsModeData
+{
+	dia_OptList *pDol;
+	uint32_t *puOptAddrs;
+	size_t cAddrsRead;
+	dia_OptNode **ppOpt;
+	int cNodesLoaded;
+};
 
 int beginDialogue (const uint32_t uDiaAddr) {
 
@@ -50,6 +62,13 @@ int beginDialogue (const uint32_t uDiaAddr) {
 }
 
 int beginOptsMode(const uint32_t uDolAddr) {
+
+	// TODO: Error handling is mad expensive here on space. Consider moving
+	// things to another function that performs necessary deallocation on the
+	// variables used here, and moving the variables to some kind of struct,
+	// shared or not.
+
+	struct optsModeData optsData;
 
 	// Load DOL node.
 	dia_OptList *pDol;
@@ -128,28 +147,47 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	}
 
 	// Prompt user for input.
-	char pchUserInput[2] = "\0";
-	int nUserInput;
-	char *pEnd;
-	if ((pchUserInput[0] = getchar()) == EOF) {
-		free(pDol);
-		free(puOptAddrs);
-		while (cNodesLoaded > 0) {
-			free(ppOpt[cNodesLoaded]);
-			--cNodesLoaded;
-		}
-		free(ppOpt);
-		return 1;
-	}
+	// char pchUserInput[2] = "\0";
+	// int nUserInput;
+	// char *pEnd;
+	// if ((pchUserInput[0] = getchar()) == EOF) {
+	// 	free(pDol);
+	// 	free(puOptAddrs);
+	// 	while (cNodesLoaded > 0) {
+	// 		free(ppOpt[cNodesLoaded]);
+	// 		--cNodesLoaded;
+	// 	}
+	// 	free(ppOpt);
+	// 	return 1;
+	// }
 
-	nUserInput = strtol(pchUserInput, &pEnd, 10);
-	nUserInput = promptUserForOpt();
+	int nUserInput;
+	if (promptUserForOpt(&nUserInput))
+
+	//nUserInput = strtol(pchUserInput, &pEnd, 10);
+	//nUserInput = promptUserForOpt();
 }
 
-int promptUserForOpt () {
+int promptUserForOpt (int *pnUserInput) {
 
-	char pszUserInput[4];
-	int nUserInput;
-	char *pEnd;
+	while (1) {
+
+		printf("Select an option: ");
+
+		errno = 0;
+
+		if (scanf("%i", pnUserInput) != 1) {
+			if (errno != 0) {
+				perror("scanf failed to convert user input");
+				return 1;
+			} else {
+				printf("Invalid selection.\n");
+				continue;
+			}
+		}
+
+		break;
+
+	}
 
 }
