@@ -310,6 +310,8 @@ int procTalk (const char *pszParam) {
 			return 1;
 		}
 
+	} else {
+		puts("There is no one here to talk to.");
 	}
 
 	free(pTalk);
