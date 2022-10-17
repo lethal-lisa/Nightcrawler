@@ -194,13 +194,14 @@ int main (int argc, char *argv[]) {
 		cbReadUserInput = wingetline(&pszUserInput, &cchUserInput, stdin);
 		if (cbReadUserInput == -1) {
 			if (feof(stdin)) {
-				fprintf(stderr, "Exiting due to EOF character.\n");
+				fprintf(stderr, "ERROR: Exiting due to EOF character.\n");
 				free(pszUserInput);
 				break;
 			}
 			if (ferror(stdin)) {
 				fprintf(stderr, "ERROR: Standard input error. Try again.\n");
 				clearerr(stdin);
+				free(pszUserInput);
 				continue;
 			}
 		}
