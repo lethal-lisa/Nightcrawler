@@ -161,9 +161,11 @@ int main (int argc, char *argv[]) {
 	}
 
 	// Display game title.
-	if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uGameTitleAddr)) {
-		killGameState();
-		exit(EXIT_FAILURE);
+	if (g_pGameState->pStory->uGameTitleAddr) {
+		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uGameTitleAddr)) {
+			killGameState();
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	// Load necessary strings from the file.
