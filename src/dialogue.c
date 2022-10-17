@@ -80,15 +80,12 @@ void killOptsData (struct optsModeData *pOptsData) {
 			free(pOptsData->ppOpt[pOptsData->cOptsLoaded]);
 			--pOptsData->cOptsLoaded;
 		}
+		free(pOptsData->ppOpt);
 	}
 }
 
+// Enter opts mode.
 int beginOptsMode(const uint32_t uDolAddr) {
-
-	// TODO: Error handling is mad expensive here on space. Consider moving
-	// things to another function that performs necessary deallocation on the
-	// variables used here, and moving the variables to some kind of struct,
-	// shared or not.
 
 	struct optsModeData optsData;
 
@@ -194,12 +191,13 @@ int beginOptsMode(const uint32_t uDolAddr) {
 
 }
 
+// Prompt for user's choice as an unsigned int.
 int promptUserForOpt (unsigned int *puUserInput) {
 
 	char *pszUserInput;
 	size_t cchUserInput;
 	ssize_t cbBytesRead;
-	char *endptr; // End pointer to strtoul.
+	char *endptr; // End pointer used by strtoul.
 
 	while (1) {
 		pszUserInput = NULL;
@@ -239,28 +237,12 @@ int promptUserForOpt (unsigned int *puUserInput) {
 		// If no input, try again.
 		if (endptr == pszUserInput) {
 			printf("Invalid input.\n");
-			//free(pszUserInput);
+			free(pszUserInput);
 			continue;
 		}
 
 		free(pszUserInput);
 		return 0;
-
-		/*
-		errno = 0;
-
-		if (scanf("%i", pnUserInput) != 1) {
-			if (errno != 0) {
-				perror("scanf failed to convert user input");
-				return 1;
-			} else {
-				printf("Invalid selection.\n");
-				continue;
-			}
-		}
-
-		break;
-		*/
 
 	}
 
