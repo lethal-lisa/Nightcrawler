@@ -70,6 +70,9 @@ int beginDialogue (const uint32_t uDiaAddr) {
 
 // Destroy an optsModeData struct.
 void killOptsData (struct optsModeData *pOptsData) {
+#ifdef _DEBUG
+	printf("DEBUG: Called killOptsData.\n");
+#endif
 	if (pOptsData->pDol) free(pOptsData->pDol);
 	if (pOptsData->puOptAddrs) free(pOptsData->puOptAddrs);
 	if (pOptsData->cOptsLoaded > 0) {
@@ -112,11 +115,11 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	}
 
 	// Read in OPT node addresses.
-	// TODO: Debug this. puOptAddrs is filled with erroneous values.
-	// The ones it does fill are closeby the real values, so it shouldn't be too hard.
-	// Actual problem may be in story file as well.
+#ifdef _DEBUG
+	printf("DEBUG: File position 0x%lX.\n", ftell(g_pGameState->fpStory));
+#endif
 	size_t cAddrsRead;
-	cAddrsRead = fread(optsData.puOptAddrs, sizeof(uint32_t), optsData.pDol->cOpts, g_pGameState->fpStory);
+	cAddrsRead = fread(&optsData.puOptAddrs[0], sizeof(uint32_t), optsData.pDol->cOpts, g_pGameState->fpStory);
 	if (cAddrsRead < optsData.pDol->cOpts) {
 		killOptsData(&optsData);
 		fprintf(stderr, "ERROR: Failed to read OPT nodes from DOL node: ");
@@ -155,14 +158,38 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		}
 	}
 
-	// Get user input.
 	int nUserInput;
-	if (promptUserForOpt(&nUserInput)) {
-		killOptsData(&optsData);
-		return 1;
-	}
-	printf("Selected %d\n", nUserInput);
+	while (1) {
 
+		// Get user input.
+		if (promptUserForOpt(&nUserInput)) {
+			killOptsData(&optsData);
+			return 1;
+		}
+
+#ifdef _DEBUG
+		printf("DEBUG: Selected %d.\n", nUserInput);
+#endif
+
+		// Try again if invalid selection.
+		if ((nUserInput > optsData.pDol->cOpts) || (nUserInput < 0)) {
+			printf("Invalid selection.\n");
+			continue;
+		}
+
+		// Try again if requirements not met.
+		if (!((optsData.ppOpt[nUserInput]->fReqStory == 0) || (optsData.ppOpt[nUserInput]->fReqStory & g_pGameState->fStory)) &&
+			!((optsData.ppOpt[nUserInput]->fReqItems == 0) || (optsData.ppOpt[nUserInput]->fReqItems & g_pGameState->fItem))) {
+			printf("Invalid selection.\n");
+			continue;
+		}
+
+		break;
+	}
+
+	// Act on desired opt node.
+
+	killOptsData(&optsData);
 	return 0;
 
 }

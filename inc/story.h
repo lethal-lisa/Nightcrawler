@@ -106,7 +106,7 @@ typedef struct tagTalk_DiaNode
 typedef struct tagDia_OptList
 {
 	char szMagic[4]; // Magic "DOL".
-	uint16_t cOpts; // Count of OPT nodes.
+	uint32_t cOpts; // Count of OPT nodes.
 } __attribute((packed, aligned(4))) dia_OptList;
 
 // OPT node struct.
