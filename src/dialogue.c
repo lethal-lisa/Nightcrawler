@@ -185,6 +185,12 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	}
 
 	// Act on desired opt node.
+	g_pGameState->fStory |= optsData.ppOpt[uUserInput]->fStory;
+	g_pGameState->fItem |= optsData.ppOpt[uUserInput]->fItem;
+	if (beginDialogue(optsData.ppOpt[uUserInput]->uDiaAddr)) {
+		killOptsData(&optsData);
+		return 1;
+	}
 
 	killOptsData(&optsData);
 	return 0;
