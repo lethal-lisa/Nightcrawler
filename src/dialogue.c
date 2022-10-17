@@ -7,6 +7,7 @@
 
 #include "gamestate.h"
 #include "dialogue.h"
+#include "wingetline.h"
 
 // Variables for beginOptsMode and error handling.
 // Stored as a struct to make error handling cheaper.
@@ -14,15 +15,14 @@ struct optsModeData
 {
 	dia_OptList *pDol;
 	uint32_t *puOptAddrs;
-	//size_t cAddrsRead;
 	dia_OptNode **ppOpt;
 	int cOptsLoaded;
 };
 
 // Local procs:
 void killOptsData (struct optsModeData *pOptsData);
-int beginOptsMode(const uint32_t uDolAddr);
-int promptUserForOpt (int *pnUserInput);
+int beginOptsMode (const uint32_t uDolAddr);
+int promptUserForOpt (unsigned int *puUserInput);
 
 
 int beginDialogue (const uint32_t uDiaAddr) {
@@ -158,28 +158,28 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		}
 	}
 
-	int nUserInput;
+	unsigned int uUserInput;
 	while (1) {
 
 		// Get user input.
-		if (promptUserForOpt(&nUserInput)) {
+		if (promptUserForOpt(&uUserInput)) {
 			killOptsData(&optsData);
 			return 1;
 		}
 
 #ifdef _DEBUG
-		printf("DEBUG: Selected %d.\n", nUserInput);
+		printf("DEBUG: Selected %d.\n", uUserInput);
 #endif
 
 		// Try again if invalid selection.
-		if ((nUserInput > optsData.pDol->cOpts) || (nUserInput < 0)) {
+		if ((uUserInput > (optsData.pDol->cOpts - 1)) || (uUserInput < 0)) {
 			printf("Invalid selection.\n");
 			continue;
 		}
 
 		// Try again if requirements not met.
-		if (!((optsData.ppOpt[nUserInput]->fReqStory == 0) || (optsData.ppOpt[nUserInput]->fReqStory & g_pGameState->fStory)) &&
-			!((optsData.ppOpt[nUserInput]->fReqItems == 0) || (optsData.ppOpt[nUserInput]->fReqItems & g_pGameState->fItem))) {
+		if (!((optsData.ppOpt[uUserInput]->fReqStory == 0) || (optsData.ppOpt[uUserInput]->fReqStory & g_pGameState->fStory)) &&
+			!((optsData.ppOpt[uUserInput]->fReqItems == 0) || (optsData.ppOpt[uUserInput]->fReqItems & g_pGameState->fItem))) {
 			printf("Invalid selection.\n");
 			continue;
 		}
@@ -194,12 +194,59 @@ int beginOptsMode(const uint32_t uDolAddr) {
 
 }
 
-int promptUserForOpt (int *pnUserInput) {
+int promptUserForOpt (unsigned int *puUserInput) {
+
+	char *pszUserInput;
+	size_t cchUserInput;
+	ssize_t cbBytesRead;
+	char *endptr; // End pointer to strtoul.
 
 	while (1) {
+		pszUserInput = NULL;
+		cchUserInput = 0;
 
+		// Get input from user.
 		printf("Select an option: ");
+		cbBytesRead = wingetline(&pszUserInput, &cchUserInput, stdin);
+		if (cbBytesRead == -1) {
+			if (feof(stdin)) {
+				fprintf(stderr, "ERROR: Encountered EOF.\n");
+				free(pszUserInput);
+				return 1;
+			}
+			if (ferror(stdin)) {
+				fprintf(stderr, "ERROR: Standard input error. Try again.\n");
+				free(pszUserInput);
+				clearerr(stdin);
+				continue;
+			}
+		}
 
+
+#ifdef _DEBUG
+		printf("DEBUG: Allocated %zu chars and read %zu bytes.\n", cchUserInput, cbBytesRead);
+#endif
+
+		// Convert to uint.
+		errno = 0;
+		*puUserInput = strtoul(pszUserInput, &endptr, 10);
+		if (errno != 0) {
+			perror("Unable to convert user input.");
+			free(pszUserInput);
+			return 1;
+		}
+
+		// If no input, try again.
+		if (endptr == pszUserInput) {
+			printf("Invalid input.\n");
+			//free(pszUserInput);
+			continue;
+		}
+
+		free(pszUserInput);
+		return 0;
+
+		/*
 		errno = 0;
 
 		if (scanf("%i", pnUserInput) != 1) {
@@ -213,9 +260,8 @@ int promptUserForOpt (int *pnUserInput) {
 		}
 
 		break;
+		*/
 
 	}
-
-	return 0;
 
 }
