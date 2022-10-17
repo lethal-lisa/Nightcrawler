@@ -168,7 +168,7 @@ dd .teddyOptList1 ; Opt node list addr.
 
 .teddyOptList1:
 db 'DOL', 00h ; Magic.
-dd 1          ; Count of option node addrs.
+dw 1          ; Count of option node addrs.
 dd .tedOptHug ; Option node addr.
 
 .tedOptHug:

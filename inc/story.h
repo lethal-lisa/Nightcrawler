@@ -30,7 +30,7 @@ typedef struct tagStoryFileHdr
 	uint16_t cItems; // Count of items.
 	uint32_t uItemNameAddr; // Address in the file where item name list begins.
 	uint32_t uInitSceneAddr; // Address in the file where the file name for the initial scene node is found.
-} __attribute__((packed, aligned(4))) storyFileHdr;
+} __attribute((packed)) storyFileHdr;
 
 // Scene node struct.
 typedef struct tagSceneNodeHdr
@@ -41,7 +41,7 @@ typedef struct tagSceneNodeHdr
 	uint16_t uGetMask; // GET item mask;
 	uint32_t uTalkClustAddr; // TALK cluster address.
 	uint32_t uUseClustAddr; // USE cluster address.
-} __attribute((packed, aligned(4))) sceneNodeHdr;
+} __attribute((packed)) sceneNodeHdr;
 
 // Move node struct.
 typedef struct tagScene_MoveCluster
@@ -57,7 +57,7 @@ typedef struct tagScene_MoveCluster
 	uint32_t uAltSouthAddr; // Alt scene node to the South.
 	uint32_t uAltEastAddr; // Alt scene node to the East.
 	uint32_t uAltWestAddr; // Alt scene node to the West.
-} __attribute((packed, aligned(4))) scene_MoveCluster;
+} __attribute((packed)) scene_MoveCluster;
 
 // Look node struct.
 typedef struct tagScene_LookCluster
@@ -76,7 +76,7 @@ typedef struct tagScene_LookCluster
 	uint32_t uAltSouthAddr; // Alt look South string addr.
 	uint32_t uAltEastAddr; // Alt look East string addr.
 	uint32_t uAltWestAddr; // Alt look West string addr.
-} __attribute((packed, aligned(4))) scene_LookCluster;
+} __attribute((packed)) scene_LookCluster;
 
 // Talk node struct.
 typedef struct tagScene_TalkCluster
@@ -85,7 +85,7 @@ typedef struct tagScene_TalkCluster
 	uint16_t fReqStory; // Required story flags.
 	uint16_t fReqItems; // Required item flags.
 	uint32_t uInitAddr; // Initial DIA node addr.
-} __attribute((packed, aligned(4))) scene_TalkCluster;
+} __attribute((packed)) scene_TalkCluster;
 
 // Individual dialogue section node struct.
 typedef struct tagTalk_DiaNode
@@ -100,14 +100,14 @@ typedef struct tagTalk_DiaNode
 	uint32_t uTextAddr; // Address of primary text.
 	uint32_t uAltTextAddr; // Address of text to display when Req'd flags met (0 if none).
 	uint32_t uOptList; // OPT node list node addr (0 if none).
-} __attribute((packed, aligned(4))) talk_DiaNode;
+} __attribute((packed)) talk_DiaNode;
 
 // OPT node list node struct.
 typedef struct tagDia_OptList
 {
 	char szMagic[4]; // Magic "DOL".
-	uint32_t cOpts; // Count of OPT nodes.
-} __attribute((packed, aligned(4))) dia_OptList;
+	uint16_t cOpts; // Count of OPT nodes.
+} __attribute((packed)) dia_OptList;
 
 // OPT node struct.
 typedef struct tagDia_OptNode
