@@ -21,18 +21,17 @@ be for Win32, tested against Wine on Linux & Mac, though the source code will
 be in C and built against Linux GCC for testing, and should be capable of 
 compiling on any decently modern 64 or 32-bit OS.
 
-Initially DOS compatibility was discussed but Lisa rejected this in favor of 
-actually getting the project to release.
-
 You may be able to get the engine to compile on platforms besides these with 
 GCC installed. Early versions were proven to work on Termux with some minor 
 makefile changes.
+
 
 ### Tools Needed/Used
 - GCC/Clang for Linux compilation.
 - mingw32-gcc for Windows compilation.
 - gperf used for tokenizer generation.
 - fasm used to build story files.
+
 
 ## List of Keywords Recognized by the Engine
 - `HELP` Shows engine help & then help included in a story file.
@@ -47,7 +46,7 @@ selected automatically.
 - `QUIT` Quits the game.
 
 
-### Proposed Keywords
+### Unimplemented Keywords (To-Do)
 - `SAVE` Saves to a fixed save slot.
 - `LOAD` Loads from a fixed save slot.
 
