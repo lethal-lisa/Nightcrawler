@@ -13,7 +13,8 @@ set to display alternative text if the engine's progress flags pass an AND
 operation on them, or to change the way a node functions.
 
 ## List of Node Identifiers ("Magic Numbers")
-All magic numbers are 4 bytes wide with a three-string
+All magic numbers are 4 bytes wide with a three char string, and a terminating
+NUL char.
 - `NST` For the "story" node.
 - `NSC` For "scene" nodes.
 - `MOV` For "move" nodes.
