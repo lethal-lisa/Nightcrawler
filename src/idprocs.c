@@ -305,9 +305,6 @@ int procTalk (const char *pszParam) {
 		((pTalk->fReqItems == 0) || (pTalk->fReqItems & g_pGameState->fItem))) {
 
 		// Process DIA node.
-		// TODO: Implement beginDialogue() in another file. The Dialogue
-		// system is so complex that inserting it into this file would
-		// severely dampen the legibility of this file.
 		if (beginDialogue(pTalk->uInitAddr)) {
 			free(pTalk);
 			return 1;
