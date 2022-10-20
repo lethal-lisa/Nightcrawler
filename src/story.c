@@ -14,19 +14,10 @@
 // the user to open their own file and pass a FILE * to loadStoryHeader, but
 // it's defined here as its own function in case special handling is required
 // later, and to keep things consistent.
-FILE *openStoryFile (char *pszFileName) {
-
-	const char pszDefFileName[] = "default.nst";
-	FILE *fp;
-
-	if (pszFileName == NULL) {
-#ifdef _DEBUG
-		printf("DEBUG: Falling back on default story file.\n");
-#endif
-		pszFileName = pszDefFileName;
-	}
+FILE *openStoryFile (const char *pszFileName) {
 
 	// Open the file spec'd by pszFileName.
+	FILE *fp;
 	if ((fp = fopen(pszFileName, "r")) == NULL) {
 		perror("Failed to open story file");
 		return NULL;
@@ -61,7 +52,7 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 
 	// Error checking for this array is done by the default statement of the
 	// following switch block.
-	const static char *szMagic[] = {
+	static char *szMagic[] = {
 		"NST",
 		"NSC",
 		"MOV",

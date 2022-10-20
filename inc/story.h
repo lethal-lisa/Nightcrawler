@@ -133,7 +133,7 @@ typedef struct tagScene_UseCluster
 } __attribute((packed, aligned(4))) scene_UseCluster;
 
 // Handlers for opening and closing story files.
-FILE *openStoryFile (char *pszFileName);
+FILE *openStoryFile (const char *pszFileName);
 int closeStoryFile (FILE *fp);
 
 // Loads a node from address nodeAddr of type nodeType from file fpStory.
