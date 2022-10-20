@@ -55,7 +55,7 @@ int main (int argc, char *argv[]) {
 	// cchStoryFileName is set to 0.
 	size_t cchStoryFileName;
 	char *pszStoryFileName = NULL;
-	const char pszDefStoryFileName[] = "default.nst";
+	//const char pszDefStoryFileName[] = "default.nst";
 
 	// Process args.
 	if (argc > 1) {
@@ -81,11 +81,13 @@ int main (int argc, char *argv[]) {
 					switch (iLongOpt) {
 						case 1: // Print out build information.
 							printBuildInfo();
+							if (pszStoryFileName) free(pszStoryFileName);
 							return 0;
 							break;
 
 						case 3: // Print out the license.
 							printLicense();
+							if (pszStoryFileName) free(pszStoryFileName);
 							return 0;
 							break;
 
@@ -97,6 +99,7 @@ int main (int argc, char *argv[]) {
 				case 'h': // Print out help.
 					printf("Nightcrawler Text Adventure Engine\n(c) 2022 Lisa-Annette Murray.\nUsage: %s [OPTIONS] ...\n", argv[0]);
 					printHelp();
+					if (pszStoryFileName) free(pszStoryFileName);
 					return 0;
 					break;
 
@@ -107,7 +110,7 @@ int main (int argc, char *argv[]) {
 					// This is determined by "X.nst", or any character as well
 					// as the file extension.
 					if ((cchStoryFileName = strlen(optarg)) < 5) {
-						fprintf(stderr, "Invalid file: File name too short.\n");
+						fprintf(stderr, "ERROR: Invalid file: File name too short.\n");
 						exit(EXIT_FAILURE);
 					}
 
@@ -127,6 +130,7 @@ int main (int argc, char *argv[]) {
 
 				default:
 					fprintf(stderr, "Error: Unhandled getopt result (%d).\n", nOpt);
+					if (pszStoryFileName) free(pszStoryFileName);
 					return 1;
 					break;
 			}
@@ -136,10 +140,10 @@ int main (int argc, char *argv[]) {
 	// If a file is specified use that, otherwise use default.
 	// If no user file is specified set the story file name's buffer's pointer
 	// to the (constant) default string.
-	if (pszStoryFileName == NULL) {
-		pszStoryFileName = pszDefStoryFileName;
-		cchStoryFileName = 0; // Set to zero to indicate the fallback to default.
-	}
+	// if (pszStoryFileName == NULL) {
+		// pszStoryFileName = pszDefStoryFileName;
+		// cchStoryFileName = 0; // Set to zero to indicate the fallback to default.
+	// }
 
 #ifdef _DEBUG
 	printf("DEBUG: Selected story file: \"%s\".\n", pszStoryFileName);
@@ -154,7 +158,7 @@ int main (int argc, char *argv[]) {
 
 	// Load game file.
 	if ((g_pGameState->fpStory = openStoryFile(pszStoryFileName)) == NULL) return 1;
-	if (cchStoryFileName != 0) free(pszStoryFileName); // Free if user defined.
+	if (pszStoryFileName) free(pszStoryFileName); // Free if user defined.
 	if ((g_pGameState->pStory = loadNode(g_pGameState->fpStory, 0, NT_STORY)) == NULL) {
 		killGameState();
 		exit(EXIT_FAILURE);
