@@ -12,9 +12,12 @@ nodes will have fields for *required flags*, in most cases these flags can be
 set to display alternative text if the engine's progress flags pass an AND 
 operation on them, or to change the way a node functions.
 
+All the information below is from the file *inc/story.h*. Consult that file for
+The most up to date information.
+
 ## List of Node Identifiers ("Magic Numbers")
 All magic numbers are 4 bytes wide with a three char string, and a terminating
-NUL char.
+NUL char. Magic numbers are used by the engine to identify the type of node.
 - `NST` For the "story" node.
 - `NSC` For "scene" nodes.
 - `MOV` For "move" nodes.
@@ -32,7 +35,7 @@ item names. It must be located at position 0 in the file, and only one node of
 this type may exist per story.
 Binary layout to follow:
 
-- byte (char) [4] : Magic "NST"
+- byte (char) [4] : Magic "NST".
 - uint32          : Format Version (must be zero in this version).
 - uint32          : Address of the game's title screen string (zero if none).
 - uint32          : Address of the game's prompt string (zero if none). If no 
@@ -44,3 +47,15 @@ items are allowed.
 - uint32          : Address where the list of item names begins.
 - uint32          : Address of the initial scene of the game. This value must 
 be specified.
+
+## NSC Node Layout
+These are Scene nodes, which mostly wrap the MOV, LOK, TLK, and USE nodes. They
+also contain a GET mask, which is OR'd with the game's item flags.
+
+- byte (char) [4] : Magic "NSC".
+- uint32          : Address of the scene's MOV node (must not be zero).
+- uint32          : Address of the scene's LOK node (must not be zero).
+- uint16          : Mask of items to OR with the game's item flags when GET is
+run.
+- uint32          : Address of the scene's TLK node (optional, zero if none).
+- uint32          : Address of the scene's USE node (optional, zero if none).
