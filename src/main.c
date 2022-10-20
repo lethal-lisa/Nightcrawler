@@ -50,12 +50,10 @@ int main (int argc, char *argv[]) {
 
 	// Vars used for story file name.
 	// A file given by the user can be detected by the values of the vars. If
-	// pszStoryFileName is NULL then no user file is used. Later on if no file
-	// is supplied pszStoryFileName is set to point to pszDefStoryFileName and
-	// cchStoryFileName is set to 0.
-	size_t cchStoryFileName;
+	// pszStoryFileName is NULL then no user file is used. The routine used to
+	// open the file will fallback to "default.nst" if passed a NULL pointer.
+	size_t cchStoryFileName = 0;
 	char *pszStoryFileName = NULL;
-	//const char pszDefStoryFileName[] = "default.nst";
 
 	// Process args.
 	if (argc > 1) {
@@ -137,14 +135,6 @@ int main (int argc, char *argv[]) {
 		}
 	}
 
-	// If a file is specified use that, otherwise use default.
-	// If no user file is specified set the story file name's buffer's pointer
-	// to the (constant) default string.
-	// if (pszStoryFileName == NULL) {
-		// pszStoryFileName = pszDefStoryFileName;
-		// cchStoryFileName = 0; // Set to zero to indicate the fallback to default.
-	// }
-
 #ifdef _DEBUG
 	printf("DEBUG: Selected story file: \"%s\".\n", pszStoryFileName);
 #endif
@@ -158,7 +148,7 @@ int main (int argc, char *argv[]) {
 
 	// Load game file.
 	if ((g_pGameState->fpStory = openStoryFile(pszStoryFileName)) == NULL) return 1;
-	if (pszStoryFileName) free(pszStoryFileName); // Free if user defined.
+	if (cchStoryFileName > 0) free(pszStoryFileName); // Free if user defined.
 	if ((g_pGameState->pStory = loadNode(g_pGameState->fpStory, 0, NT_STORY)) == NULL) {
 		killGameState();
 		exit(EXIT_FAILURE);
