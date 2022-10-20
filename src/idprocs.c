@@ -73,7 +73,7 @@ Command List (case does not matter):\n\
 			break;
 
 		default:
-			fprintf(stderr, "NYI: Command with ID %d not yet implemented.\n", uId);
+			fprintf(stderr, "Invalid command ID %d. Try \"HELP\".\n", uId);
 			break;
 
 	}
