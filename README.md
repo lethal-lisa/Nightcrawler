@@ -3,10 +3,15 @@
 
 ## Summary
 A simplistic text-adventure engine designed primarily to fit within a miniscule 
-binary footprint (i.e. a floppy disk).
+binary footprint (i.e. a floppy disk) and uses simple prompt based interaction
+with predefined keywords used to crawl through a binary story file containing
+the game information.
 
-Prompt based interaction with predefined keywords used to crawl through a 
-binary story file containing the game information.
+### Internal documentation
+Information for working with the engine is available in header files, and in
+various files in the doc/ folder. Information on the story file format is in
+[doc/nstspecs.md](doc/nstspecs.md). You can also see the
+[original project pitch](doc/pitch.txt) there.
 
 [[_TOC_]]
 
@@ -31,6 +36,18 @@ makefile changes.
 - gperf used for tokenizer generation.
 - fasm used to build story files.
 
+### Using the Build System
+Nightcrawlers makefile recognizes the following environment variables:
+- `DEBUG` : Builds a binary with debug features.
+- `WINDOWS` : Builds a 32-bit Windows binary.
+- `WIN64` : If this and `WINDOWS` are set, a 64-bit binary will be generated,
+otherwise no effect.
+
+The makefile also recognizes:
+- `make clean` to clean up.
+- `make release` to generate a release archive.
+- `make all` (default) to build.
+
 ## List of Keywords Recognized by the Engine
 - `HELP` Shows engine help & then help included in a story file.
 - `MOVE|GO NORTH|SOUTH|EAST|WEST|N|S|E|W` Moves to a different scene.
@@ -49,7 +66,6 @@ selected automatically.
 
 ## License
 The Nightcrawler engine is licensed under the BSD 3-Clause license (see 
-[LICENSE](LICENSE). Story files compatible with Nightcrawler may be licensed however the 
-author of these files sees fit.
+[LICENSE](LICENSE). Story files compatible with Nightcrawler may be licensed
+however the author of these files sees fit.
 
-*This document is adapted from the original project pitch. See [doc/pitch.txt](doc/pitch.txt)*
