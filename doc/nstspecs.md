@@ -12,8 +12,10 @@ nodes will have fields for *required flags*, in most cases these flags can be
 set to display alternative text if the engine's progress flags pass an AND 
 operation on them, or to change the way a node functions.
 
-All the information below is from the file *inc/story.h*. Consult that file for
-The most up to date information.
+All the information below is from the file [inc/story.h](../inc/story.h).
+Consult that file for The most up to date information.
+
+[[_TOC_]]
 
 ## List of Node Identifiers ("Magic Numbers")
 All magic numbers are 4 bytes wide with a three char string, and a terminating
@@ -55,7 +57,7 @@ also contain a GET mask, which is OR'd with the game's item flags.
 - byte (char) [4] : Magic "NSC".
 - uint32          : Address of the scene's MOV node (must not be zero).
 - uint32          : Address of the scene's LOK node (must not be zero).
-- uint16          : Mask of items to OR with the game's item flags when GET is
+- uint16          : Mask of items to OR with the game's item flags when `GET` is
 run.
 - uint32          : Address of the scene's TLK node (optional, zero if none).
 - uint32          : Address of the scene's USE node (optional, zero if none).
