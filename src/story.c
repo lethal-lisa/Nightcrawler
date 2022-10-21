@@ -166,10 +166,9 @@ int printStrFromStory (FILE *fpStory, const int strAddr) {
 
 	char *pszString = NULL;
 	size_t cchString;
-	ssize_t cbReadString;
 
 	// Read string.
-	if ((cbReadString = wingetdelim(&pszString, &cchString, '\0', fpStory)) == -1) {
+	if (wingetdelim(&pszString, &cchString, '\0', fpStory) == -1) {
 		if (ferror(fpStory)) perror("ERROR: printStrFromStory: Error reading string");
 		if (feof(fpStory)) fprintf(stderr, "WARN: printStrFromStory: Error reading string: End of file reached.\n");
 		return 1;
