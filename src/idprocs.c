@@ -163,16 +163,16 @@ int procLook (const char *pszParam) {
 // Process CI_MOVE.
 int procMove (const char *pszParam) {
 
+	// Print go where if no direction given.
+	if ((pszParam == NULL) || (strlen(pszParam) == 0)) {
+		puts("Go where?");
+		return 0;
+	}
+
 	// Load MOV node.
 	scene_MoveCluster *pMove;
 	pMove = loadNode(g_pGameState->fpStory, g_pGameState->pScene->uMoveClustAddr, NT_MOVE);
 	if (pMove == NULL) return 1;
-
-	if (pszParam == NULL || strlen(pszParam) == 0) {
-		printf("Go where?\n");
-		free(pMove);
-		return 0;
-	}
 
 	struct parserCmd *pparserCmd;
 	if ((pparserCmd = parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
