@@ -4,6 +4,14 @@
 
 /* Modified by Lisa-Annette 2022-09-26 as kludge for Nightcrawler */
 
+/* Modification Details */
+/* Modifications fall under BSD 3-Clause, as per use in Nightcrawler.
+ * - Changed to wrap native getline and getdelim on non-Windows (detected via
+ *   _WINDOWS define being defined or not).
+ * - Modifications to conform to the style of the rest of the Nightcrawler
+ *   codebase.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -34,7 +42,6 @@ ssize_t wingetdelim (char **lineptr, size_t *n, int delim, FILE *stream)  {
 		*n = WGL_DEF_CBLINEALLOC;
 	}
 
-	//pos = 0;
 	while (c != EOF) {
 
 		// Reallocate if buffer too small.
@@ -52,8 +59,6 @@ ssize_t wingetdelim (char **lineptr, size_t *n, int delim, FILE *stream)  {
 			*lineptr = pchNew;
 		}
 
-		//((unsigned char *)(*lineptr))[pos++] = c;
-		//if (c == delim) break;
 		if ((((unsigned char *)(*lineptr))[pos++] = c) == delim) break;
 		c = getc(stream);
 	}
