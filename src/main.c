@@ -63,7 +63,7 @@ int main (int argc, char *argv[]) {
 			static int nOpt; // Buffer for return value from getopt.
 			static int iLongOpt; // Long option index.
 			// List of available options.
-			static struct option optLongOpts[] = {
+			const static struct option optLongOpts[] = {
 				{ "help", no_argument, 0, 'h' },
 				{ "info", no_argument, 0, 0 },
 				{ "file", required_argument, 0, 'f' },
