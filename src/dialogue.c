@@ -13,10 +13,10 @@
 // Stored as a struct to make error handling cheaper.
 struct optsModeData
 {
-	dia_OptList *pDol;
-	uint32_t *puOptAddrs;
-	dia_OptNode **ppOpt;
-	int cOptsLoaded;
+	dia_OptList *pDol; // DOL node.
+	uint32_t *puOptAddrs; // List of option addresses.
+	dia_OptNode **ppOpt; // List of OPT nodes.
+	int cOptsLoaded; // Count of loaded OPT nodes.
 };
 
 // Local procs:
@@ -71,7 +71,7 @@ int beginDialogue (const uint32_t uDiaAddr) {
 // Destroy an optsModeData struct.
 void killOptsData (struct optsModeData *pOptsData) {
 #ifdef _DEBUG
-	printf("DEBUG: Called killOptsData.\n");
+	puts("DEBUG: Called killOptsData.");
 #endif
 	if (pOptsData->pDol) free(pOptsData->pDol);
 	if (pOptsData->puOptAddrs) free(pOptsData->puOptAddrs);
@@ -92,9 +92,6 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	// Load DOL node.
 	optsData.pDol = loadNode(g_pGameState->fpStory, uDolAddr, NT_DOL);
 	if (optsData.pDol == NULL) return 1;
-#ifdef _DEBUG
-	printf("DEBUG: Loaded DOL node.\n");
-#endif
 
 	// If no options, return without error.
 	// NOTE: This technically means the story file is invalid, but there is no
@@ -113,7 +110,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 
 	// Read in OPT node addresses.
 #ifdef _DEBUG
-	printf("DEBUG: File position 0x%lX.\n", ftell(g_pGameState->fpStory));
+	printf("DEBUG: Beginning reading addresses from 0x%lX.\n", ftell(g_pGameState->fpStory));
 #endif
 	size_t cAddrsRead;
 	cAddrsRead = fread(&optsData.puOptAddrs[0], sizeof(uint32_t), optsData.pDol->cOpts, g_pGameState->fpStory);
@@ -147,7 +144,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		// Print out each string.
 		if (((optsData.ppOpt[iOpt]->fReqStory == 0) || (optsData.ppOpt[iOpt]->fReqStory & g_pGameState->fStory)) &&
 			((optsData.ppOpt[iOpt]->fReqItems == 0) || (optsData.ppOpt[iOpt]->fReqItems & g_pGameState->fItem))) {
-			printf("%d: ", iOpt);
+			printf("\t%d: ", iOpt);
 			if (printStrFromStory(g_pGameState->fpStory, optsData.ppOpt[iOpt]->uTextAddr)) {
 				killOptsData(&optsData);
 				return 1;
@@ -173,6 +170,10 @@ int beginOptsMode(const uint32_t uDolAddr) {
 			printf("Invalid selection.\n");
 			continue;
 		}
+
+		// NOTE: These two blocks (the one above and the one below) are not
+		// grouped together because the value of uUserInput is checked above,
+		// and used to index ppOpt below.
 
 		// Try again if requirements not met.
 		if (!((optsData.ppOpt[uUserInput]->fReqStory == 0) || (optsData.ppOpt[uUserInput]->fReqStory & g_pGameState->fStory)) &&
@@ -225,7 +226,6 @@ int promptUserForOpt (unsigned int *puUserInput) {
 				continue;
 			}
 		}
-
 
 #ifdef _DEBUG
 		printf("DEBUG: Allocated %zu chars and read %zu bytes.\n", cchUserInput, cbBytesRead);
