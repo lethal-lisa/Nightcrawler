@@ -24,6 +24,8 @@ USE,       5
 INTERACT,  5
 INVENTORY, 6
 ITEMS,     6
+SAVE,      50
+LOAD,      51
 QUIT,      99
 EXIT,      99
 AROUND,    100

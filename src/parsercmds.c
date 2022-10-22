@@ -1,6 +1,6 @@
 /* C code produced by gperf version 3.1 */
-/* Command-line: gperf src/parsercmds.gperf  */
-/* Computed positions: -k'1-2' */
+/* Command-line: gperf parsercmds.gperf  */
+/* Computed positions: -k'1,3' */
 
 #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
       && ('%' == 37) && ('&' == 38) && ('\'' == 39) && ('(' == 40) \
@@ -29,10 +29,10 @@
 error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gperf@gnu.org>."
 #endif
 
-#line 11 "src/parsercmds.gperf"
+#line 11 "parsercmds.gperf"
 
 #include "parsercmds.h"
-/* maximum key range = 34, duplicates = 0 */
+/* maximum key range = 51, duplicates = 0 */
 
 #ifndef GPERF_DOWNCASE
 #define GPERF_DOWNCASE 1
@@ -91,40 +91,41 @@ parserCmd_hash (str, len)
 {
   static const unsigned char asso_values[] =
     {
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 10, 35, 35, 35,  0,
-      35,  0, 13,  0, 35, 35,  8, 30, 15,  0,
-      35, 25,  5, 10,  5,  0, 35,  5,  0, 35,
-      35, 35, 35, 35, 35, 35, 35, 10, 35, 35,
-      35,  0, 35,  0, 13,  0, 35, 35,  8, 30,
-      15,  0, 35, 25,  5, 10,  5,  0, 35,  5,
-       0, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-      35, 35, 35, 35, 35, 35
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 15, 52, 52, 52,  5,
+      52,  0,  3,  5, 52, 52,  0, 15, 10, 30,
+      52,  3,  5,  0,  0,  0, 25, 20, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 15, 52, 52,
+      52,  5, 52,  0,  3,  5, 52, 52,  0, 15,
+      10, 30, 52,  3,  5,  0,  0,  0, 25, 20,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52, 52, 52, 52, 52,
+      52, 52, 52, 52, 52, 52
     };
   register unsigned int hval = len;
 
   switch (hval)
     {
       default:
-        hval += asso_values[(unsigned char)str[1]];
+        hval += asso_values[(unsigned char)str[2]];
       /*FALLTHROUGH*/
+      case 2:
       case 1:
         hval += asso_values[(unsigned char)str[0]];
         break;
@@ -139,59 +140,63 @@ parserCmd_inWordSet (str, len)
 {
   enum
     {
-      TOTAL_KEYWORDS = 22,
+      TOTAL_KEYWORDS = 24,
       MIN_WORD_LENGTH = 1,
       MAX_WORD_LENGTH = 9,
       MIN_HASH_VALUE = 1,
-      MAX_HASH_VALUE = 34
+      MAX_HASH_VALUE = 51
     };
 
   static const struct parserCmd wordlist[] =
     {
-#line 36 "src/parsercmds.gperf"
-      {"E",         103},
-#line 18 "src/parsercmds.gperf"
-      {"GO",        1},
-#line 21 "src/parsercmds.gperf"
-      {"GET",       3},
-#line 28 "src/parsercmds.gperf"
-      {"EXIT",      99},
-#line 37 "src/parsercmds.gperf"
-      {"W",         104},
-#line 20 "src/parsercmds.gperf"
-      {"EXAMINE",   2},
-#line 33 "src/parsercmds.gperf"
-      {"WEST",      104},
-#line 26 "src/parsercmds.gperf"
-      {"ITEMS",     6},
-#line 35 "src/parsercmds.gperf"
+#line 37 "parsercmds.gperf"
       {"S",         102},
-#line 19 "src/parsercmds.gperf"
-      {"LOOK",      2},
-#line 23 "src/parsercmds.gperf"
-      {"USE",       5},
-#line 32 "src/parsercmds.gperf"
-      {"EAST",      103},
-#line 31 "src/parsercmds.gperf"
-      {"SOUTH",     102},
-#line 34 "src/parsercmds.gperf"
-      {"N",         101},
-#line 16 "src/parsercmds.gperf"
-      {"HELP",      0},
-#line 22 "src/parsercmds.gperf"
+#line 18 "parsercmds.gperf"
+      {"GO",        1},
+#line 21 "parsercmds.gperf"
+      {"GET",       3},
+#line 22 "parsercmds.gperf"
       {"TALK",      4},
-#line 30 "src/parsercmds.gperf"
-      {"NORTH",     101},
-#line 29 "src/parsercmds.gperf"
-      {"AROUND",    100},
-#line 24 "src/parsercmds.gperf"
-      {"INTERACT",  5},
-#line 25 "src/parsercmds.gperf"
-      {"INVENTORY", 6},
-#line 27 "src/parsercmds.gperf"
+#line 33 "parsercmds.gperf"
+      {"SOUTH",     102},
+#line 38 "parsercmds.gperf"
+      {"E",         103},
+#line 16 "parsercmds.gperf"
+      {"HELP",      0},
+#line 23 "parsercmds.gperf"
+      {"USE",       5},
+#line 34 "parsercmds.gperf"
+      {"EAST",      103},
+#line 36 "parsercmds.gperf"
+      {"N",         101},
+#line 29 "parsercmds.gperf"
       {"QUIT",      99},
-#line 17 "src/parsercmds.gperf"
-      {"MOVE",      1}
+#line 24 "parsercmds.gperf"
+      {"INTERACT",  5},
+#line 30 "parsercmds.gperf"
+      {"EXIT",      99},
+#line 26 "parsercmds.gperf"
+      {"ITEMS",     6},
+#line 28 "parsercmds.gperf"
+      {"LOAD",      51},
+#line 32 "parsercmds.gperf"
+      {"NORTH",     101},
+#line 39 "parsercmds.gperf"
+      {"W",         104},
+#line 35 "parsercmds.gperf"
+      {"WEST",      104},
+#line 20 "parsercmds.gperf"
+      {"EXAMINE",   2},
+#line 27 "parsercmds.gperf"
+      {"SAVE",      50},
+#line 19 "parsercmds.gperf"
+      {"LOOK",      2},
+#line 25 "parsercmds.gperf"
+      {"INVENTORY", 6},
+#line 17 "parsercmds.gperf"
+      {"MOVE",      1},
+#line 31 "parsercmds.gperf"
+      {"AROUND",    100}
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
@@ -218,26 +223,29 @@ parserCmd_inWordSet (str, len)
                   case 3:
                     resword = &wordlist[3];
                     goto compare;
-                  case 5:
+                  case 4:
                     resword = &wordlist[4];
                     goto compare;
-                  case 6:
+                  case 5:
                     resword = &wordlist[5];
                     goto compare;
-                  case 8:
+                  case 6:
                     resword = &wordlist[6];
                     goto compare;
-                  case 9:
+                  case 7:
                     resword = &wordlist[7];
                     goto compare;
-                  case 10:
+                  case 8:
                     resword = &wordlist[8];
                     goto compare;
-                  case 11:
+                  case 10:
                     resword = &wordlist[9];
                     goto compare;
-                  case 12:
+                  case 11:
                     resword = &wordlist[10];
+                    goto compare;
+                  case 12:
+                    resword = &wordlist[11];
                     goto compare;
                 }
             }
@@ -246,37 +254,40 @@ parserCmd_inWordSet (str, len)
               switch (key - 14)
                 {
                   case 0:
-                    resword = &wordlist[11];
-                    goto compare;
-                  case 1:
                     resword = &wordlist[12];
                     goto compare;
-                  case 2:
+                  case 1:
                     resword = &wordlist[13];
                     goto compare;
-                  case 3:
+                  case 5:
                     resword = &wordlist[14];
                     goto compare;
-                  case 5:
+                  case 6:
                     resword = &wordlist[15];
                     goto compare;
-                  case 6:
+                  case 7:
                     resword = &wordlist[16];
                     goto compare;
-                  case 7:
+                  case 10:
                     resword = &wordlist[17];
                     goto compare;
-                  case 9:
+                  case 13:
                     resword = &wordlist[18];
                     goto compare;
-                  case 10:
+                  case 15:
                     resword = &wordlist[19];
                     goto compare;
-                  case 15:
+                  case 20:
                     resword = &wordlist[20];
                     goto compare;
-                  case 20:
+                  case 25:
                     resword = &wordlist[21];
+                    goto compare;
+                  case 30:
+                    resword = &wordlist[22];
+                    goto compare;
+                  case 37:
+                    resword = &wordlist[23];
                     goto compare;
                 }
             }

@@ -14,6 +14,8 @@
 #define CI_TALK 4
 #define CI_USE 5
 #define CI_ITEMS 6
+#define CI_SAVE 50
+#define CI_LOAD 51
 #define CI_QUIT 99
 #define CI_AROUND 100
 #define CI_NORTH 101
