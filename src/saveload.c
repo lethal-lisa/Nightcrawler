@@ -26,7 +26,7 @@ int saveGame (void) {
 	// it does.
 	if ((fp = fopen("nightcrawler.sav", "w")) == NULL) {
 		perror("Failed to open Nightcrawler save file");
-		return 1;
+		return 0;
 	}
 
 	// Transfer g_pGameState to sgd.
@@ -53,7 +53,7 @@ int loadGame (void) {
 
 	if ((fp = fopen("nightcrawler.sav", "r")) == NULL) {
 		perror("Failed to open Nightcrawler save file");
-		return 1;
+		return 0;
 	}
 
 	// Read from file.
