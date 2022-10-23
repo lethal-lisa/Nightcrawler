@@ -61,3 +61,19 @@ also contain a GET mask, which is OR'd with the game's item flags.
 run.
 - uint32          : Address of the scene's TLK node (optional, zero if none).
 - uint32          : Address of the scene's USE node (optional, zero if none).
+
+## MOV Node Layout
+These are nodes that contain addresses to other NSC nodes, and optionally can
+branch to alternative scenes based on the game's state flags being met.
+
+- byte (char) [4] : Magic "MOV".
+- uint16          : Required story flags to use alt addresses.
+- uint16          : Required item flags to use alt addresses.
+- uint32          : Address of NSC node to use for North.
+- uint32          : Address of NSC node to use for South.
+- uint32          : Address of NSC node to use for East.
+- uint32          : Address of NSC node to use for West.
+- uint32          : Alternate address of NSC node to use for North.
+- uint32          : Alternate address of NSC node to use for South.
+- uint32          : Alternate address of NSC node to use for East.
+- uint32          : Alternate address of NSC node to use for West.
