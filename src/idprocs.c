@@ -37,6 +37,8 @@ Command List (case does not matter):\n\
 \t                  in the scene, or perform some other context-\n\
 \t                  sensitive action.\n\
 \tITEMS/INVENTORY - Show a list of the items in your posession.\n\
+\tSAVE            - Save the game to nightcrawler.sav.\n\
+\tLOAD            - Load the game from nightcrawler.sav.\n\
 \tQUIT/EXIT       - Quit the game.\n");
 			if (g_pGameState->pszHelpString) puts(g_pGameState->pszHelpString);
 			break;
