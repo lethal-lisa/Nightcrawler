@@ -7,6 +7,7 @@
 #include "gamestate.h"
 #include "parsercmds.h"
 #include "dialogue.h"
+#include "saveload.h"
 
 // Local procs.
 uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr);
@@ -66,6 +67,15 @@ Command List (case does not matter):\n\
 
 		case CI_TALK: // Begin talk mode.
 			procTalk(pszParam);
+			break;
+
+		case CI_SAVE: // Save the game.
+			return saveGame();
+			break;
+
+		case CI_LOAD: // Load the game.
+			g_pGameState->fReload = 1;
+			return loadGame();
 			break;
 
 		case CI_QUIT: // Quit the game.

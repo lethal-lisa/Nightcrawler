@@ -41,6 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "idprocs.h"
 #include "story.h"
 #include "gamestate.h"
+#include "saveload.h"
 
 void printHelp (void);
 void printBuildInfo (void);
@@ -231,6 +232,11 @@ int main (int argc, char *argv[]) {
 			if (procCmdId(pparserCmd->uId, pszParamSubstr) != 0) {
 				free(pszUserInput);
 				break;
+			}
+
+			if (g_pGameState->fReload != 0) {
+				g_pGameState->fReload = 0;
+				fprintf(stderr, "NYI: Loading not yet implemented.\n");
 			}
 		}
 

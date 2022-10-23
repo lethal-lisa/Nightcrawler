@@ -6,8 +6,6 @@
 
 #include <stdint.h>
 
-#define SAVEGAME_VERSION 0
-
 int saveGame (void);
 int loadGame (void);
 
