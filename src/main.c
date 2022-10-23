@@ -233,11 +233,6 @@ int main (int argc, char *argv[]) {
 				free(pszUserInput);
 				break;
 			}
-
-			if (g_pGameState->fReload != 0) {
-				g_pGameState->fReload = 0;
-				fprintf(stderr, "NYI: Loading not yet implemented.\n");
-			}
 		}
 
 		free(pszUserInput);

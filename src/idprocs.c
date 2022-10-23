@@ -74,7 +74,6 @@ Command List (case does not matter):\n\
 			break;
 
 		case CI_LOAD: // Load the game.
-			g_pGameState->fReload = 1;
 			return loadGame();
 			break;
 
@@ -220,6 +219,7 @@ int procMove (const char *pszParam) {
 	// Change scenes.
 	if (uNewSceneAddr != 0) {
 		free(g_pGameState->pScene);
+		g_pGameState->uCurSceneAddr = uNewSceneAddr;
 		g_pGameState->pScene = loadNode(g_pGameState->fpStory, uNewSceneAddr, NT_SCENE);
 
 		// Run LOOK AROUND after changing scenes.

@@ -23,7 +23,6 @@ struct gameState
 	char *pszPromptString; // Prompt string.
 	size_t cchHelpString; // Length of pszHelpString.
 	char *pszHelpString; // Help string.
-	int fReload; // Reload on game load.
 };
 
 extern struct gameState *g_pGameState;

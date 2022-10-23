@@ -61,6 +61,8 @@ int loadGame (void) {
 		return 1;
 	}
 
+	fclose(fp);
+
 	// Verify save file version.
 	if (sgd.uSaveGameVer != s_uSaveGameVersion) {
 		fprintf(stderr, "ERROR: Save game is for a different version of Nightcrawler!\nThis version expects 0x%X\n", s_uSaveGameVersion);
@@ -72,7 +74,14 @@ int loadGame (void) {
 	g_pGameState->fStory = sgd.fStory;
 	g_pGameState->fItem = sgd.fItem;
 
-	fclose(fp);
+	// Reload scene.
+	free(g_pGameState->pScene);
+	g_pGameState->pScene = loadNode(g_pGameState->fpStory, g_pGameState->uCurSceneAddr, NT_SCENE);
+	if (g_pGameState->pScene == NULL) {
+		fprintf(stderr, "ERROR: Failed to reload scene from story file.\n");
+		return 1;
+	}
+
 	return 0;
 
 }
