@@ -58,11 +58,9 @@ the scene.
 - `USE` Interact with the scene, optionally using an item in the inventory, 
 selected automatically.
 - `ITEMS|INVENTORY` Displays your inventory.
+- `SAVE` Saves the game state to a `"nightcrawler.sav"` file.
+- `LOAD` Loads the game state from a `"nightcrawler.sav"` file.
 - `QUIT` Quits the game.
-
-### Unimplemented Keywords (To-Do)
-- `SAVE` Saves to a fixed save slot.
-- `LOAD` Loads from a fixed save slot.
 
 ## License
 The Nightcrawler engine is licensed under the BSD 3-Clause license (see 
