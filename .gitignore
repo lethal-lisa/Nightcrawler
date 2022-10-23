@@ -5,5 +5,8 @@ nightcrawler
 *.elf
 *.bin
 
+## Ignore save files
+*.sav
+
 ## Ignore build folder
 build/
