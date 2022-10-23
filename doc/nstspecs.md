@@ -37,7 +37,7 @@ item names. It must be located at position 0 in the file, and only one node of
 this type may exist per story.
 Binary layout to follow:
 
-- byte (char) [4] : Magic "NST".
+- byte (char) [4] : Magic `"NST"`.
 - uint32          : Format Version (must be zero in this version).
 - uint32          : Address of the game's title screen string (zero if none).
 - uint32          : Address of the game's prompt string (zero if none). If no 
@@ -51,24 +51,25 @@ items are allowed.
 be specified.
 
 ## NSC Node Layout
-These are Scene nodes, which mostly wrap the MOV, LOK, TLK, and USE nodes. They
-also contain a GET mask, which is OR'd with the game's item flags.
+These are Scene nodes, which mostly wrap the `MOV`, `LOK`, `TLK`, and `USE`
+nodes. They also contain a `GET` mask, which is OR'd with the game's item
+flags.
 
-- byte (char) [4] : Magic "NSC".
-- uint32          : Address of the scene's MOV node (must not be zero).
-- uint32          : Address of the scene's LOK node (must not be zero).
+- byte (char) [4] : Magic `"NSC"`.
+- uint32          : Address of the scene's `MOV` node (must not be zero).
+- uint32          : Address of the scene's `LOK` node (must not be zero).
 - uint16          : Mask of items to OR with the game's item flags when `GET` is
 run.
-- uint32          : Address of the scene's TLK node (optional, zero if none).
-- uint32          : Address of the scene's USE node (optional, zero if none).
+- uint32          : Address of the scene's `TLK` node (optional, zero if none).
+- uint32          : Address of the scene's `USE` node (optional, zero if none).
 
 ## MOV Node Layout
-These are nodes that contain addresses to other NSC nodes, and optionally can
+These are nodes that contain addresses to other `NSC` nodes, and optionally can
 branch to alternative scenes based on the game's state flags being met.
 Addresses can be set to zero if it is desired for the player to not be able to
 move in a direction.
 
-- byte (char) [4] : Magic "MOV".
+- byte (char) [4] : Magic `"MOV"`.
 - uint16          : Required story flags to use alt addresses.
 - uint16          : Required item flags to use alt addresses.
 - uint32          : Address of NSC node to use for North.
@@ -81,12 +82,13 @@ move in a direction.
 - uint32          : Alternate address of NSC node to use for West.
 
 ## LOK Node Layout
-These contain addresses to strings that respond to the LOOK command, and can
+These contain addresses to strings that respond to the `LOOK` command, and can
 optionally set story flags or have alternate messages based on story and item
 flags. Story flags are set before being compared for displaying alternate text.
 Addresses must not be zero.
 
-- byte (char) [4] : Magic "LOK".
+- byte (char) [4] : Magic `"LOK"`.
+- uint16          : Story flags to set.
 - uint16          : Required story flags to use alt addresses.
 - uint16          : Required item flags to use alt addresses.
 - uint32          : Address of string to use for "Around".
@@ -99,3 +101,66 @@ Addresses must not be zero.
 - uint32          : Address of alternate string to use for South.
 - uint32          : Address of alternate string to use for East.
 - uint32          : Address of alternate string to use for West.
+
+## TLK Node Layout
+This type of node defines the beginning of a dialogue tree, including required
+flags and the initial `DIA` node. If the required flags are not met a `"There is
+no one here to talk to."` message is displayed.
+
+- byte (char) [4] : Magic `"TLK"`.
+- uint16          : Required story flags to initiate dialogue.
+- uint16          : Required item flags to initiate dialogue.
+- uint32          : Address of initial `DIA` node.
+
+## DIA Node Layout
+DIA nodes holds information about a dialogue phase; including textual and flag
+data. The node can set flags, has an alternate set of flags and text that can
+be set if required flags are met, and can point to an `DOL` node optionally.
+If a `DOL` node is specified the game will prompt the player for their choice
+from a list of options, if not, the dialogue mode will end and the game will
+return to its standard input processing mode.
+
+- byte (char) [4] : Magic `"DIA"`.
+- uint16          : Story flags to set.
+- uint16          : Item flags to set.
+- uint16          : Alternate story flags to set.
+- uint16          : Alternate item flags to set.
+- uint16          : Required story flags for alternate fields.
+- uint16          : Required item flags for alternate fields.
+- uint32          : Address of string to display.
+- uint32          : Address of alternate string to display.
+- uint32          : Address of options list (zero if none).
+
+## DOL Node Layout
+This type of node works slightly differently from the others. It begins with a
+header structured like all the others, but has a list of uint32s that hold
+addresses of `OPT` nodes.
+
+- byte (char) [4] : Magic `"DOL"`.
+- uint16          : Count of subsequent OPT node addresses.
+
+## OPT Node Layout
+OPT nodes define a dialogue option the player can choose. They can set flags,
+and have required flags to display. All the options will be displayed in a list
+for the player to select. but when the required flags for a node are not met,
+the node will be omitted in the list.
+
+- byte (char) [4] : Magic `"OPT"`.
+- uint16          : Story flags to set.
+- uint16          : Item flags to set.
+- uint16          : Required story flags to display the option.
+- uint16          : Required item flags to display the option.
+- uint32          : Address of the string for the option.
+- uint32          : Address of the `DIA` node to branch to.
+
+## USE Node Layout
+Defines the action of an `USE` command, including flags that are set,
+prerequisites, and the text to display. If the prerequisite flags are not met
+no flags will be set and the user will get a `"No effect."` message.
+
+- byte (char) [4] : Magic `"USE"`.
+- uint16          : Story flags to set.
+- uint16          : Item flags to set.
+- uint16          : Required story flags to run the `USE` command.
+- uint16          : Required item flags to run the `USE` command.
+- uint32          : Address of the string to print on successful `USE` command.
