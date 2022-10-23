@@ -2,6 +2,7 @@
 // Nightcrawler Engine - Save/Load module.
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "gamestate.h"
 #include "saveload.h"
