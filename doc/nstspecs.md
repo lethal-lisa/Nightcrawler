@@ -65,6 +65,8 @@ run.
 ## MOV Node Layout
 These are nodes that contain addresses to other NSC nodes, and optionally can
 branch to alternative scenes based on the game's state flags being met.
+Addresses can be set to zero if it is desired for the player to not be able to
+move in a direction.
 
 - byte (char) [4] : Magic "MOV".
 - uint16          : Required story flags to use alt addresses.
@@ -77,3 +79,23 @@ branch to alternative scenes based on the game's state flags being met.
 - uint32          : Alternate address of NSC node to use for South.
 - uint32          : Alternate address of NSC node to use for East.
 - uint32          : Alternate address of NSC node to use for West.
+
+## LOK Node Layout
+These contain addresses to strings that respond to the LOOK command, and can
+optionally set story flags or have alternate messages based on story and item
+flags. Story flags are set before being compared for displaying alternate text.
+Addresses must not be zero.
+
+- byte (char) [4] : Magic "LOK".
+- uint16          : Required story flags to use alt addresses.
+- uint16          : Required item flags to use alt addresses.
+- uint32          : Address of string to use for "Around".
+- uint32          : Address of string to use for North.
+- uint32          : Address of string to use for South.
+- uint32          : Address of string to use for East.
+- uint32          : Address of string to use for West.
+- uint32          : Address of alternate string to use for "Around".
+- uint32          : Address of alternate string to use for North.
+- uint32          : Address of alternate string to use for South.
+- uint32          : Address of alternate string to use for East.
+- uint32          : Address of alternate string to use for West.
