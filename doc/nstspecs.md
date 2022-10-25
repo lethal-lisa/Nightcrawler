@@ -13,7 +13,7 @@ set to display alternative text if the engine's progress flags pass an AND
 operation on them, or to change the way a node functions.
 
 All the information below is from the file [inc/story.h](../inc/story.h).
-Consult that file for The most up to date information.
+Consult that file for the most up to date information.
 
 [[_TOC_]]
 
@@ -113,7 +113,7 @@ no one here to talk to."` message is displayed.
 - uint32          : Address of initial `DIA` node.
 
 ## DIA Node Layout
-DIA nodes holds information about a dialogue phase; including textual and flag
+`DIA` nodes holds information about a dialogue phase; including textual and flag
 data. The node can set flags, has an alternate set of flags and text that can
 be set if required flags are met, and can point to an `DOL` node optionally.
 If a `DOL` node is specified the game will prompt the player for their choice
