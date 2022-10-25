@@ -65,7 +65,7 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 		return NULL;
 	}
 
-	if ((nodeType > NT_DTH) || nodeType < 0)) {
+	if ((nodeType > NT_DTH) || (nodeType < 0)) {
 		fprintf(stderr, "ERROR: %s: Unknown node type %d.\n", __func__, nodeType);
 		return NULL;
 	}
