@@ -31,6 +31,12 @@ extern struct gameState *g_pGameState;
 int initGameState ();
 int killGameState ();
 
+// Reset the game.
+int resetGameState ();
+
+// Reloads the current scene.
+int reloadScene (void);
+
 // Loads global strings from the story file, part of initialization.
 int getStrsFromStoryFile ();
 

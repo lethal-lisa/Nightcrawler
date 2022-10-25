@@ -54,7 +54,6 @@ int closeStoryFile (FILE *fp) {
 
 }
 
-
 // NOTE: Be extra sure you know what you're doing before you start playing
 // around with this one. This function can return an arbitrary pointer if
 // something goes wrong.

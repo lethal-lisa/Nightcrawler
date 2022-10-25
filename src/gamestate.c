@@ -12,8 +12,9 @@ struct gameState *g_pGameState;
 
 int initGameState () {
 
+	// Allocate and initialize memory for game state struct.
 	if ((g_pGameState = malloc(sizeof(struct gameState))) == NULL) {
-		perror("initGameState");
+		fprintf(stderr, "ERROR: %s: Failed to allocate space for game state: %s.\n", __func__, strerror(errno));
 		return 1;
 	}
 	memset(g_pGameState, 0, sizeof(struct gameState));
@@ -37,6 +38,39 @@ int killGameState () {
 	if (g_pGameState->pszHelpString) free(g_pGameState->pszHelpString);
 
 	if (g_pGameState) free(g_pGameState);
+
+	return 0;
+
+}
+
+int resetGameState () {
+
+	// Re-initialize flags and scene addresses.
+	g_pGameState->fStory = 0;
+	g_pGameState->fItem = 0;
+	g_pGameState->uCurSceneAddr = g_pGameState->pStory->uInitSceneAddr;
+
+	if (reloadScene() != 0) return 1;
+
+	// Display game's title again.
+	if (g_pGameState->pStory->uGameTitleAddr) {
+		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uGameTitleAddr)) return 1;
+	}
+
+	return 0;
+
+}
+
+// Reloads the current scene.
+// This gets called after loading a game and after game over and such.
+int reloadScene (void) {
+
+	free(g_pGameState->pScene);
+	g_pGameState->pScene = loadNode(g_pGameState->fpStory, g_pGameState->uCurSceneAddr, NT_SCENE);
+	if (g_pGameState->pScene == NULL) {
+		fprintf(stderr, "ERROR: %s: Failed to reload scene.\n", __func__);
+		return 1;
+	}
 
 	return 0;
 

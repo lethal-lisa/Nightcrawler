@@ -76,12 +76,13 @@ int loadGame (void) {
 	g_pGameState->fItem = sgd.fItem;
 
 	// Reload scene.
-	free(g_pGameState->pScene);
-	g_pGameState->pScene = loadNode(g_pGameState->fpStory, g_pGameState->uCurSceneAddr, NT_SCENE);
-	if (g_pGameState->pScene == NULL) {
-		fprintf(stderr, "ERROR: Failed to reload scene from story file.\n");
-		return 1;
-	}
+	//free(g_pGameState->pScene);
+	//g_pGameState->pScene = loadNode(g_pGameState->fpStory, g_pGameState->uCurSceneAddr, NT_SCENE);
+	//if (g_pGameState->pScene == NULL) {
+		//fprintf(stderr, "ERROR: Failed to reload scene from story file.\n");
+		//return 1;
+	//}
+	if (reloadScene() != 0) return 1;
 
 	return 0;
 
