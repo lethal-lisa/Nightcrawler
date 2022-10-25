@@ -9,6 +9,10 @@
 
 #include "story.h"
 
+#define GS_NORMAL 0
+#define GS_WON 1
+#define GS_LOST 2
+
 struct gameState
 {
 	storyFileHdr *pStory; // Story file header object.
@@ -23,6 +27,7 @@ struct gameState
 	char *pszPromptString; // Prompt string.
 	size_t cchHelpString; // Length of pszHelpString.
 	char *pszHelpString; // Help string.
+	int nWonLost; // Win/lose state.
 };
 
 extern struct gameState *g_pGameState;

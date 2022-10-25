@@ -86,6 +86,8 @@ int procDeath (const int nodeAddr) {
 
 	if (resetGameState()) return 1;
 
+	g_pGameState->nWonLost = GS_LOST;
+
 	return 0;
 
 }
@@ -96,11 +98,11 @@ int procWin (const int nodeAddr) {
 	pWin = loadNode(g_pGameState->fpStory, nodeAddr, NT_WIN);
 	if (pWin == NULL) return 1;
 
-	if (((pWin->fReqStory == 0) || (pWin->fReqStory & g_pGameState->fStory)) &&
-		((pWin->fReqItem == 0) || (pWin->fReqItem & g_pGameState->fItem))) {
-		if (printStrFromStory(g_pGameState->fpStory, pWin->uStrAddr)) return 1;
-		if (resetGameState()) return 1;
-	}
+	if (printStrFromStory(g_pGameState->fpStory, pWin->uStrAddr)) return 1;
+
+	if (resetGameState()) return 1;
+
+	g_pGameState->nWonLost = GS_WON;
 
 	return 0;
 
