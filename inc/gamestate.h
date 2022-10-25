@@ -37,6 +37,9 @@ int resetGameState ();
 // Reloads the current scene.
 int reloadScene (void);
 
+int procDeath (const int nodeAddr);
+int procWin (const int nodeAddr);
+
 // Loads global strings from the story file, part of initialization.
 int getStrsFromStoryFile ();
 

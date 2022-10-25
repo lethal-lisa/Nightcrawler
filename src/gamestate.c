@@ -76,6 +76,36 @@ int reloadScene (void) {
 
 }
 
+int procDeath (const int nodeAddr) {
+
+	dthNodeHdr *pDth;
+	pDth = loadNode(g_pGameState->fpStory, nodeAddr, NT_DTH);
+	if (pDth == NULL) return 1;
+
+	if (printStrFromStory(g_pGameState->fpStory, pDth->uStrAddr)) return 1;
+
+	if (resetGameState()) return 1;
+
+	return 0;
+
+}
+
+int procWin (const int nodeAddr) {
+
+	winNodeHdr *pWin;
+	pWin = loadNode(g_pGameState->fpStory, nodeAddr, NT_WIN);
+	if (pWin == NULL) return 1;
+
+	if (((pWin->fReqStory == 0) || (pWin->fReqStory & g_pGameState->fStory)) &&
+		((pWin->fReqItem == 0) || (pWin->fReqItem & g_pGameState->fItem))) {
+		if (printStrFromStory(g_pGameState->fpStory, pWin->uStrAddr)) return 1;
+		if (resetGameState()) return 1;
+	}
+
+	return 0;
+
+}
+
 int getStrsFromStory_handleError (const ssize_t cbBytesRead, const char *pszErrMsg) {
 
 	if ((cbBytesRead == -1) && (feof(g_pGameState->fpStory) || ferror(g_pGameState->fpStory))) {
