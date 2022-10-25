@@ -119,7 +119,7 @@ typedef struct tagDia_OptNode
 	uint16_t fReqItems; // Required item flags to set.
 	uint32_t uTextAddr; // Address to the name of the option.
 	uint32_t uDiaAddr; // Address of the DIA node to branch to.
-} __attribute((packed, aligned(4))) dia_OptNode;
+} __attribute((packed)) dia_OptNode;
 
 // Use node struct.
 typedef struct tagScene_UseCluster
@@ -130,7 +130,23 @@ typedef struct tagScene_UseCluster
 	uint16_t fReqStory; // Required story flags.
 	uint16_t fReqItems; // Required item flags.
 	uint32_t uStrAddr; // Addr of string to print.
-} __attribute((packed, aligned(4))) scene_UseCluster;
+} __attribute((packed)) scene_UseCluster;
+
+// WIN node struct.
+typedef struct tagWinNodeHdr
+{
+	char szMagic[4]; // Magic "WIN".
+	uint16_t fReqStory; // Required story flags.
+	uint16_t fReqItem; // Required item flags.
+	uint32_t uStrAddr; // Addr of string to print.
+} __attribute((packed)) winNodeHdr;
+
+// DTH node struct.
+typedef struct tagDthNodeHdr
+{
+	char szMagic[4]; // Magic "DTH".
+	uint32_t uStrAddr; // Addr of string to print.
+} __attribute((packed)) dthNodeHdr;
 
 // Handlers for opening and closing story files.
 FILE *openStoryFile (char *pszFileName);
