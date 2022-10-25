@@ -15,6 +15,20 @@ struct nodeMagicData
 	const size_t cbNode;
 };
 
+const static struct nodeMagicData s_magicData[] = {
+	{ "NST", sizeof(storyFileHdr) },
+	{ "NSC", sizeof(sceneNodeHdr) },
+	{ "MOV", sizeof(scene_MoveCluster) },
+	{ "LOK", sizeof(scene_LookCluster) },
+	{ "TLK", sizeof(scene_TalkCluster) },
+	{ "DIA", sizeof(talk_DiaNode) },
+	{ "DOL", sizeof(dia_OptList) },
+	{ "OPT", sizeof(dia_OptNode) },
+	{ "USE", sizeof(scene_UseCluster) },
+	{ "WIN", sizeof(winNodeHdr) },
+	{ "DTH", sizeof(dthNodeHdr) }
+};
+
 // Open story file.
 // Normally this kind of thing would be handled elsewhere and you'd just ask
 // the user to open their own file and pass a FILE * to loadStoryHeader, but
@@ -69,34 +83,20 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 		return NULL;
 	}
 
-	const static struct nodeMagicData magicData[] = {
-		{ "NST", sizeof(storyFileHdr) },
-		{ "NSC", sizeof(sceneNodeHdr) },
-		{ "MOV", sizeof(scene_MoveCluster) },
-		{ "LOK", sizeof(scene_LookCluster) },
-		{ "TLK", sizeof(scene_TalkCluster) },
-		{ "DIA", sizeof(talk_DiaNode) },
-		{ "DOL", sizeof(dia_OptList) },
-		{ "OPT", sizeof(dia_OptNode) },
-		{ "USE", sizeof(scene_UseCluster) },
-		{ "WIN", sizeof(winNodeHdr) },
-		{ "DTH", sizeof(dthNodeHdr) }
-	};
-
 	size_t cbNode; // Size of node.
 	void *pNode; // Node pointer.
 
-	cbNode = magicData[nodeType].cbNode;
-
-	// Seek to the specified offset in the file.
-	if (fseek(fpStory, nodeAddr, SEEK_SET)) {
-		perror("ERROR: loadNode: fseek fail.");
-		return NULL;
-	}
+	cbNode = s_magicData[nodeType].cbNode;
 
 	// Allocate space for the node.
 	if ((pNode = malloc(cbNode)) == NULL) {
 		perror("ERROR: loadNode: malloc fail.");
+		return NULL;
+	}
+
+	// Seek to the specified offset in the file.
+	if (fseek(fpStory, nodeAddr, SEEK_SET)) {
+		perror("ERROR: loadNode: fseek fail.");
 		return NULL;
 	}
 
@@ -109,8 +109,8 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 	}
 
 	// Verify node as type.
-	if (strncmp((const char *)pNode, magicData[nodeType].szMagic, 4) != 0) {
-		fprintf(stderr, "ERROR: %s: Node's magic ID is invalid for its type (\"%s\" @ 0x%X).\n", __func__, magicData[nodeType].szMagic, nodeAddr);
+	if (strncmp((const char *)pNode, s_magicData[nodeType].szMagic, 4) != 0) {
+		fprintf(stderr, "ERROR: %s: Node's magic ID is invalid for its type (\"%s\" @ 0x%X).\n", __func__, s_magicData[nodeType].szMagic, nodeAddr);
 		free(pNode);
 		return NULL;
 	}
