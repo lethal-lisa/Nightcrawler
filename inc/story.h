@@ -5,6 +5,7 @@
 #define __STORY_H__ 1
 
 #include <stdint.h>
+#include <stdio.h>
 
 // Node types:
 // NOTE: An enum was considered here, but ended up increasing the file size,
