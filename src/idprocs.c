@@ -220,12 +220,12 @@ int procMove (const char *pszParam) {
 
 	// Change scenes.
 	if (uNewSceneAddr != 0) {
-		free(g_pGameState->pScene);
+		//free(g_pGameState->pScene);
 		g_pGameState->uCurSceneAddr = uNewSceneAddr;
-		g_pGameState->pScene = loadNode(g_pGameState->fpStory, uNewSceneAddr, NT_SCENE);
+		//g_pGameState->pScene = loadNode(g_pGameState->fpStory, uNewSceneAddr, NT_SCENE);
 
 		// Run LOOK AROUND after changing scenes.
-		if ((g_pGameState->pScene == NULL) || procLook(NULL)) {
+		if (reloadScene() || procLook(NULL)) {
 			free(pMove);
 			return 1;
 		}
