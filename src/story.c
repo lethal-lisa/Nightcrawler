@@ -9,6 +9,12 @@
 #include "wingetline.h"
 #include "story.h"
 
+struct nodeMagicData
+{
+	const char szMagic[4];
+	const size_t cbNode;
+};
+
 // Open story file.
 // Normally this kind of thing would be handled elsewhere and you'd just ask
 // the user to open their own file and pass a FILE * to loadStoryHeader, but
@@ -55,77 +61,33 @@ int closeStoryFile (FILE *fp) {
 void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 
 	if (fpStory == NULL) {
-		fprintf(stderr, "ERROR: loadNode: Bad FILE pointer.\n");
+		fprintf(stderr, "ERROR: %s: Bad FILE pointer.\n", __func__);
 		return NULL;
 	}
 
-	// Error checking for this array is done by the default statement of the
-	// following switch block.
-	const static char *szMagic[] = {
-		"NST",
-		"NSC",
-		"MOV",
-		"LOK",
-		"TLK",
-		"DIA",
-		"DOL",
-		"OPT",
-		"USE"
-	};
-
-	size_t cbNode; // Size of node struct.
-	void *pNode; // Pointer to node struct.
-
-	// Get size of the node per node type.
-	switch (nodeType) {
-		case NT_STORY:
-			cbNode = sizeof(storyFileHdr);
-			break;
-
-		case NT_SCENE:
-			cbNode = sizeof(sceneNodeHdr);
-			break;
-
-		case NT_MOVE:
-			cbNode = sizeof(scene_MoveCluster);
-			break;
-
-		case NT_LOOK:
-			cbNode = sizeof(scene_LookCluster);
-			break;
-
-		case NT_TALK:
-			cbNode = sizeof(scene_TalkCluster);
-			break;
-
-		case NT_DIA:
-			cbNode = sizeof(talk_DiaNode);
-			break;
-
-		case NT_DOL:
-			cbNode = sizeof(dia_OptList);
-			break;
-
-		case NT_OPT:
-			cbNode = sizeof(dia_OptNode);
-			break;
-
-		case NT_USE:
-			cbNode = sizeof(scene_UseCluster);
-			break;
-
-		case NT_WIN:
-			cbNode = sizeof(winNodeHdr);
-			break;
-
-		case NT_DTH:
-			cbNode = sizeof(dthNodeHdr);
-			break;
-
-		default:
-			fprintf(stderr, "ERROR: loadNode: Unknown node type (%d).\n", nodeType);
-			return NULL;
+	if (nodeType > NT_DTH) {
+		fprintf(stderr, "ERROR: %s: Unknown node type %d.\n", __func__, nodeType);
+		return NULL;
 	}
+
+	const static struct nodeMagicData magicData[] = {
+	{ "NST", sizeof(storyFileHdr) },
+	{ "NSC", sizeof(sceneNodeHdr) },
+	{ "MOV", sizeof(scene_MoveCluster) },
+	{ "LOK", sizeof(scene_LookCluster) },
+	{ "TLK", sizeof(scene_TalkCluster) },
+	{ "DIA", sizeof(talk_DiaNode) },
+	{ "DOL", sizeof(dia_OptList) },
+	{ "OPT", sizeof(dia_OptNode) },
+	{ "USE", sizeof(scene_UseCluster) },
+	{ "WIN", sizeof(winNodeHdr) },
+	{ "DTH", sizeof(dthNodeHdr) }
+};
+
+	size_t cbNode; // Size of node.
+	void *pNode; // Node pointer.
+
+	cbNode = magicData[nodeType].cbNode;
 
 	// Seek to the specified offset in the file.
 	if (fseek(fpStory, nodeAddr, SEEK_SET)) {
@@ -141,15 +103,15 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 
 	// Read in the node.
 	if (fread(pNode, cbNode, 1, fpStory) != 1) {
-		if (ferror(fpStory)) perror("ERROR: loadNode: fread tripped file error.");
-		if (feof(fpStory)) fprintf(stderr, "ERROR: loadNode: fread reached EOF.\n");
+		if (ferror(fpStory)) fprintf(stderr, "ERROR: %s: fread tripped file I/O error.\n", __func__);
+		if (feof(fpStory)) fprintf(stderr, "ERROR: %s: fread reached EOF.\n", __func__);
 		free(pNode);
 		return NULL;
 	}
 
 	// Verify node as type.
-	if (strncmp((const char *)pNode, szMagic[nodeType], 4) != 0) {
-		fprintf(stderr, "ERROR: loadNode: Node's magic ID is invalid for its type.\n");
+	if (strncmp((const char *)pNode, magicData[nodeType].szMagic, 4) != 0) {
+		fprintf(stderr, "ERROR: %s: Node's magic ID is invalid for its type (\"%s\" @ 0x%X).\n", __func__, magicData[nodeType].szMagic, nodeAddr);
 		free(pNode);
 		return NULL;
 	}
