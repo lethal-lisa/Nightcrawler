@@ -71,18 +71,18 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 	}
 
 	const static struct nodeMagicData magicData[] = {
-	{ "NST", sizeof(storyFileHdr) },
-	{ "NSC", sizeof(sceneNodeHdr) },
-	{ "MOV", sizeof(scene_MoveCluster) },
-	{ "LOK", sizeof(scene_LookCluster) },
-	{ "TLK", sizeof(scene_TalkCluster) },
-	{ "DIA", sizeof(talk_DiaNode) },
-	{ "DOL", sizeof(dia_OptList) },
-	{ "OPT", sizeof(dia_OptNode) },
-	{ "USE", sizeof(scene_UseCluster) },
-	{ "WIN", sizeof(winNodeHdr) },
-	{ "DTH", sizeof(dthNodeHdr) }
-};
+		{ "NST", sizeof(storyFileHdr) },
+		{ "NSC", sizeof(sceneNodeHdr) },
+		{ "MOV", sizeof(scene_MoveCluster) },
+		{ "LOK", sizeof(scene_LookCluster) },
+		{ "TLK", sizeof(scene_TalkCluster) },
+		{ "DIA", sizeof(talk_DiaNode) },
+		{ "DOL", sizeof(dia_OptList) },
+		{ "OPT", sizeof(dia_OptNode) },
+		{ "USE", sizeof(scene_UseCluster) },
+		{ "WIN", sizeof(winNodeHdr) },
+		{ "DTH", sizeof(dthNodeHdr) }
+	};
 
 	size_t cbNode; // Size of node.
 	void *pNode; // Node pointer.
