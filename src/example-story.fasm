@@ -43,7 +43,7 @@ db 'MOV', 00h    ; Magic.
 dw 0001h         ; Required story flags for alt addresses.
 dw 0000h         ; Required item flags for alt addresses.
 dd 0             ; North.
-dd 0             ; South.
+dd hallS         ; South.
 dd 0             ; East.
 dd 0             ; West.
 dd sceneMainRoom ; Alt North.
@@ -58,7 +58,7 @@ dw 0001h                     ; Required story flags for alt text.
 dw 0000h                     ; Required item flags for alt text.
 dd .initScene_LookAroundC    ; Around.
 dd .initScene_LookClosedDoor ; North.
-dd .initScene_LookWall       ; South.
+dd .initScene_LookHallS      ; South.
 dd .initScene_LookWall       ; East.
 dd .initScene_LookWall       ; West.
 dd .initScene_LookAroundO    ; Around alt.
@@ -81,6 +81,8 @@ db 'key on the floor next to the door.', 00h
 db 'Beyond the now open door is a blinding light.', 00h
 .initScene_LookWall:
 db 'There is nothing but the wall with a faint tiled pattern.', 00h
+.initScene_LookHallS:
+db 'The hall extends in this direction.', 00h
 
 .initScene_Use:
 db 'USE', 00h ; Magic.
@@ -92,6 +94,79 @@ dd .iS_UseKey ; Addr of string to print.
 
 .iS_UseKey:
 db 'You insert the key into the door and turn. With a click the door opens.', 00h
+
+; ----------------------------------------------------------------------------
+; Hall South
+; ----------------------------------------------------------------------------
+
+hallS:         ; South hall
+db 'NSC', 00h  ; Scene node header.
+dd .hallS_Move ; Move cluster address.
+dd .hallS_Look ; Look cluster address.
+dw 0001h       ; GET item mask.
+dd 0           ; TALK cluster address.
+dd 0           ; Use cluster offset.
+
+.hallS_Move:
+db 'MOV', 00h ; Magic.
+dw 0002h      ; Required story flags for alt addresses.
+dw 0000h      ; Required item flags for alt addresses.
+dd initScene  ; North.
+dd 0          ; South.
+dd 0          ; East.
+dd 0          ; West.
+dd 0          ; Alt North.
+dd winNode1   ; Alt South.
+dd 0          ; Alt East.
+dd 0          ; Alt West.
+
+.hallS_Look:
+db 'LOK', 00h           ; Magic.
+dw 0000h                ; Story flags to set.
+dw 0002h                ; Required story flags for alt text.
+dw 0000h                ; Required item flags for alt text.
+dd .hallS_LookAroundC   ; Around.
+dd .hallS_LookN         ; North.
+dd .hallS_LookCloseDoor ; South.
+dd initScene.initScene_LookWall  ; East.
+dd initScene.initScene_LookWall  ; West.
+dd .hallS_LookAroundO   ; Around alt.
+dd 0                    ; North alt.
+dd .hallS_LookOpenDoor  ; South alt.
+dd 0                    ; East alt.
+dd 0                    ; West alt.
+
+.hallS_LookAroundC:
+db 'You are at the end of the hall, it is dark and the walls are cold to the', 10
+db 'touch. The South wall looks like it could move.', 00h
+.hallS_LookN:
+db 'The North end of the hallway expands before you.', 00h
+.hallS_LookCloseDoor:
+db 'Looking closer at the South wall it seems like it is hollow. You can hear', 10
+db 'mechanical parts moving behind it. You are now certain it could move, but', 10
+db 'there is no visible mechanism for this, only an insignia of a bear to the', 10
+db 'side.', 00h
+.hallS_LookAroundO:
+db 'The South end of the hall is now brightly lit after the bear opened the', 10
+db 'door. The walls are warm and sun pours in from outside.', 00h
+.hallS_LookOpenDoor:
+db 'The wall that was here before has been retracted into the floor, allowing', 10
+db 'you to pass. Beyond the now open portal extends the great outdoors.', 00h
+
+; ----------------------------------------------------------------------------
+; Win Node
+; ----------------------------------------------------------------------------
+
+winNode1:
+db 'WIN', 00h
+dd .winStr
+
+.winStr:
+db 10, 10
+db 'Congratulations on completing this example story. You have now experienced', 10
+db 'most of the features of the Nightcrawler engine.', 10, 10
+db 'Thank you for playing.', 10
+db '(c)2022 Lisa-Annette Murray, dedicated to Chloii, my girlfriend.', 00h
 
 ; ----------------------------------------------------------------------------
 ; Main Room Node
@@ -148,13 +223,13 @@ db 'from.', 00h
 db 'TLK', 00h     ; Magic.
 dw 0000h          ; Required story flags.
 dw 0000h          ; Required item flags.
-dd .teddyInitDia  ; Initial DIA node addr.
+dd teddyInitDia   ; Initial DIA node addr.
 
 ; ----------------------------------------------------------------------------
 ; Teddy Bear Dialogue Nodes
 ; ----------------------------------------------------------------------------
 
-.teddyInitDia:
+teddyInitDia:
 db 'DIA', 00h     ; Magic.
 dw 0001h          ; Story flags to set.
 dw 0000h          ; Item flags to set.
@@ -198,6 +273,7 @@ db '"Hi, I', "'m a teddy bear!", '" the bear speaks with a squeak.', 00h
 .tedOptHugTxt:
 db 'Hug the teddy bear.', 00h
 .tedThankTxt:
-db '"Thank you very much!" the bear blushes and smiles.', 00h
+db '"Thank you very much!" the bear blushes and smiles.', 10
+db '"I', "'", 'll open the door at the other end of the hall for you!"', 00h
 
 ; End-of-File
