@@ -114,6 +114,14 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 			cbNode = sizeof(scene_UseCluster);
 			break;
 
+		case NT_WIN:
+			cbNode = sizeof(winNodeHdr);
+			break;
+
+		case NT_DTH:
+			cbNode = sizeof(dthNodeHdr);
+			break;
+
 		default:
 			fprintf(stderr, "ERROR: loadNode: Unknown node type (%d).\n", nodeType);
 			return NULL;

@@ -10,14 +10,21 @@
 // NOTE: An enum was considered here, but ended up increasing the file size,
 // so this idea was rejected in favor of #defines.
 #define NT_STORY 0
+#define NT_NST 0
 #define NT_SCENE 1
+#define NT_NSC 1
 #define NT_MOVE 2
+#define NT_MOV 2
 #define NT_LOOK 3
+#define NT_LOK 3
 #define NT_TALK 4
+#define NT_TLK 4
 #define NT_DIA 5
 #define NT_DOL 6
 #define NT_OPT 7
 #define NT_USE 8
+#define NT_WIN 9
+#define NT_DTH 10
 
 // Toplevel story node struct.
 typedef struct tagStoryFileHdr
