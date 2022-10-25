@@ -65,6 +65,10 @@ int resetGameState () {
 // This gets called after loading a game and after game over and such.
 int reloadScene (void) {
 
+	// Try to process as death or win node.
+	if (procDeath(g_pGameState->uCurSceneAddr)) return 1;
+	if (procWin(g_pGameState->uCurSceneAddr)) return 1;
+
 	free(g_pGameState->pScene);
 	g_pGameState->pScene = loadNode(g_pGameState->fpStory, g_pGameState->uCurSceneAddr, NT_SCENE);
 	if (g_pGameState->pScene == NULL) {
@@ -77,6 +81,23 @@ int reloadScene (void) {
 }
 
 int procDeath (const int nodeAddr) {
+
+	char szMagic[4];
+
+	// Seek to the specified offset in the file.
+	if (fseek(g_pGameState->fpStory, nodeAddr, SEEK_SET)) {
+		perror("ERROR: procDeath: fseek fail.");
+		return 1;
+	}
+
+	// Read in the node.
+	if (fread(szMagic, 4, 1, g_pGameState->fpStory) != 1) {
+		if (ferror(g_pGameState->fpStory)) fprintf(stderr, "ERROR: %s: fread tripped file I/O error.\n", __func__);
+		if (feof(g_pGameState->fpStory)) fprintf(stderr, "ERROR: %s: fread reached EOF.\n", __func__);
+		return 1;
+	}
+
+	if (strncmp(szMagic, "DTH", 4) != 0) return 0;
 
 	dthNodeHdr *pDth;
 	pDth = loadNode(g_pGameState->fpStory, nodeAddr, NT_DTH);
@@ -93,6 +114,23 @@ int procDeath (const int nodeAddr) {
 }
 
 int procWin (const int nodeAddr) {
+
+	char szMagic[4];
+
+	// Seek to the specified offset in the file.
+	if (fseek(g_pGameState->fpStory, nodeAddr, SEEK_SET)) {
+		perror("ERROR: procWin: fseek fail.");
+		return 1;
+	}
+
+	// Read in the node.
+	if (fread(szMagic, 4, 1, g_pGameState->fpStory) != 1) {
+		if (ferror(g_pGameState->fpStory)) fprintf(stderr, "ERROR: %s: fread tripped file I/O error.\n", __func__);
+		if (feof(g_pGameState->fpStory)) fprintf(stderr, "ERROR: %s: fread reached EOF.\n", __func__);
+		return 1;
+	}
+
+	if (strncmp(szMagic, "WIN", 4) != 0) return 0;
 
 	winNodeHdr *pWin;
 	pWin = loadNode(g_pGameState->fpStory, nodeAddr, NT_WIN);
