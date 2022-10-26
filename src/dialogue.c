@@ -123,7 +123,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	}
 
 	// Allocate space for the list of opt nodes.
-	if ((optsData.ppOpt = calloc(optsData.pDol->cOpts, sizeof(uint32_t))) == NULL) {
+	if ((optsData.ppOpt = calloc(optsData.pDol->cOpts, sizeof(dia_OptNode *))) == NULL) {
 		killOptsData(&optsData);
 		return 1;
 	}

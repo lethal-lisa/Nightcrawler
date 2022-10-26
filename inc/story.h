@@ -144,8 +144,6 @@ typedef struct tagScene_UseCluster
 typedef struct tagWinNodeHdr
 {
 	char szMagic[4]; // Magic "WIN".
-	//uint16_t fReqStory; // Required story flags.
-	//uint16_t fReqItem; // Required item flags.
 	uint32_t uStrAddr; // Addr of string to print.
 } __attribute((packed)) winNodeHdr;
 

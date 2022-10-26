@@ -60,7 +60,10 @@ Command List (case does not matter):\n\
 			break;
 
 		case CI_ITEMS: // Show a list of items.
-			if ((g_pGameState->pStory->cItems == 0) || (g_pGameState->fItem == 0)) break;
+			if ((g_pGameState->pStory->cItems == 0) || (g_pGameState->fItem == 0)) {
+				puts("Nothing in Inventory");
+				break;
+			}
 			puts("-- Inventory --");
 			for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
 				if (g_pGameState->fItem & (1 << iItem)) puts(g_pGameState->ppszItemName[iItem]);
@@ -220,9 +223,7 @@ int procMove (const char *pszParam) {
 
 	// Change scenes.
 	if (uNewSceneAddr != 0) {
-		//free(g_pGameState->pScene);
 		g_pGameState->uCurSceneAddr = uNewSceneAddr;
-		//g_pGameState->pScene = loadNode(g_pGameState->fpStory, uNewSceneAddr, NT_SCENE);
 
 		// Run LOOK AROUND after changing scenes.
 		if (reloadScene() || procLook(NULL)) {
