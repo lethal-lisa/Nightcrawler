@@ -3,10 +3,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h> // access
+#include <ctype.h> // toupper
 
 #include "gamestate.h"
 #include "saveload.h"
 
+const char *s_pszNcSaveFile = "nightcrawler.sav";
 const uint32_t s_uSaveGameVersion = 0;
 
 struct l_saveGameData
@@ -22,9 +25,17 @@ int saveGame (void) {
 	FILE *fp;
 	struct l_saveGameData sgd;
 
+	if (access(s_pszNcSaveFile, F_OK) == 0) {
+		puts("Save file already exists. Ok to overwrite? [y/N]");
+		if (toupper(getchar()) != 'Y') {
+			puts("Save cancelled...");
+			return 0;
+		}
+	}
+
 	// TODO: Check if file exists beforehand, and prompt user to overwrite if
 	// it does.
-	if ((fp = fopen("nightcrawler.sav", "w")) == NULL) {
+	if ((fp = fopen(s_pszNcSaveFile, "w")) == NULL) {
 		perror("Failed to open Nightcrawler save file");
 		return 0;
 	}
@@ -54,7 +65,7 @@ int loadGame (void) {
 	FILE *fp;
 	struct l_saveGameData sgd;
 
-	if ((fp = fopen("nightcrawler.sav", "r")) == NULL) {
+	if ((fp = fopen(s_pszNcSaveFile, "r")) == NULL) {
 		perror("Failed to open Nightcrawler save file");
 		return 0;
 	}
