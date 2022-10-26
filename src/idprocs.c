@@ -223,9 +223,14 @@ int procMove (const char *pszParam) {
 
 	// Change scenes.
 	if (uNewSceneAddr != 0) {
-		g_pGameState->uCurSceneAddr = uNewSceneAddr;
+
+		if (procDeath(uNewSceneAddr) || procWin(uNewSceneAddr) || (g_pGameState->nWonLost != GS_NORMAL)) {
+			free(pMove);
+			return 1;
+		}
 
 		// Run LOOK AROUND after changing scenes.
+		g_pGameState->uCurSceneAddr = uNewSceneAddr;
 		if (reloadScene() || procLook(NULL)) {
 			free(pMove);
 			return 1;

@@ -66,8 +66,8 @@ int resetGameState () {
 int reloadScene (void) {
 
 	// Try to process as death or win node.
-	if (procDeath(g_pGameState->uCurSceneAddr)) return 1;
-	if (procWin(g_pGameState->uCurSceneAddr)) return 1;
+	//if (procDeath(g_pGameState->uCurSceneAddr)) return 1;
+	//if (procWin(g_pGameState->uCurSceneAddr)) return 1;
 
 	free(g_pGameState->pScene);
 	g_pGameState->pScene = loadNode(g_pGameState->fpStory, g_pGameState->uCurSceneAddr, NT_SCENE);
@@ -138,7 +138,8 @@ int procWin (const int nodeAddr) {
 
 	if (printStrFromStory(g_pGameState->fpStory, pWin->uStrAddr)) return 1;
 
-	if (resetGameState()) return 1;
+	// No longer reseting game state due to exit on Win.
+	//if (resetGameState()) return 1;
 
 	g_pGameState->nWonLost = GS_WON;
 
