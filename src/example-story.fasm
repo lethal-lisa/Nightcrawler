@@ -169,6 +169,20 @@ db 'Thank you for playing.', 10
 db '(c)2022 Lisa-Annette Murray, dedicated to Chloii, my partner.', 00h
 
 ; ----------------------------------------------------------------------------
+; Death Node
+; ----------------------------------------------------------------------------
+
+deathNode1:
+db 'DTH', 00h
+dd .deathStr
+
+.deathStr:
+db 10, 10
+db 'You spontaneously explode after trying to use the key on the teddy bear.', 10
+db 10
+db 'GAME OVER', 10, 10, 00h
+
+; ----------------------------------------------------------------------------
 ; Main Room Node
 ; ----------------------------------------------------------------------------
 
@@ -178,7 +192,7 @@ dd .mainRoom_Move ; MOVE cluster.
 dd .mainRoom_Look ; LOOK cluster.
 dw 0000h          ; GET item mask.
 dd .mainRoom_Talk ; TALK cluster
-dd 0 ;dd .mainRoom_Use  ; USE cluster.
+dd deathNode1     ; USE cluster.
 
 .mainRoom_Move:
 db 'MOV', 00h ; Magic.
