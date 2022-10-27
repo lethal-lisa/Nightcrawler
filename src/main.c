@@ -231,6 +231,16 @@ int main (int argc, char *argv[]) {
 #endif
 			if (procCmdId(pparserCmd->uId, pszParamSubstr) != 0) {
 				free(pszUserInput);
+
+				// If the game is won, exit but allow the user to read the win
+				// message. Rationale: many users will be running games from a
+				// Windows GUI, this prevents the terminal window from closing
+				// automatically when the program exits.
+				if (g_pGameState->nWonLost == GS_WON) {
+					puts("Press Enter to exit game...");
+					getchar();
+				}
+
 				break;
 			}
 		}
