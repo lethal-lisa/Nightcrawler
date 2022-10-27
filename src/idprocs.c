@@ -226,6 +226,7 @@ int procMove (const char *pszParam) {
 
 		if (procDeath(uNewSceneAddr) || procWin(uNewSceneAddr) || (g_pGameState->nWonLost != GS_NORMAL)) {
 			free(pMove);
+			if (g_pGameState->nWonLost == GS_LOST) return 0;
 			return 1;
 		}
 
@@ -277,6 +278,11 @@ int procUse (const char *pszParam) {
 	if (g_pGameState->pScene->uUseClustAddr == 0) {
 		puts("No effect.");
 		return 0;
+	}
+
+	if (procDeath(g_pGameState->pScene->uUseClustAddr) || procWin(g_pGameState->pScene->uUseClustAddr) || (g_pGameState->nWonLost != GS_NORMAL)) {
+		if (g_pGameState->nWonLost == GS_LOST) return 0;
+		return 1;
 	}
 
 	// Load USE node.
