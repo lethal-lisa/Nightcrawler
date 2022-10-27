@@ -25,6 +25,7 @@ int saveGame (void) {
 	FILE *fp;
 	struct l_saveGameData sgd;
 
+	// Prompt user to overwrite if file already exists.
 	if (access(s_pszNcSaveFile, F_OK) == 0) {
 		puts("Save file already exists. Ok to overwrite? [y/N]");
 		if (toupper(getchar()) != 'Y') {
@@ -33,8 +34,6 @@ int saveGame (void) {
 		}
 	}
 
-	// TODO: Check if file exists beforehand, and prompt user to overwrite if
-	// it does.
 	if ((fp = fopen(s_pszNcSaveFile, "w")) == NULL) {
 		perror("Failed to open Nightcrawler save file");
 		return 0;

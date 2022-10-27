@@ -138,9 +138,6 @@ int procWin (const int nodeAddr) {
 
 	if (printStrFromStory(g_pGameState->fpStory, pWin->uStrAddr)) return 1;
 
-	// No longer reseting game state due to exit on Win.
-	//if (resetGameState()) return 1;
-
 	g_pGameState->nWonLost = GS_WON;
 
 	return 0;
