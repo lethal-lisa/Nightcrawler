@@ -20,15 +20,17 @@ Consult that file for the most up to date information.
 ## List of Node Identifiers ("Magic Numbers")
 All magic numbers are 4 bytes wide with a three char string, and a terminating
 NUL char. Magic numbers are used by the engine to identify the type of node.
-- `NST` For the "story" node.
-- `NSC` For "scene" nodes.
-- `MOV` For "move" nodes.
-- `LOK` For "look" nodes.
-- `TLK` For "talk" nodes.
-- `DIA` For "dialogue" nodes.
-- `DOL` For "dialogue option list" nodes.
-- `OPT` For "dialogue option" nodes.
-- `USE` For "use" nodes.
+- `NST` : For the "story" node.
+- `NSC` : For "scene" nodes.
+- `MOV` : For "move" nodes.
+- `LOK` : For "look" nodes.
+- `TLK` : For "talk" nodes.
+- `DIA` : For "dialogue" nodes.
+- `DOL` : For "dialogue option list" nodes.
+- `OPT` : For "dialogue option" nodes.
+- `USE` : For "use" nodes.
+- `WIN` : For "win" nodes.
+- `DTH` : For "death" nodes.
 
 ## NST Node Layout
 This type of node contains vital information about the story file overall, 
@@ -53,7 +55,8 @@ be specified.
 ## NSC Node Layout
 These are Scene nodes, which mostly wrap the `MOV`, `LOK`, `TLK`, and `USE`
 nodes. They also contain a `GET` mask, which is OR'd with the game's item
-flags.
+flags. The `USE` node address may also point to a `WIN` or `DTH` node which will
+run appropriate actions.
 
 - byte (char) [4] : Magic `"NSC"`.
 - uint32          : Address of the scene's `MOV` node (must not be zero).
@@ -67,7 +70,8 @@ run.
 These are nodes that contain addresses to other `NSC` nodes, and optionally can
 branch to alternative scenes based on the game's state flags being met.
 Addresses can be set to zero if it is desired for the player to not be able to
-move in a direction.
+move in a direction. Additionally instead of an `NSC` node, a `WIN` or `DTH`
+node's address may be used instead, and will perform the respective actions.
 
 - byte (char) [4] : Magic `"MOV"`.
 - uint16          : Required story flags to use alt addresses.
@@ -164,3 +168,13 @@ no flags will be set and the user will get a `"No effect."` message.
 - uint16          : Required story flags to run the `USE` command.
 - uint16          : Required item flags to run the `USE` command.
 - uint32          : Address of the string to print on successful `USE` command.
+
+## WIN and DTH Node Layout
+Win and Death nodes are structured exactly the same, but do different things
+when called. Death nodes will print their string and reset the game. Win nodes
+will print their string and exit the game, and print an `"Press Enter to exit
+the game..."` message. These nodes can be called by `MOVE` or `USE` commands.
+See the `MOV` node and the `NSC` node documentation on how that works.
+
+- byte (char) [4] : Magic `"WIN"`, or `"DTH"`.
+- uint32          : Address of string to print out.
