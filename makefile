@@ -4,7 +4,7 @@
 ## Set phony & default targets, and override the default suffix rules.
 ## ---------------------------------------------------------------------
 
-.PHONY: all clean release
+.PHONY: all clean
 .SUFFIXES:
 
 .DEFAULT_GOAL := all
@@ -68,11 +68,17 @@ CFLAGS   += -I$(INCLUDE)
 ## Compilation rules.
 ## ---------------------------------------------------------------------
 
-## Generate a release archive.
-release: all
+## Generate a 7zip release archive (requires p7zip).
+%.7z: default.nst LICENSE README.md $(TARGET)
+	-@echo 'Compressing 7zip release archive ("$^"->"$@")'
 	$(STRIP) -vs $(TARGET)
-	md5sum -b default.nst LICENSE README.md $(TARGET) | tee nightcrawler.md5
-	7z a nightcrawler.7z nightcrawler.md5 default.nst LICENSE README.md $(TARGET)
+	7z a $@ $^
+
+## Generate a zip release archive (requires infozip).
+%.zip: default.nst LICENSE README.md $(TARGET)
+	-@echo 'Compressing zip release archive ("$^"->"$@")'
+	$(STRIP) -vs $(TARGET)
+	zip -v -9 $@ $^
 
 ## Compile all targets.
 all: $(TARGET)
