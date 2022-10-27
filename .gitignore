@@ -8,5 +8,13 @@ nightcrawler
 ## Ignore save files
 *.sav
 
+## Ignore checksum files
+*.sha*
+*.md5
+
+## Ignore archive files
+*.7z
+*.zip
+
 ## Ignore build folder
 build/
