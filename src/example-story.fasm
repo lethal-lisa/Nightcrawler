@@ -166,7 +166,7 @@ db 10, 10
 db 'Congratulations on completing this example story. You have now experienced', 10
 db 'most of the features of the Nightcrawler engine.', 10, 10
 db 'Thank you for playing.', 10
-db '(c)2022 Lisa-Annette Murray, dedicated to Chloii, my girlfriend.', 00h
+db '(c)2022 Lisa-Annette Murray, dedicated to Chloii, my partner.', 00h
 
 ; ----------------------------------------------------------------------------
 ; Main Room Node
