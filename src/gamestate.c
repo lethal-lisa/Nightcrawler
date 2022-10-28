@@ -102,8 +102,6 @@ int procDeath (const int nodeAddr) {
 
 	if (printStrFromStory(g_pGameState->fpStory, pDth->uStrAddr)) return 1;
 
-	//if (resetGameState()) return 1;
-
 	g_pGameState->nWonLost = GS_LOST;
 
 	return 0;
