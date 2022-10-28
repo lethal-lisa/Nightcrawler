@@ -49,6 +49,7 @@ int resetGameState () {
 	g_pGameState->fStory = 0;
 	g_pGameState->fItem = 0;
 	g_pGameState->uCurSceneAddr = g_pGameState->pStory->uInitSceneAddr;
+	g_pGameState->nWonLost = GS_NORMAL;
 
 	if (reloadScene() != 0) return 1;
 
@@ -64,10 +65,6 @@ int resetGameState () {
 // Reloads the current scene.
 // This gets called after loading a game and after game over and such.
 int reloadScene (void) {
-
-	// Try to process as death or win node.
-	//if (procDeath(g_pGameState->uCurSceneAddr)) return 1;
-	//if (procWin(g_pGameState->uCurSceneAddr)) return 1;
 
 	free(g_pGameState->pScene);
 	g_pGameState->pScene = loadNode(g_pGameState->fpStory, g_pGameState->uCurSceneAddr, NT_SCENE);
@@ -105,7 +102,7 @@ int procDeath (const int nodeAddr) {
 
 	if (printStrFromStory(g_pGameState->fpStory, pDth->uStrAddr)) return 1;
 
-	if (resetGameState()) return 1;
+	//if (resetGameState()) return 1;
 
 	g_pGameState->nWonLost = GS_LOST;
 

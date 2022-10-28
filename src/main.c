@@ -243,6 +243,15 @@ int main (int argc, char *argv[]) {
 
 				break;
 			}
+
+			// Reset game if player lost.
+			if (g_pGameState->nWonLost == GS_LOST) {
+				if (resetGameState()) {
+					fprintf(stderr, "ERROR: Unable to reset game state.\n");
+					killGameState();
+					exit(EXIT_FAILURE);
+				}
+			}
 		}
 
 		free(pszUserInput);
