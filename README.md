@@ -53,11 +53,11 @@ The makefile also recognizes:
 - `MOVE|GO NORTH|SOUTH|EAST|WEST|N|S|E|W` Moves to a different scene.
 - `LOOK|EXAMINE [AROUND|NORTH|SOUTH|EAST|WEST|N|S|E|W]` Triggers look node for 
 the scene.
-- `GET` Adds the item in the scene to the player's inventory.
+- `GET|GRAB|TAKE` Adds the item in the scene to the player's inventory.
 - `TALK` Triggers the dialogue tree for the scene.
 - `USE` Interact with the scene, optionally using an item in the inventory, 
 selected automatically.
-- `ITEMS|INVENTORY` Displays your inventory.
+- `ITEMS|INVENTORY|INV` Displays your inventory.
 - `SAVE` Saves the game state to a `"nightcrawler.sav"` file.
 - `LOAD` Loads the game state from a `"nightcrawler.sav"` file.
 - `QUIT` Quits the game.

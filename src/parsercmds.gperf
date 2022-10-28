@@ -19,11 +19,14 @@ GO,        1
 LOOK,      2
 EXAMINE,   2
 GET,       3
+GRAB,      3
+TAKE,      3
 TALK,      4
 USE,       5
 INTERACT,  5
 INVENTORY, 6
 ITEMS,     6
+INV,       6
 SAVE,      50
 LOAD,      51
 QUIT,      99
