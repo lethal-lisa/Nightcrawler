@@ -28,7 +28,13 @@ int saveGame (void) {
 	// Prompt user to overwrite if file already exists.
 	if (access(s_pszNcSaveFile, F_OK) == 0) {
 		puts("Save file already exists. Ok to overwrite? [y/N]");
-		if (toupper(getchar()) != 'Y') {
+
+		// Get first char and eat chars until newline.
+		int chFirst = toupper(getchar());
+		while (getchar() != '\n');
+
+		// Cancel save if not 'Y'.
+		if (chFirst != 'Y') {
 			puts("Save cancelled...");
 			return 0;
 		}
