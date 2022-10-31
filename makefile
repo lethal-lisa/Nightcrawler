@@ -4,7 +4,7 @@
 ## Set phony & default targets, and override the default suffix rules.
 ## ---------------------------------------------------------------------
 
-.PHONY: all clean
+.PHONY: all clean debug
 .SUFFIXES:
 
 .DEFAULT_GOAL := all
@@ -48,10 +48,6 @@ ifndef CLANG
 	CFLAGS += -fno-printf-return-value
 endif
 
-ifdef DEBUG
-	CFLAGS += -D_DEBUG -g
-endif
-
 ifdef WINDOWS
 	CFLAGS += -D_WINDOWS
 ifdef WIN64
@@ -79,6 +75,10 @@ CFLAGS   += -I$(INCLUDE)
 	-@echo 'Compressing zip release archive ("$^"->"$@")'
 	$(STRIP) -vs $(TARGET)
 	zip -v -9 $@ $^
+
+## Use debug build.
+debug: CFLAGS += -D_DEBUG -g
+debug: all
 
 ## Compile all targets.
 all: $(TARGET)
