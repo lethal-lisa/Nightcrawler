@@ -1,37 +1,39 @@
 ; Nightcrawler Example Story File
 ; Assemble with fasm
 
+INCLUDE "predefs.def"
+
 ; Header:
-db 'NST', 00h ; Magic.
+db N_NST      ; Magic.
 dd 00000000h  ; NST format version.
 dd gameTitle  ; Title string addr.
-dd promptStr  ; Prompt string addr.
+dd 0          ; Prompt string addr.
 dd helpStr    ; Help string addr.
 dw 1          ; Count of item names.
 dd itemNames  ; Item name addr.
 dd initScene  ; Initial scene addr.
 
 gameTitle:    ; Game title string.
-db 'Example Nightcrawler Story File', 10
-db '(c)2022 Lisa-Annette Murray, part of the Nightcrawler codebase.', 10, 00h
+db 'Example Nightcrawler Story File', NL
+db '(c)2022 Lisa-Annette Murray, part of the Nightcrawler codebase.', NL, NUL
 
-promptStr:    ; Prompt string.
-db 'N> ', 0
+;promptStr:    ; Prompt string.
+;db 'N> ', 0
 
 helpStr:      ; Help string.
-db 'Nightcrawler Example Story File', 10
-db '(c)2022 Lisa-Annette Murray', 10
-db 'This story file contains two scenes used to debug the Nightcrawler engine.', 10, 00h
+db 'Nightcrawler Example Story File', NL
+db '(c)2022 Lisa-Annette Murray', NL
+db 'This story file contains two scenes used to debug the Nightcrawler engine.', NL, NUL
 
 itemNames:    ; Item name list.
-db 'Door key', 00h
+db 'Door key', NUL
 
 ; ----------------------------------------------------------------------------
 ; Initial Scene Node
 ; ----------------------------------------------------------------------------
 
 initScene:         ; Initial scene node.
-db 'NSC', 00h      ; Scene node header.
+db N_NSC           ; Scene node header.
 dd .initScene_Move ; Move cluster address.
 dd .initScene_Look ; Look cluster address.
 dw 0001h           ; GET item mask.
@@ -39,7 +41,7 @@ dd 0               ; TALK cluster address.
 dd .initScene_Use  ; Use cluster offset.
 
 .initScene_Move:
-db 'MOV', 00h    ; Magic.
+db N_MOV         ; Magic.
 dw 0001h         ; Required story flags for alt addresses.
 dw 0000h         ; Required item flags for alt addresses.
 dd 0             ; North.
@@ -52,7 +54,7 @@ dd 0             ; Alt East.
 dd 0             ; Alt West.
 
 .initScene_Look:
-db 'LOK', 00h                ; Magic.
+db N_LOK                     ; Magic.
 dw 0000h                     ; Story flags to set.
 dw 0001h                     ; Required story flags for alt text.
 dw 0000h                     ; Required item flags for alt text.
@@ -68,24 +70,24 @@ dd 0                         ; East alt.
 dd 0                         ; West alt.
 
 .initScene_LookAroundO:
-db 'The door at the end of the hall is open now, and bright light fills the', 10
-db 'empty passage.', 00h
+db 'The door at the end of the hall is open now, and bright light fills the', NL
+db 'empty passage.', NUL
 .initScene_LookAroundC:
-db 'You find yourself standing in an empty hallway with an closed door at the', 10
-db 'North end. The hallway is dimly lit and a bright light pours from', 10
-db 'underneath the doorway. Looking around there are no other exits.', 00h
+db 'You find yourself standing in an empty hallway with an closed door at the', NL
+db 'North end. The hallway is dimly lit and a bright light pours from', NL
+db 'underneath the doorway. Looking around there are no other exits.', NUL
 .initScene_LookClosedDoor:
-db 'There is a closed and locked door at the end of the hallway. There is a', 10
-db 'key on the floor next to the door.', 00h
+db 'There is a closed and locked door at the end of the hallway. There is a', NL
+db 'key on the floor next to the door.', NUL
 .initScene_LookOpenDoor:
-db 'Beyond the now open door is a blinding light.', 00h
+db 'Beyond the now open door is a blinding light.', NUL
 .initScene_LookWall:
-db 'There is nothing but the wall with a faint tiled pattern.', 00h
+db 'There is nothing but the wall with a faint tiled pattern.', NUL
 .initScene_LookHallS:
-db 'The hall extends in this direction.', 00h
+db 'The hall extends in this direction.', NUL
 
 .initScene_Use:
-db 'USE', 00h ; Magic.
+db N_USE      ; Magic.
 dw 0001h      ; Story flags to set.
 dw 0000h      ; Item flags to set.
 dw 0000h      ; Required story flags.
@@ -93,14 +95,14 @@ dw 0001h      ; Required item flags.
 dd .iS_UseKey ; Addr of string to print.
 
 .iS_UseKey:
-db 'You insert the key into the door and turn. With a click the door opens.', 00h
+db 'You insert the key into the door and turn. With a click the door opens.', NUL
 
 ; ----------------------------------------------------------------------------
 ; Hall South
 ; ----------------------------------------------------------------------------
 
 hallS:         ; South hall
-db 'NSC', 00h  ; Scene node header.
+db N_NSC       ; Scene node header.
 dd .hallS_Move ; Move cluster address.
 dd .hallS_Look ; Look cluster address.
 dw 0001h       ; GET item mask.
@@ -108,7 +110,7 @@ dd 0           ; TALK cluster address.
 dd 0           ; Use cluster offset.
 
 .hallS_Move:
-db 'MOV', 00h ; Magic.
+db N_MOV      ; Magic.
 dw 0002h      ; Required story flags for alt addresses.
 dw 0000h      ; Required item flags for alt addresses.
 dd initScene  ; North.
@@ -121,7 +123,7 @@ dd 0          ; Alt East.
 dd 0          ; Alt West.
 
 .hallS_Look:
-db 'LOK', 00h           ; Magic.
+db N_LOK                ; Magic.
 dw 0000h                ; Story flags to set.
 dw 0002h                ; Required story flags for alt text.
 dw 0000h                ; Required item flags for alt text.
@@ -137,57 +139,57 @@ dd 0                    ; East alt.
 dd 0                    ; West alt.
 
 .hallS_LookAroundC:
-db 'You are at the end of the hall, it is dark and the walls are cold to the', 10
-db 'touch. The South wall looks like it could move.', 00h
+db 'You are at the end of the hall, it is dark and the walls are cold to the', NL
+db 'touch. The South wall looks like it could move.', NUL
 .hallS_LookN:
-db 'The North end of the hallway expands before you.', 00h
+db 'The North end of the hallway expands before you.', NUL
 .hallS_LookCloseDoor:
-db 'Looking closer at the South wall it seems like it is hollow. You can hear', 10
-db 'mechanical parts moving behind it. You are now certain it could move, but', 10
-db 'there is no visible mechanism for this, only an insignia of a bear to the', 10
-db 'side.', 00h
+db 'Looking closer at the South wall it seems like it is hollow. You can hear', NL
+db 'mechanical parts moving behind it. You are now certain it could move, but', NL
+db 'there is no visible mechanism for this, only an insignia of a bear to the', NL
+db 'side.', NUL
 .hallS_LookAroundO:
-db 'The South end of the hall is now brightly lit after the bear opened the', 10
-db 'door. The walls are warm and sun pours in from outside.', 00h
+db 'The South end of the hall is now brightly lit after the bear opened the', NL
+db 'door. The walls are warm and sun pours in from outside.', NUL
 .hallS_LookOpenDoor:
-db 'The wall that was here before has been retracted into the floor, allowing', 10
-db 'you to pass. Beyond the now open portal extends the great outdoors.', 00h
+db 'The wall that was here before has been retracted into the floor, allowing', NL
+db 'you to pass. Beyond the now open portal extends the great outdoors.', NUL
 
 ; ----------------------------------------------------------------------------
 ; Win Node
 ; ----------------------------------------------------------------------------
 
 winNode1:
-db 'WIN', 00h
+db N_WIN
 dd .winStr
 
 .winStr:
-db 10, 10
-db 'Congratulations on completing this example story. You have now experienced', 10
-db 'most of the features of the Nightcrawler engine.', 10, 10
-db 'Thank you for playing.', 10
-db '(c)2022 Lisa-Annette Murray, dedicated to Chloii, my partner.', 00h
+db NL, NL
+db 'Congratulations on completing this example story. You have now experienced', NL
+db 'most of the features of the Nightcrawler engine.', NL, NL
+db 'Thank you for playing.', NL
+db '(c)2022 Lisa-Annette Murray, dedicated to Chloii, my partner.', NUL
 
 ; ----------------------------------------------------------------------------
 ; Death Node
 ; ----------------------------------------------------------------------------
 
 deathNode1:
-db 'DTH', 00h
+db N_DTH
 dd .deathStr
 
 .deathStr:
-db 10, 10
-db 'You spontaneously explode after trying to use the key on the teddy bear.', 10
-db 10
-db 'GAME OVER', 10, 10, 00h
+db NL, NL
+db 'You spontaneously explode after trying to use the key on the teddy bear.', NL
+db NL
+db 'GAME OVER', NL, NL, NUL
 
 ; ----------------------------------------------------------------------------
 ; Main Room Node
 ; ----------------------------------------------------------------------------
 
 sceneMainRoom:
-db 'NSC', 00h     ; Magic.
+db N_NSC          ; Magic.
 dd .mainRoom_Move ; MOVE cluster.
 dd .mainRoom_Look ; LOOK cluster.
 dw 0000h          ; GET item mask.
@@ -195,7 +197,7 @@ dd .mainRoom_Talk ; TALK cluster
 dd deathNode1     ; USE cluster.
 
 .mainRoom_Move:
-db 'MOV', 00h ; Magic.
+db N_MOV      ; Magic.
 dw 0000h      ; Required story flags for alt addresses.
 dw 0000h      ; Required item flags for alt addresses.
 dd 0          ; North.
@@ -208,7 +210,7 @@ dd 0          ; Alt East.
 dd 0          ; Alt West.
 
 .mainRoom_Look:
-db 'LOK', 00h           ; Magic.
+db N_LOK                ; Magic.
 dw 0000h                ; Story flags to set.
 dw 0000h                ; Required story flags for alt text.
 dw 0000h                ; Required item flags for alt text.
@@ -224,17 +226,17 @@ dd 0                    ; East alt.
 dd 0                    ; West alt.
 
 .mainRoom_LookAround:
-db 'A massive room swells around you; its expanse towering 12 feet all around', 10
-db 'you. In the center is a plain dummy in the shape of a teddy bear mounted', 10
-db 'to the floor.', 00h
+db 'A massive room swells around you; its expanse towering 12 feet all around', NL
+db 'you. In the center is a plain dummy in the shape of a teddy bear mounted', NL
+db 'to the floor.', NUL
 .mainRoom_LookWall:
-db 'To this side there is only a large tiled wall filling your vision.', 00h
+db 'To this side there is only a large tiled wall filling your vision.', NUL
 .mainRoom_LookBack:
-db 'Breaking up the tiled walls is the door to the small passage you entered', 10
-db 'from.', 00h
+db 'Breaking up the tiled walls is the door to the small passage you entered', NL
+db 'from.', NUL
 
 .mainRoom_Talk:
-db 'TLK', 00h     ; Magic.
+db N_TLK          ; Magic.
 dw 0000h          ; Required story flags.
 dw 0000h          ; Required item flags.
 dd teddyInitDia   ; Initial DIA node addr.
@@ -244,7 +246,7 @@ dd teddyInitDia   ; Initial DIA node addr.
 ; ----------------------------------------------------------------------------
 
 teddyInitDia:
-db 'DIA', 00h     ; Magic.
+db N_DIA          ; Magic.
 dw 0001h          ; Story flags to set.
 dw 0000h          ; Item flags to set.
 dw 0000h          ; Alt story flags to set.
@@ -256,12 +258,12 @@ dd .tedThankTxt   ; Alt string to print.
 dd .teddyOptList1 ; Opt node list addr.
 
 .teddyOptList1:
-db 'DOL', 00h ; Magic.
+db N_DOL      ; Magic.
 dw 1          ; Count of option node addrs.
 dd .tedOptHug ; Option node addr.
 
 .tedOptHug:
-db 'OPT', 00h    ; Magic.
+db N_OPT         ; Magic.
 dw 0002h         ; Story flags to set.
 dw 0000h         ; Item flags to set.
 dw 0000h         ; Required story flags.
@@ -270,7 +272,7 @@ dd .tedOptHugTxt ; Text this should print out.
 dd .tedDiaThank  ; DIA node this branches to.
 
 .tedDiaThank:
-db 'DIA', 00h ; Magic.
+db N_DIA      ; Magic.
 dw 0000h      ; Story flags to set.
 dw 0000h      ; Item flags to set.
 dw 0000h      ; Alt story flags to set.
@@ -283,11 +285,11 @@ dd 0
 
 
 .teddyInitText:
-db '"Hi, I', "'m a teddy bear!", '" the bear speaks with a squeak.', 00h
+db '"Hi, I', "'m a teddy bear!", '" the bear speaks with a squeak.', NUL
 .tedOptHugTxt:
-db 'Hug the teddy bear.', 00h
+db 'Hug the teddy bear.', NUL
 .tedThankTxt:
-db '"Thank you very much!" the bear blushes and smiles.', 10
-db '"I', "'", 'll open the door at the other end of the hall for you!"', 00h
+db '"Thank you very much!" the bear blushes and smiles.', NL
+db '"I', "'", 'll open the door at the other end of the hall for you!"', NUL
 
 ; End-of-File
