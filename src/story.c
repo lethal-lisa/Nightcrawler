@@ -53,7 +53,6 @@ FILE *openStoryFile (char *pszFileName) {
 	}
 
 	return fp;
-
 }
 
 // Counterpart to openStoryFile.
@@ -65,7 +64,6 @@ int closeStoryFile (FILE *fp) {
 	}
 
 	return 0;
-
 }
 
 // NOTE: Be extra sure you know what you're doing before you start playing
@@ -116,7 +114,6 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 	}
 
 	return pNode;
-
 }
 
 int printStrFromStory (FILE *fpStory, const int strAddr) {
@@ -148,5 +145,4 @@ int printStrFromStory (FILE *fpStory, const int strAddr) {
 	free(pszString);
 
 	return 0;
-
 }

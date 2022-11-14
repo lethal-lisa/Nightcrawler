@@ -261,7 +261,6 @@ int main (int argc, char *argv[]) {
 	killGameState();
 
 	return 0;
-
 };
 
 // Print help message.
@@ -272,7 +271,6 @@ void printHelp (void) {
 \t    --info      Display build info.\n\
 \t-f, --file      Select a story file to load.\n\
 \t    --license   Show the BSD 3-Clause license text.\n");
-
 }
 
 // Prints out build info.
@@ -311,7 +309,6 @@ void printBuildInfo (void) {
 #else
 	printf("GCC %s\n\n", __VERSION__);
 #endif
-
 }
 
 void printLicense (void) {
@@ -343,7 +340,6 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\n\
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\n\
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n\
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n");
-
 }
 
 // EOF

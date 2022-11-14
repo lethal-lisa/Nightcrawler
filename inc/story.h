@@ -27,6 +27,8 @@
 #define NT_WIN 9
 #define NT_DTH 10
 
+#define NST_HIGHEST_SUPPORTED_VER 0
+
 // Toplevel story node struct.
 typedef struct tagStoryFileHdr
 {

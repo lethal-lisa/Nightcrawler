@@ -90,11 +90,9 @@ Command List (case does not matter):\n\
 		default:
 			fprintf(stderr, "Invalid command ID %d. Try \"HELP\".\n", uId);
 			break;
-
 	}
 
 	return 0;
-
 }
 
 // Determine if alternate look text is to be shown.
@@ -165,14 +163,12 @@ int procLook (const char *pszParam) {
 			fprintf(stderr, "ERROR: Bad directional value.\n");
 			free(pLook);
 			return 0;
-
 	}
 
 	if (printStrFromStory(g_pGameState->fpStory, uStrAddr)) return 1;
 
 	free(pLook);
 	return 0;
-
 }
 
 // Process CI_MOVE.
@@ -219,7 +215,6 @@ int procMove (const char *pszParam) {
 			fprintf(stderr, "ERROR: Bad directional value.\n");
 			free(pMove);
 			return 0;
-
 	}
 
 	// Change scenes.
@@ -243,7 +238,6 @@ int procMove (const char *pszParam) {
 
 	free(pMove);
 	return 0;
-
 }
 
 // Process CI_GET.
@@ -269,7 +263,6 @@ int procGet (const char *pszParam) {
 
 	g_pGameState->fItem |= g_pGameState->pScene->uGetMask;
 	return 0;
-
 }
 
 // Process CI_USE.
@@ -308,7 +301,6 @@ int procUse (const char *pszParam) {
 
 	free(pUse);
 	return 0;
-
 }
 
 // Process CI_TALK.
@@ -341,6 +333,4 @@ int procTalk (const char *pszParam) {
 
 	free(pTalk);
 	return 0;
-
 }
-

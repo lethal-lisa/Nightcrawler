@@ -65,7 +65,6 @@ int beginDialogue (const uint32_t uDiaAddr) {
 
 	free(pDia);
 	return 0;
-
 }
 
 // Destroy an optsModeData struct.
@@ -195,7 +194,6 @@ int beginOptsMode(const uint32_t uDolAddr) {
 
 	killOptsData(&optsData);
 	return 0;
-
 }
 
 // Prompt for user's choice as an unsigned int.
@@ -249,7 +247,5 @@ int promptUserForOpt (unsigned int *puUserInput) {
 
 		free(pszUserInput);
 		return 0;
-
 	}
-
 }

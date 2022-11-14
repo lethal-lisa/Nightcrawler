@@ -62,7 +62,6 @@ int saveGame (void) {
 	puts("Save successful...");
 
 	return 0;
-
 }
 
 int loadGame (void) {
@@ -100,5 +99,4 @@ int loadGame (void) {
 	puts("Load successful...");
 
 	return 0;
-
 }

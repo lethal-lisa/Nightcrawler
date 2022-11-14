@@ -40,7 +40,6 @@ int killGameState () {
 	if (g_pGameState) free(g_pGameState);
 
 	return 0;
-
 }
 
 int resetGameState () {
@@ -59,7 +58,6 @@ int resetGameState () {
 	}
 
 	return 0;
-
 }
 
 // Reloads the current scene.
@@ -74,7 +72,6 @@ int reloadScene (void) {
 	}
 
 	return 0;
-
 }
 
 int procDeath (const int nodeAddr) {
@@ -105,7 +102,6 @@ int procDeath (const int nodeAddr) {
 	g_pGameState->nWonLost = GS_LOST;
 
 	return 0;
-
 }
 
 int procWin (const int nodeAddr) {
@@ -136,7 +132,6 @@ int procWin (const int nodeAddr) {
 	g_pGameState->nWonLost = GS_WON;
 
 	return 0;
-
 }
 
 int getStrsFromStory_handleError (const ssize_t cbBytesRead, const char *pszErrMsg) {
@@ -147,13 +142,12 @@ int getStrsFromStory_handleError (const ssize_t cbBytesRead, const char *pszErrM
 	}
 
 	return 0;
-
 }
 
 int getStrsFromStoryFile () {
 
 	ssize_t cbBytesRead;
-	const char pszDefPrompt[] = "Your next move? ";
+	const char pszDefPrompt[] = "N> ";
 
 	// Get prompt string.
 	if (g_pGameState->pStory->uPromptStrAddr != 0) {
@@ -202,5 +196,4 @@ int getStrsFromStoryFile () {
 	}
 
 	return 0;
-
 }
