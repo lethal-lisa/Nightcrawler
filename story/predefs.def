@@ -1,0 +1,21 @@
+; Nightcrawler Story File Predefines
+; Macro Defines for fasm
+
+; NUL Char:
+NUL equ 00h
+
+; New Line (LF) Char:
+NL equ 0Ah
+
+; Node Magic Number Strings:
+N_NST equ 'NST', NUL
+N_NSC equ 'NSC', NUL
+N_MOV equ 'MOV', NUL
+N_LOK equ 'LOK', NUL
+N_TLK equ 'TLK', NUL
+N_DIA equ 'DIA', NUL
+N_DOL equ 'DOL', NUL
+N_OPT equ 'OPT', NUL
+N_USE equ 'USE', NUL
+N_WIN equ 'WIN', NUL
+N_DTH equ 'DTH', NUL
