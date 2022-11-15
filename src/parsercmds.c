@@ -1,5 +1,5 @@
-/* C code produced by gperf version 3.1 */
-/* Command-line: gperf src/parsercmds.gperf  */
+/* ANSI-C code produced by gperf version 3.1 */
+/* Command-line: gperf parsercmds.gperf  */
 /* Computed positions: -k'1,3' */
 
 #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
@@ -26,10 +26,10 @@
       && ('w' == 119) && ('x' == 120) && ('y' == 121) && ('z' == 122) \
       && ('{' == 123) && ('|' == 124) && ('}' == 125) && ('~' == 126))
 /* The character set is not based on ISO-646.  */
-error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gperf@gnu.org>."
+#error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gperf@gnu.org>."
 #endif
 
-#line 11 "src/parsercmds.gperf"
+#line 11 "parsercmds.gperf"
 
 #include "parsercmds.h"
 /* maximum key range = 54, duplicates = 0 */
@@ -62,9 +62,7 @@ static unsigned char gperf_downcase[256] =
 #ifndef GPERF_CASE_STRCMP
 #define GPERF_CASE_STRCMP 1
 static int
-gperf_case_strcmp (s1, s2)
-     register const char *s1;
-     register const char *s2;
+gperf_case_strcmp (register const char *s1, register const char *s2)
 {
   for (;;)
     {
@@ -85,9 +83,7 @@ inline
 #endif
 #endif
 static unsigned int
-parserCmd_hash (str, len)
-     register const char *str;
-     register size_t len;
+parserCmd_hash (register const char *str, register size_t len)
 {
   static const unsigned char asso_values[] =
     {
@@ -134,9 +130,7 @@ parserCmd_hash (str, len)
 }
 
 const struct parserCmd *
-parserCmd_inWordSet (str, len)
-     register const char *str;
-     register size_t len;
+parserCmd_inWordSet (register const char *str, register size_t len)
 {
   enum
     {
@@ -149,59 +143,59 @@ parserCmd_inWordSet (str, len)
 
   static const struct parserCmd wordlist[] =
     {
-#line 40 "src/parsercmds.gperf"
+#line 40 "parsercmds.gperf"
       {"S",         102},
-#line 18 "src/parsercmds.gperf"
+#line 18 "parsercmds.gperf"
       {"GO",        1},
-#line 21 "src/parsercmds.gperf"
+#line 21 "parsercmds.gperf"
       {"GET",       3},
-#line 42 "src/parsercmds.gperf"
+#line 42 "parsercmds.gperf"
       {"W",         104},
-#line 36 "src/parsercmds.gperf"
+#line 36 "parsercmds.gperf"
       {"SOUTH",     102},
-#line 41 "src/parsercmds.gperf"
+#line 41 "parsercmds.gperf"
       {"E",         103},
-#line 38 "src/parsercmds.gperf"
+#line 38 "parsercmds.gperf"
       {"WEST",      104},
-#line 25 "src/parsercmds.gperf"
+#line 25 "parsercmds.gperf"
       {"USE",       5},
-#line 37 "src/parsercmds.gperf"
+#line 37 "parsercmds.gperf"
       {"EAST",      103},
-#line 39 "src/parsercmds.gperf"
+#line 39 "parsercmds.gperf"
       {"N",         101},
-#line 32 "src/parsercmds.gperf"
+#line 32 "parsercmds.gperf"
       {"QUIT",      99},
-#line 26 "src/parsercmds.gperf"
+#line 26 "parsercmds.gperf"
       {"INTERACT",  5},
-#line 33 "src/parsercmds.gperf"
+#line 33 "parsercmds.gperf"
       {"EXIT",      99},
-#line 28 "src/parsercmds.gperf"
+#line 28 "parsercmds.gperf"
       {"ITEMS",     6},
-#line 23 "src/parsercmds.gperf"
+#line 23 "parsercmds.gperf"
       {"TAKE",      3},
-#line 30 "src/parsercmds.gperf"
+#line 30 "parsercmds.gperf"
       {"SAVE",      50},
-#line 35 "src/parsercmds.gperf"
+#line 35 "parsercmds.gperf"
       {"NORTH",     101},
-#line 29 "src/parsercmds.gperf"
+#line 29 "parsercmds.gperf"
       {"INV",       6},
-#line 22 "src/parsercmds.gperf"
+#line 22 "parsercmds.gperf"
       {"GRAB",      3},
-#line 27 "src/parsercmds.gperf"
+#line 27 "parsercmds.gperf"
       {"INVENTORY", 6},
-#line 34 "src/parsercmds.gperf"
+#line 34 "parsercmds.gperf"
       {"AROUND",    100},
-#line 20 "src/parsercmds.gperf"
+#line 20 "parsercmds.gperf"
       {"EXAMINE",   2},
-#line 24 "src/parsercmds.gperf"
+#line 24 "parsercmds.gperf"
       {"TALK",      4},
-#line 19 "src/parsercmds.gperf"
+#line 19 "parsercmds.gperf"
       {"LOOK",      2},
-#line 17 "src/parsercmds.gperf"
+#line 17 "parsercmds.gperf"
       {"MOVE",      1},
-#line 16 "src/parsercmds.gperf"
+#line 16 "parsercmds.gperf"
       {"HELP",      0},
-#line 31 "src/parsercmds.gperf"
+#line 31 "parsercmds.gperf"
       {"LOAD",      51}
     };
 

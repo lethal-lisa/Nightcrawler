@@ -1,6 +1,6 @@
 %ignore-case
 %struct-type
-%language=C
+%language=ANSI-C
 %readonly-tables
 %enum
 %omit-struct-type
