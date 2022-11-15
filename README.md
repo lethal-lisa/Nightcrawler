@@ -38,14 +38,13 @@ makefile changes.
 
 ### Using the Build System
 Nightcrawlers makefile recognizes the following environment variables:
-- `DEBUG` : Builds a binary with debug features.
 - `WINDOWS` : Builds a 32-bit Windows binary.
 - `WIN64` : If this and `WINDOWS` are set, a 64-bit binary will be generated,
 otherwise no effect.
 
-The makefile also recognizes:
+The makefile recognizes the following targets:
+- `make debug` to generate a debug build.
 - `make clean` to clean up.
-- `make release` to generate a release archive.
 - `make all` (default) to build.
 
 ## List of Keywords Recognized by the Engine
