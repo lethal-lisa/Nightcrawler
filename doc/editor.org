@@ -1,0 +1,49 @@
+#+title: Nightcrawler Story File (NST) Editor
+#+author: Lisa Murray
+#+date: [2022-11-16 Wed]
+#+options: num:nil toc:nil
+
+* PROJ Nightcrawler Story Editor
+** IDEA Ncurses Based Editor
+Using Ncurses I could make an editor for NST files. It would be a lot easier to
+use than a lot of other ideas, but less flexible to work with, and it'd need a
+lot of time in the oven.
+
+** IDEA Script Compiler
+This would probably be easier to build and debug, but harder to work with for
+the end user. The neat thing about this as an option is that I could later one
+make an (graphical or otherwise) editor program that would generate scripts used
+by this compiler.
+
+*** BSD v GNU Tools
+Such a thing would assuredly have to use something like lex/yacc or flex/bison,
+etc. Because I'm /not/ writing a compiler from scratch without some extra tools.
+I'd personally lean toward the BSD (byacc, etc) implementations of each, but
+that's something to figure out once I get to picking how this project will work.
+
+* TODO Clean Up and Optimize Existing Nightcrawler Codebase
+Before any work on an NST editor can be completed a general cleanup of the
+codebase is necessary. This is because I didn't originally intend to be working
+on this project for so long, and it wasn't in the original design to have an
+editor, originally users were expected to use an assembler for their story
+files, but after trying to make one myself I discovered how ill-equipped
+something like fasm, the assembler used in the current example story is to this
+task, and so, here we are.
+
+* Optimization and Toolchain Integration
+One thing I've known for sure for a little bit about this is any extra tools
+that come with Nightcrawler need not be subject to the size constraints present
+when the Nightcrawler engine was being developed, and would instead be focused
+on speed optimization. It would be possible to use ~-O3~ instead of ~-Os~ and
+use ~inline~, and things like that for instance.
+
+I'm unsure as to how to integrate this into the existing codebase and build
+system. Maybe a separate file structure like =editor= and =engine=,
+or some such.
+
+** IDEA Nightcrawler Static Library
+An idea I've been chewing on for a little bit is making the Nightcrawler story
+and save file interfaces into some kind of library that could be linked to both
+an editor and the engine itself. This would accomplish a decent bit of
+much-needed cleanup, and make it easier to use some of Nightcrawler's existing
+code to make an editor, thus ensuring a degree of compatibility.
