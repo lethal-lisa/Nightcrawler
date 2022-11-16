@@ -165,6 +165,8 @@ int closeStoryFile (FILE *fp);
 // routine prints its own error information to stderr.
 void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType);
 
+int loadStrFromStory (FILE *fpStory, const int nStrAddr, size_t *pcchStr, char **ppszStr);
+
 // Prints a string from the story file fpStory at address strAddr to stdout.
 // Returns 0 on success and 1 on failure. This routine prints its own error
 // information to stderr.

@@ -146,6 +146,11 @@ int getStrsFromStory_handleError (const ssize_t cbBytesRead, const char *pszErrM
 
 int getStrsFromStoryFile () {
 
+	// REVIEW This whole routine is fucking nasty and illegible. Fix it if
+	// possible. Consider implementing something like a string loader, such a
+	// routine could also be used in printStrFromStory. This is probably the
+	// best way to proceed tbh.
+
 	ssize_t cbBytesRead;
 	const char pszDefPrompt[] = "N> ";
 

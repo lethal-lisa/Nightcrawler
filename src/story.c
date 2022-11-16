@@ -116,27 +116,42 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 	return pNode;
 }
 
+int loadStrFromStory (FILE *fpStory, const int nStrAddr, size_t *pcchStr, char **ppszStr) {
+
+	ssize_t cbBytesRead;
+
+	if (fseek(fpStory, nStrAddr, SEEK_SET)) {
+		perror("Failed seeking while trying to load a string");
+		return 1;
+	}
+
+	if (wingetdelim(ppszStr, pcchStr, '\0', fpStory) == -1) {
+		if (ferror(fpStory)) fprintf(stderr, "ERROR: %s: Error reading string: %s.\n", __func__, strerror(errno));
+		if (feof(fpStory)) fprintf(stderr, "WARN: %s: Error reading string: End of file reached.\n", __func__);
+		return 1;
+	}
+
+	return 0;
+}
+
 int printStrFromStory (FILE *fpStory, const int strAddr) {
 
 	// Verify file pointer.
 	if (fpStory == NULL) {
-		fprintf(stderr, "ERROR: printStrFromStory: Bad FILE pointer.\n");
+		fprintf(stderr, "ERROR: %s: Bad FILE pointer.\n", __func__);
 		return 1;
 	}
 
-	// Seek to string position.
-	if (fseek(fpStory, strAddr, SEEK_SET)) {
-		perror("ERROR: printStrFromStory: fseek failed");
+	if (strAddr == 0) {
+		fprintf(stderr, "ERROR: %s: Invalid string address.\n", __func__);
 		return 1;
 	}
 
-	char *pszString = NULL;
+	char *pszString;
 	size_t cchString;
 
-	// Read string.
-	if (wingetdelim(&pszString, &cchString, '\0', fpStory) == -1) {
-		if (ferror(fpStory)) perror("ERROR: printStrFromStory: Error reading string");
-		if (feof(fpStory)) fprintf(stderr, "WARN: printStrFromStory: Error reading string: End of file reached.\n");
+	if (loadStrFromStory(fpStory, strAddr, &cchString, &pszString)) {
+		fprintf(stderr, "ERROR: %s: Unable to load string.\n", __func__);
 		return 1;
 	}
 
