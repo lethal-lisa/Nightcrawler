@@ -118,8 +118,6 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 
 int loadStrFromStory (FILE *fpStory, const int nStrAddr, size_t *pcchStr, char **ppszStr) {
 
-	ssize_t cbBytesRead;
-
 	if (fseek(fpStory, nStrAddr, SEEK_SET)) {
 		perror("Failed seeking while trying to load a string");
 		return 1;
