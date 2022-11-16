@@ -135,19 +135,8 @@ int procWin (const int nodeAddr) {
 	return 0;
 }
 
-int getStrsFromStory_handleError (const ssize_t cbBytesRead, const char *pszErrMsg) {
-
-	if ((cbBytesRead == -1) && (feof(g_pGameState->fpStory) || ferror(g_pGameState->fpStory))) {
-		fprintf(stderr, "ERROR: getStrsFromStory: %s: %s\n", pszErrMsg, strerror(errno));
-		return 1;
-	}
-
-	return 0;
-}
-
 int getStrsFromStoryFile () {
 
-	ssize_t cbBytesRead;
 	const char pszDefPrompt[] = "N> ";
 
 	// Get prompt string.
@@ -186,11 +175,13 @@ int getStrsFromStoryFile () {
 
 		// Load in each item.
 		for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
-			cbBytesRead = wingetdelim(&g_pGameState->ppszItemName[iItem], &g_pGameState->pcchItemName[iItem], '\0', g_pGameState->fpStory);
-			if (getStrsFromStory_handleError(cbBytesRead, "Failed to load an item")) return 1;
+			if (wingetdelim(&g_pGameState->ppszItemName[iItem], &g_pGameState->pcchItemName[iItem], '\0', g_pGameState->fpStory) == -1) {
+				if (ferror(g_pGameState->fpStory)) fprintf(stderr, "ERROR: %s: Error reading string: %s.\n", __func__, strerror(errno));
+				if (feof(g_pGameState->fpStory)) fprintf(stderr, "WARN: %s: Error reading string: End of file reached.\n", __func__);
+				return 1;
+			}
 		}
 	}
 
 	return 0;
-
 }
