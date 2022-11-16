@@ -5,6 +5,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include "story.h"
 #include "wingetline.h"
 #include "gamestate.h"
 
@@ -146,23 +147,15 @@ int getStrsFromStory_handleError (const ssize_t cbBytesRead, const char *pszErrM
 
 int getStrsFromStoryFile () {
 
-	// REVIEW This whole routine is fucking nasty and illegible. Fix it if
-	// possible. Consider implementing something like a string loader, such a
-	// routine could also be used in printStrFromStory. This is probably the
-	// best way to proceed tbh.
-
 	ssize_t cbBytesRead;
 	const char pszDefPrompt[] = "N> ";
 
 	// Get prompt string.
 	if (g_pGameState->pStory->uPromptStrAddr != 0) {
-		if (fseek(g_pGameState->fpStory, g_pGameState->pStory->uPromptStrAddr, SEEK_SET)) {
-			perror("Failed seeking for prompt string");
+		if (loadStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uPromptStrAddr, &g_pGameState->cchPromptString, &g_pGameState->pszPromptString)) {
+			fprintf(stderr, "ERROR: %s: Failed to load prompt string.\n", __func__);
 			return 1;
 		}
-		cbBytesRead = wingetdelim(&g_pGameState->pszPromptString, &g_pGameState->cchPromptString, '\0', g_pGameState->fpStory);
-		if (getStrsFromStory_handleError(cbBytesRead, "Failed to load prompt string due to file error")) return 1;
-
 	} else {
 		// Use default string if none specified.
 		if ((g_pGameState->pszPromptString = malloc(strlen(pszDefPrompt) + 1)) == NULL) {
@@ -174,12 +167,10 @@ int getStrsFromStoryFile () {
 
 	// Load help string.
 	if (g_pGameState->pStory->uHelpStrAddr != 0) {
-		if (fseek(g_pGameState->fpStory, g_pGameState->pStory->uHelpStrAddr, SEEK_SET)) {
-			perror("Failed seeking for help string");
+		if (loadStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uHelpStrAddr, &g_pGameState->cchHelpString, &g_pGameState->pszHelpString)) {
+			fprintf(stderr, "ERROR: %s: Failed to load help string.\n", __func__);
 			return 1;
 		}
-		cbBytesRead = wingetdelim(&g_pGameState->pszHelpString, &g_pGameState->cchPromptString, '\0', g_pGameState->fpStory);
-		if (getStrsFromStory_handleError(cbBytesRead, "Failed to load help string due to file error")) return 1;
 	}
 
 	// Load item names.
@@ -201,4 +192,5 @@ int getStrsFromStoryFile () {
 	}
 
 	return 0;
+
 }

@@ -147,7 +147,7 @@ int printStrFromStory (FILE *fpStory, const int strAddr) {
 		return 1;
 	}
 
-	char *pszString;
+	char *pszString = NULL;
 	size_t cchString;
 
 	if (loadStrFromStory(fpStory, strAddr, &cchString, &pszString)) {
