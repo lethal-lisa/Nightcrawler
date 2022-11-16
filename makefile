@@ -16,7 +16,7 @@
 TARGET   := $(shell basename $(CURDIR))
 SOURCES  := src/
 BUILD    := build/
-INCLUDE  := inc/
+#INCLUDE  := inc/
 OBJS     := $(patsubst $(SOURCES)%.c,$(BUILD)%.o,$(wildcard src/*.c))
 
 ## ---------------------------------------------------------------------
