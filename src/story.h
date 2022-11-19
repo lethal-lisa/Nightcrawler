@@ -28,6 +28,7 @@
 #define NT_DTH 10
 
 #define NST_HIGHEST_SUPPORTED_VER 0
+#define NST_MAX_ITEM_COUNT 16
 
 // Toplevel story node struct.
 typedef struct tagStoryFileHdr
