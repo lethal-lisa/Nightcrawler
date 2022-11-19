@@ -8,6 +8,7 @@
 #include "gamestate.h"
 #include "dialogue.h"
 #include "wingetline.h"
+#include "validate.h"
 
 // Variables for beginOptsMode and error handling.
 // Stored as a struct to make error handling cheaper.
@@ -31,6 +32,12 @@ int beginDialogue (const uint32_t uDiaAddr) {
 	talk_DiaNode *pDia;
 	pDia = loadNode(g_pGameState->fpStory, uDiaAddr, NT_DIA);
 	if (pDia == NULL) return 1;
+
+	// Validate DIA node.
+	if (validDia(pDia) == false) {
+		fprintf(stderr, "ERROR: Invalid DIA node @0x%X.\n", uDiaAddr);
+		return 1;
+	}
 
 	// Select string to print.
 	uint32_t uStrAddr;
@@ -92,6 +99,12 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	optsData.pDol = loadNode(g_pGameState->fpStory, uDolAddr, NT_DOL);
 	if (optsData.pDol == NULL) return 1;
 
+	// Validate DOL node.
+	if (validDol(optsData.pDol) == false) {
+		fprintf(stderr, "ERROR: Invalid DOL node @0x%X.\n", uDolAddr);
+		return 1;
+	}
+
 	// If no options, return without error.
 	// NOTE: This technically means the story file is invalid, but there is no
 	// reason to treat this as a fatal error.
@@ -139,6 +152,12 @@ int beginOptsMode(const uint32_t uDolAddr) {
 			return 1;
 		}
 		optsData.cOptsLoaded++;
+
+		// Validate OPT node.
+		if (validOpt(optsData.ppOpt[iOpt]) == false) {
+			fprintf(stderr, "ERROR: Invalid OPT node @0x%X.\n", optsData.puOptAddrs[iOpt]);
+			return 1;
+		}
 
 		// Print out each string.
 		if (((optsData.ppOpt[iOpt]->fReqStory == 0) || (optsData.ppOpt[iOpt]->fReqStory & g_pGameState->fStory)) &&

@@ -21,7 +21,7 @@ bool validMove (const scene_MoveCluster *pMove) {
 }
 
 bool validLook (const scene_LookCluster *pLook) {
-	if ((pLook->uAroundAddr == 0) || (pLook->uAltAroundAddr == 0)) return false;
+	if ((pLook->uAroundAddr == 0) && (pLook->uAltAroundAddr == 0)) return false;
 	return true;
 }
 
@@ -31,7 +31,7 @@ bool validTalk (const scene_TalkCluster *pTalk) {
 }
 
 bool validDia (const talk_DiaNode *pDia) {
-	if ((pDia->uTextAddr == 0) || (pDia->uAltTextAddr == 0)) return false;
+	if ((pDia->uTextAddr == 0) && (pDia->uAltTextAddr == 0)) return false;
 	return true;
 }
 

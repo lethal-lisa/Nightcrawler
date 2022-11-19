@@ -8,6 +8,7 @@
 #include "parsercmds.h"
 #include "dialogue.h"
 #include "saveload.h"
+#include "validate.h"
 
 // Local procs.
 uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr);
@@ -119,6 +120,12 @@ int procLook (const char *pszParam) {
 	pLook = loadNode(g_pGameState->fpStory, g_pGameState->pScene->uLookClustAddr, NT_LOOK);
 	if (pLook == NULL) return 1;
 
+	// Validate LOK node.
+	if (validLook(pLook) == false) {
+		fprintf(stderr, "ERROR: Invalid LOK node @0x%X.\n", g_pGameState->pScene->uLookClustAddr);
+		return 1;
+	}
+
 	// Set story flags based on values in the scene.
 	g_pGameState->fStory |= pLook->fStory;
 
@@ -184,6 +191,12 @@ int procMove (const char *pszParam) {
 	scene_MoveCluster *pMove;
 	pMove = loadNode(g_pGameState->fpStory, g_pGameState->pScene->uMoveClustAddr, NT_MOVE);
 	if (pMove == NULL) return 1;
+
+	// Validate MOV node.
+	if (validMove(pMove) == false) {
+		fprintf(stderr, "ERROR: Invalid MOV node @0x%X.\n", g_pGameState->pScene->uMoveClustAddr);
+		return 1;
+	}
 
 	struct parserCmd *pparserCmd;
 	if ((pparserCmd = parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
@@ -284,6 +297,12 @@ int procUse (const char *pszParam) {
 	pUse = loadNode(g_pGameState->fpStory, g_pGameState->pScene->uUseClustAddr, NT_USE);
 	if (pUse == NULL) return 1;
 
+	// Validate USE node.
+	if (validUse(pUse) == false) {
+		fprintf(stderr, "ERROR: Invalid USE node @0x%X.\n", g_pGameState->pScene->uUseClustAddr);
+		return 1;
+	}
+
 	if (((pUse->fReqStory == 0) || (pUse->fReqStory & g_pGameState->fStory)) &&
 		((pUse->fReqItems == 0) || (pUse->fReqItems & g_pGameState->fItem))) {
 
@@ -316,6 +335,12 @@ int procTalk (const char *pszParam) {
 	scene_TalkCluster *pTalk;
 	pTalk = loadNode(g_pGameState->fpStory, g_pGameState->pScene->uTalkClustAddr, NT_TALK);
 	if (pTalk == NULL) return 1;
+
+	// Validate TLK node.
+	if (validTalk(pTalk) == false) {
+		fprintf(stderr, "ERROR: Invalid TLK node @0x%X.\n", g_pGameState->pScene->uTalkClustAddr);
+		return 1;
+	}
 
 	// Gate based on required flags.
 	if (((pTalk->fReqStory == 0) || (pTalk->fReqStory & g_pGameState->fStory)) &&

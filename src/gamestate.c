@@ -8,6 +8,7 @@
 #include "story.h"
 #include "wingetline.h"
 #include "gamestate.h"
+#include "validate.h"
 
 struct gameState *g_pGameState;
 
@@ -92,11 +93,19 @@ int procDeath (const int nodeAddr) {
 		return 1;
 	}
 
+	// Check magic.
 	if (strncmp(szMagic, "DTH", 4) != 0) return 0;
 
+	// Load DTH node.
 	dthNodeHdr *pDth;
 	pDth = loadNode(g_pGameState->fpStory, nodeAddr, NT_DTH);
 	if (pDth == NULL) return 1;
+
+	// Validate DTH node.
+	if (validDth(pDth) == false) {
+		fprintf(stderr, "ERROR: Invalid DTH node @0x%X.\n", nodeAddr);
+		return 1;
+	}
 
 	if (printStrFromStory(g_pGameState->fpStory, pDth->uStrAddr)) return 1;
 
@@ -122,11 +131,19 @@ int procWin (const int nodeAddr) {
 		return 1;
 	}
 
+	// Check magic.
 	if (strncmp(szMagic, "WIN", 4) != 0) return 0;
 
+	// Load WIN node.
 	winNodeHdr *pWin;
 	pWin = loadNode(g_pGameState->fpStory, nodeAddr, NT_WIN);
 	if (pWin == NULL) return 1;
+
+	// Validate WIN node.
+	if (validWin(pWin) == false) {
+		fprintf(stderr, "ERROR: Invalid WIN node @0x%X.\n", nodeAddr);
+		return 1;
+	}
 
 	if (printStrFromStory(g_pGameState->fpStory, pWin->uStrAddr)) return 1;
 
