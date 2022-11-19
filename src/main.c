@@ -42,6 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "story.h"
 #include "gamestate.h"
 #include "saveload.h"
+#include "validate.h"
 
 void printHelp (void);
 void printBuildInfo (void);
@@ -155,6 +156,13 @@ int main (int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
+	// Validate NST header.
+	if (validNst(g_pGameState->pStory) == false) {
+		fprintf(stderr, "ERROR: Invalid NST node!\n");
+		killGameState();
+		exit(EXIT_FAILURE);
+	}
+
 	// Display game title.
 	if (g_pGameState->pStory->uGameTitleAddr) {
 		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uGameTitleAddr)) {
@@ -173,6 +181,13 @@ int main (int argc, char *argv[]) {
 	g_pGameState->uCurSceneAddr = g_pGameState->pStory->uInitSceneAddr;
 	g_pGameState->pScene = loadNode(g_pGameState->fpStory, g_pGameState->uCurSceneAddr, NT_SCENE);
 	if (g_pGameState->pScene == NULL) {
+		killGameState();
+		exit(EXIT_FAILURE);
+	}
+
+	// Validate initial scene.
+	if (validNsc(g_pGameState->pScene) == false) {
+		fprintf(stderr, "ERROR: Invalid initial NSC node @0x%X.\n", g_pGameState->pStory->uInitSceneAddr);
 		killGameState();
 		exit(EXIT_FAILURE);
 	}

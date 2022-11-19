@@ -73,6 +73,12 @@ int reloadScene (void) {
 		return 1;
 	}
 
+	// Validate new scene.
+	if (validNsc(g_pGameState->pScene) == false) {
+		fprintf(stderr, "ERROR: Invalid NSC node @0x%X.\n", g_pGameState->uCurSceneAddr);
+		return 1;
+	}
+
 	return 0;
 }
 
