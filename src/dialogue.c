@@ -220,7 +220,6 @@ int promptUserForOpt (unsigned int *puUserInput) {
 
 	char *pszUserInput;
 	size_t cchUserInput;
-	ssize_t cbBytesRead;
 	char *endptr; // End pointer used by strtoul.
 
 	while (1) {
@@ -229,8 +228,7 @@ int promptUserForOpt (unsigned int *puUserInput) {
 
 		// Get input from user.
 		printf("Select an option: ");
-		cbBytesRead = wingetline(&pszUserInput, &cchUserInput, stdin);
-		if (cbBytesRead == -1) {
+		if (wingetline(&pszUserInput, &cchUserInput, stdin) == -1) {
 			if (feof(stdin)) {
 				fprintf(stderr, "ERROR: Encountered EOF.\n");
 				free(pszUserInput);
@@ -245,7 +243,7 @@ int promptUserForOpt (unsigned int *puUserInput) {
 		}
 
 #ifdef _DEBUG
-		printf("DEBUG: Allocated %zu chars and read %zu bytes.\n", cchUserInput, cbBytesRead);
+		printf("DEBUG: Allocated %zu chars.\n", cchUserInput);
 #endif
 
 		// Convert to uint.
