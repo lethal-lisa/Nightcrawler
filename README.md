@@ -1,5 +1,5 @@
 # Nightcrawler Text Adventure Engine
-(c) 2022 Lisa-Annette Murray Commissioned by Dan Butler/Technomage
+(c) 2022 Lisa-Annette Murray Commissioned by Dan Butler from Technomage
 
 ## Summary
 A simplistic text-adventure engine designed primarily to fit within a miniscule 
