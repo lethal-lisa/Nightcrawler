@@ -7,11 +7,15 @@ binary footprint (i.e. a floppy disk) and uses simple prompt based interaction
 with predefined keywords used to crawl through a binary story file containing
 the game information.
 
-### Internal documentation
+### Documentation
 Information for working with the engine is available in header files, and in
 various files in the doc/ folder. Information on the story file format is in
 [doc/nstspecs.md](doc/nstspecs.md). You can also see the
 [original project pitch](doc/pitch.txt) there.
+
+Documentation is also available on the
+[website](https://lethallisa.neocities.org/nightcrawler) in a potentially easier
+to digest format.
 
 [[_TOC_]]
 
@@ -21,10 +25,10 @@ various files in the doc/ folder. Information on the story file format is in
 systems may not function.
 
 ## Platform
-As for the actual platform of the engine. The release included by default will 
-be for Win32, tested against Wine on Linux & Mac, though the source code will 
-be in C and built against Linux GCC for testing, and should be capable of 
-compiling on any decently modern 64 or 32-bit OS.
+As for the actual platform of the engine. The release included by default will
+be for Win32, tested against Wine on Linux & Mac, though the source code will be
+in C and built against x86_64 Linux with GCC for testing, and should be capable
+of compiling on any decently modern 64 or 32-bit OS.
 
 You may be able to get the engine to compile on platforms besides these with 
 GCC installed. Early versions were proven to work on Termux with some minor 
