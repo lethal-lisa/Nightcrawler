@@ -184,6 +184,16 @@ db 'You spontaneously explode after trying to use the key on the teddy bear.', N
 db NL
 db 'GAME OVER', NL, NL, NUL
 
+death2:
+db N_DTH
+dd .tedKillStr
+
+.tedKillStr:
+db NL, NL
+db 'The teddy bear causes you to explode with mind beams.', NL
+db NL
+db 'GAME OVER', NL, NL, NUL
+
 ; ----------------------------------------------------------------------------
 ; Main Room Node
 ; ----------------------------------------------------------------------------
@@ -259,8 +269,9 @@ dd .teddyOptList1 ; Opt node list addr.
 
 .teddyOptList1:
 db N_DOL      ; Magic.
-dw 1          ; Count of option node addrs.
+dw 2          ; Count of option node addrs.
 dd .tedOptHug ; Option node addr.
+dd .tedOptKill
 
 .tedOptHug:
 db N_OPT         ; Magic.
@@ -270,6 +281,15 @@ dw 0000h         ; Required story flags.
 dw 0000h         ; Required item flags.
 dd .tedOptHugTxt ; Text this should print out.
 dd .tedDiaThank  ; DIA node this branches to.
+
+.tedOptKill:
+db N_OPT
+dw 0000h
+dw 0000h
+dw 0000h
+dw 0000h
+dd .tedOptKillTxt 
+dd death2
 
 .tedDiaThank:
 db N_DIA      ; Magic.
@@ -288,6 +308,8 @@ dd 0
 db '"Hi, I', "'m a teddy bear!", '" the bear speaks with a squeak.', NUL
 .tedOptHugTxt:
 db 'Hug the teddy bear.', NUL
+.tedOptKillTxt:
+db 'Strangle the bear.', NUL
 .tedThankTxt:
 db '"Thank you very much!" the bear blushes and smiles.', NL
 db '"I', "'", 'll open the door at the other end of the hall for you!"', NUL
