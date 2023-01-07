@@ -204,6 +204,11 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	}
 
 	// Act on desired opt node.
+	if (procDeath(optsData.ppOpt[uUserInput]->uDiaAddr) || procWin(optsData.ppOpt[uUserInput]->uDiaAddr) || (g_pGameState->nWonLost != GS_NORMAL)) {
+		if (g_pGameState->nWonLost == GS_LOST) return 0;
+		return 1;
+	}
+
 	g_pGameState->fStory |= optsData.ppOpt[uUserInput]->fStory;
 	g_pGameState->fItem |= optsData.ppOpt[uUserInput]->fItem;
 	if (beginDialogue(optsData.ppOpt[uUserInput]->uDiaAddr)) {
