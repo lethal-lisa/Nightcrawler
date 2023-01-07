@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Lisa-Annette Murray
+Copyright 2022-2023 Lisa-Annette Murray
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -329,7 +329,7 @@ void printBuildInfo (void) {
 void printLicense (void) {
 
 	puts("Nightcrawler Text Adventure Engine\n\
-Copyright 2022 Lisa-Annette Murray\n\
+Copyright 2022-2023 Lisa-Annette Murray\n\
 \n\
 Redistribution and use in source and binary forms, with or without\n\
 modification, are permitted provided that the following conditions are met:\n\
