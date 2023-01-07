@@ -147,7 +147,9 @@ addresses of `OPT` nodes.
 OPT nodes define a dialogue option the player can choose. They can set flags,
 and have required flags to display. All the options will be displayed in a list
 for the player to select. but when the required flags for a node are not met,
-the node will be omitted in the list.
+the node will be omitted in the list. Additionally instead of pointing to a
+`DIA` node `OPT` nodes can point to either `WIN` or `DTH` to perform those
+respective actions.
 
 - byte (char) [4] : Magic `"OPT"`.
 - uint16          : Story flags to set.
@@ -173,8 +175,8 @@ no flags will be set and the user will get a `"No effect."` message.
 Win and Death nodes are structured exactly the same, but do different things
 when called. Death nodes will print their string and reset the game. Win nodes
 will print their string and exit the game, and print an `"Press Enter to exit
-the game..."` message. These nodes can be called by `MOVE` or `USE` commands.
-See the `MOV` node and the `NSC` node documentation on how that works.
+the game..."` message. These nodes can be called by `MOVE`, `USE`, or `TALK`
+commands. See the `MOV`, `NSC`, and `OPT` node documentation on how that works.
 
 - byte (char) [4] : Magic `"WIN"`, or `"DTH"`.
 - uint32          : Address of string to print out.
