@@ -37,7 +37,7 @@ makefile changes.
 ## Tools Needed/Used
 - GCC/Clang for Linux compilation.
 - mingw32-gcc for Windows compilation.
-- gperf used for tokenizer generation.
+- gperf used for tokenizer generation. This is only required if you desire to change the set of keywords recognized by Nightcrawler.
 - fasm used to build story files.
 
 ### Using the Build System
