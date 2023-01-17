@@ -51,7 +51,14 @@ The makefile recognizes the following targets:
 - `make clean` to clean up.
 - `make all` (default) to build.
 
-## List of Keywords Recognized by the Engine
+## Using the Engine
+
+Nightcrawler binaries will look for a file called `"default.nst"` in the
+current working directory. This will be loaded as the default story file,
+and can be overridden with the `-f` or `--file` flag. Saves are saved to
+a file in the current working directory called `"nightcrawler.sav"`.
+
+### List of Keywords Recognized by the Engine
 - `HELP` Shows engine help & then help included in a story file.
 - `MOVE|GO NORTH|SOUTH|EAST|WEST|N|S|E|W` Moves to a different scene.
 - `LOOK|EXAMINE [AROUND|NORTH|SOUTH|EAST|WEST|N|S|E|W]` Triggers look node for 
