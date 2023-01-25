@@ -1,10 +1,13 @@
+// Nightcrawler - NSC Validation Module Header
+
 #ifndef VALIDATE_H_
-#define VALIDATE_H_
+#define VALIDATE_H_ 1
 
 #include <stdbool.h>
 
 #include "story.h"
 
+// Routines for validating story files.
 bool validNst (const storyFileHdr *pStory);
 bool validNsc (const sceneNodeHdr *pScene);
 bool validMove (const scene_MoveCluster *pMove);
@@ -17,4 +20,4 @@ bool validUse (const scene_UseCluster *pUse);
 bool validWin (const winNodeHdr *pWin);
 bool validDth (const dthNodeHdr *pDth);
 
-#endif // VALIDATE_H_
+#endif /* VALIDATE_H_ */

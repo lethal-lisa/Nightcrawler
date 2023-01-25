@@ -1,8 +1,8 @@
 
 // Nightcrawler Engine - Story File Header
 
-#ifndef __STORY_H__
-#define __STORY_H__ 1
+#ifndef STORY_H_
+#define STORY_H_ 1
 
 #include <stdint.h>
 #include <stdio.h>
@@ -166,6 +166,10 @@ int closeStoryFile (FILE *fp);
 // routine prints its own error information to stderr.
 void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType);
 
+// Loads a string from a story file, fpStory, at nStrAddr. The string is 
+// loaded into ppszStr, and has its size in chars stored in pcchStr. None of
+// these may be NULL pointers or zero. The string buffer will be automatically
+// allocated or resized.
 int loadStrFromStory (FILE *fpStory, const int nStrAddr, size_t *pcchStr, char **ppszStr);
 
 // Prints a string from the story file fpStory at address strAddr to stdout.
@@ -173,4 +177,4 @@ int loadStrFromStory (FILE *fpStory, const int nStrAddr, size_t *pcchStr, char *
 // information to stderr.
 int printStrFromStory (FILE *fpStory, const int strAddr);
 
-#endif /* __STORY_H__ */
+#endif /* STORY_H_ */

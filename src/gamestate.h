@@ -1,18 +1,23 @@
 
 // Nightcrawler Engine - Game State Machine Header
 
-#ifndef __GAMESTATE_H__
-#define __GAMESTATE_H__ 1
+#ifndef GAMESTATE_H_
+#define GAMESTATE_H_ 1
 
 #include <stdint.h>
 #include <stdio.h>
 
 #include "story.h"
 
-#define GS_NORMAL 0
-#define GS_WON 1
-#define GS_LOST 2
+// Values for nWonLost.
+enum WONLOSTSTATE
+{
+	GS_NORMAL,
+	GS_WON,
+	GS_LOST
+};
 
+// Structure for game state machine
 struct gameState
 {
 	storyFileHdr *pStory; // Story file header object.
@@ -27,9 +32,10 @@ struct gameState
 	char *pszPromptString; // Prompt string.
 	size_t cchHelpString; // Length of pszHelpString.
 	char *pszHelpString; // Help string.
-	int nWonLost; // Win/lose state.
+	enum WONLOSTSTATE nWonLost; // Win/lose state.
 };
 
+// Global state machine structure.
 extern struct gameState *g_pGameState;
 
 // Initialize & destroy g_pGameState.
@@ -42,10 +48,11 @@ int resetGameState ();
 // Reloads the current scene.
 int reloadScene (void);
 
+// Attempt to process a node as if it were a WIN or DTH node.
 int procDeath (const int nodeAddr);
 int procWin (const int nodeAddr);
 
 // Loads global strings from the story file, part of initialization.
 int getStrsFromStoryFile ();
 
-#endif /* __GAMESTATE_H__ */
+#endif /* GAMESTATE_H_ */

@@ -1,8 +1,8 @@
 
 // Nightcrawler Engine - Parser Commands Header
 
-#ifndef __PARSERCMDS_H__
-#define __PARSERCMDS_H__ 1
+#ifndef PARSERCMDS_H_
+#define PARSERCMDS_H_ 1
 
 #include <string.h>
 
@@ -32,4 +32,4 @@ struct parserCmd
 
 const struct parserCmd *parserCmd_inWordSet (register const char *str, register size_t len);
 
-#endif /* __PARSERCMDS_H__ */
+#endif /* PARSERCMDS_H_ */
