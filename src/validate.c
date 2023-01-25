@@ -18,11 +18,27 @@ bool validNsc (const sceneNodeHdr *pScene) {
 }
 
 bool validMove (const scene_MoveCluster *pMove) {
+	if (pMove->uNorthAddr == 0 &&
+		pMove->uSouthAddr == 0 &&
+		pMove->uEastAddr == 0 &&
+		pMove->uWestAddr == 0 &&
+		pMove->uAltNorthAddr == 0 &&
+		pMove->uAltSouthAddr == 0 &&
+		pMove->uAltEastAddr == 0 &&
+		pMove->uAltWestAddr == 0) return false;
 	return true;
 }
 
 bool validLook (const scene_LookCluster *pLook) {
 	if ((pLook->uAroundAddr == 0) && (pLook->uAltAroundAddr == 0)) return false;
+	if (pLook->uNorthAddr == 0 &&
+		pLook->uSouthAddr == 0 &&
+		pLook->uEastAddr == 0 &&
+		pLook->uWestAddr == 0 &&
+		pLook->uAltNorthAddr == 0 &&
+		pLook->uAltSouthAddr == 0 &&
+		pLook->uAltEastAddr == 0 &&
+		pLook->uAltWestAddr == 0) return false;
 	return true;
 }
 
