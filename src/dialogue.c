@@ -81,11 +81,15 @@ void killOptsData (struct optsModeData *pOptsData) {
 #endif
 	if (pOptsData->pDol) free(pOptsData->pDol);
 	if (pOptsData->puOptAddrs) free(pOptsData->puOptAddrs);
-	if (pOptsData->cOptsLoaded > 0) {
+	/* if (pOptsData->cOptsLoaded > 0) {
 		while (pOptsData->cOptsLoaded > 0) {
 			free(pOptsData->ppOpt[pOptsData->cOptsLoaded]);
 			--pOptsData->cOptsLoaded;
-		}
+		} */
+
+	if (pOptsData->ppOpt) {
+		for (int iOption = 0; iOption < pOptsData->cOptsLoaded; iOption++)
+			if (pOptsData->ppOpt[iOption]) free(pOptsData->ppOpt[iOption]);
 		free(pOptsData->ppOpt);
 	}
 }
