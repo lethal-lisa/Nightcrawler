@@ -4,7 +4,7 @@
 ## Set phony & default targets, and override the default suffix rules.
 ## ---------------------------------------------------------------------
 
-.PHONY: all clean debug
+.PHONY: all clean engine compiler
 .SUFFIXES:
 
 .DEFAULT_GOAL := all
@@ -13,10 +13,13 @@
 ## Setup project details.
 ## ---------------------------------------------------------------------
 
-TARGET   := $(shell basename $(CURDIR))
-SOURCES  := src/
-BUILD    := build/
-OBJS     := $(patsubst $(SOURCES)%.c,$(BUILD)%.o,$(wildcard src/*.c))
+TARGET_ENGINE   := nightcrawler
+TARGET_COMPILER := ncc
+SOURCES         := src/
+BUILD           := build/
+OBJS            := $(patsubst $(SOURCES)%.c,$(BUILD)%.o,$(wildcard $(SOURCES)*.c))
+OBJS_ENGINE     := $(patsubst $(SOURCES)$(TARGET_ENGINE)/%.c,$(BUILD)%.o,$(wildcard $(SOURCES)$(TARGET_ENGINE)/*.c))
+OBJS_COMPILER   := $(patsubst $(SOURCES)$(TARGET_COMPILER)/%.c,$(BUILD)%.o,$(wildcard $(SOURCES)$(TARGET_COMPILER)/*.c))
 
 ## ---------------------------------------------------------------------
 ## Set flags for code generation.
@@ -28,7 +31,8 @@ ifdef WIN64
 else
 	GCCPREFIX := i686-w64-mingw32-
 endif
-	TARGET    := $(TARGET).exe
+	TARGET_ENGINE    := $(TARGET_ENGINE).exe
+	TARGET_COMPILER  := $(TARGET_COMPILER).exe
 endif
 
 ifndef CLANG
@@ -41,10 +45,14 @@ else
 	STRIP     := strip
 endif
 
-CFLAGS   := -Wall -Os -fshort-enums
+CFLAGS   := -Wall -Os -fshort-enums -I$(SOURCES)
 ifndef CLANG
 	# -fno-printf-return-value unsupported on clang.
 	CFLAGS += -fno-printf-return-value
+endif
+
+ifdef DEBUG
+	CFLAGS += -D_DEBUG -g
 endif
 
 ifdef WINDOWS
@@ -63,28 +71,35 @@ LDFLAGS  := $(CFLAGS)
 ## ---------------------------------------------------------------------
 
 ## Generate a 7zip release archive (requires p7zip).
-%.7z: default.nst LICENSE README.md $(TARGET)
+%.7z: all default.nst LICENSE README.md
 	-@echo 'Compressing 7zip release archive ("$^"->"$@")'
-	$(STRIP) -vs $(TARGET)
+	$(STRIP) -vs $(TARGET_ENGINE)
+	$(STRIP) -vs $(TARGET_COMPILER)
 	7z a $@ $^
 
 ## Generate a zip release archive (requires infozip).
-%.zip: default.nst LICENSE README.md $(TARGET)
+%.zip: all default.nst LICENSE README.md
 	-@echo 'Compressing zip release archive ("$^"->"$@")'
-	$(STRIP) -vs $(TARGET)
+	$(STRIP) -vs $(TARGET_ENGINE)
+	$(STRIP) -vs $(TARGET_COMPILER)
 	zip -v -9 $@ $^
 
-## Use debug build.
-debug: CFLAGS += -D_DEBUG -g
-debug: all
-
 ## Compile all targets.
-all: $(TARGET)
-	-@chmod +x $<
+all: engine compiler
+	-@chmod +x $@
 
-## Link objects.
-$(TARGET): $(OBJS)
-	-@echo 'Linking objects... ("$^"->"$@")'
+engine: $(TARGET_ENGINE)
+
+compiler: $(TARGET_COMPILER)
+
+## Build Engine.
+$(TARGET_ENGINE): $(OBJS) $(OBJS_ENGINE)
+	-@echo 'Linking objects for engine... ("$^"->"$@")'
+	$(LD) $(LDFLAGS) $^ -o $@
+
+## Build Compiler
+$(TARGET_COMPILER): $(OBJS) $(OBJS_COMPILER)
+	-@echo 'Linking objects for compiler... ("$^"->"$@")'
 	$(LD) $(LDFLAGS) $^ -o $@
 
 ## Compile each C file.
@@ -93,8 +108,20 @@ $(OBJS): $(BUILD)%.o : $(SOURCES)%.c
 	-@echo 'Compiling object "$@"... ("$<"->"$@")'
 	$(CC) $(CFLAGS) -c $< -o $@
 
+## Compile Engine Objects.
+$(OBJS_ENGINE): $(BUILD)%.o : $(SOURCES)$(TARGET_ENGINE)/%.c
+	-@mkdir -p $(BUILD)
+	-@echo 'Compiling engine object "$@"... ("$<"->"$@")'
+	$(CC) $(CFLAGS) -c $< -o $@
+
+## Compile Compiler Objects.
+$(OBJS_COMPILER): $(BUILD)%.o : $(SOURCES)$(TARGET_COMPILER)/%.c
+	-@mkdir -p $(BUILD)
+	-@echo 'Compiling compiler object "$@"... ("$<"->"$@")'
+	$(CC) $(CFLAGS) -c $< -o $@
+
 ## Remove $(BUILD) dir.
 .IGNORE: clean
 clean:
 	@echo 'Cleaning up intermediary files...'
-	@rm -rvf $(BUILD) $(TARGET) $(TARGET).exe
+	@rm -rvf $(BUILD) $(TARGET_ENGINE) $(TARGET_COMPILER)

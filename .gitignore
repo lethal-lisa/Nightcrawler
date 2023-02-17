@@ -1,5 +1,4 @@
 ## Ignore binaries
-nightcrawler
 *.exe
 *.o
 *.elf
