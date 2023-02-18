@@ -288,7 +288,7 @@ dw 0000h
 dw 0000h
 dw 0000h
 dw 0000h
-dd .tedOptKillTxt 
+dd .tedOptKillTxt
 dd death2
 
 .tedDiaThank:
@@ -299,7 +299,7 @@ dw 0000h      ; Alt story flags to set.
 dw 0000h      ; Alt item flags to set.
 dw 0002h      ; Required story flags.
 dw 0000h      ; Required item flags.
-dd .tedThankTxt 
+dd .tedThankTxt
 dd 0
 dd 0
 
