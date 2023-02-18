@@ -60,7 +60,7 @@ int main (int argc, char *argv[]) {
 					}
 
 				case 'h': // Print out help.
-					printf("Nightcrawler Packer\n(c) 2022 Lisa-Annette Murray.\nUsage: %s [OPTIONS] ...\n", argv[0]);
+					printf("Nightcrawler Packer\n(c) 2022-2023 Lisa-Annette Murray.\nUsage: %s [OPTIONS] ...\n", argv[0]);
 					printHelp();
 					return 0;
 					break;
