@@ -14,7 +14,7 @@
 ## ---------------------------------------------------------------------
 
 TARGET_ENGINE   := nightcrawler
-TARGET_COMPILER := ncc
+TARGET_COMPILER := ncpk
 SOURCES         := src/
 BUILD           := build/
 OBJS            := $(patsubst $(SOURCES)%.c,$(BUILD)%.o,$(wildcard $(SOURCES)*.c))
