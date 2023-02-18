@@ -276,7 +276,7 @@ int main (int argc, char *argv[]) {
 	killGameState();
 
 	return 0;
-};
+}
 
 // Print help message.
 void printHelp (void) {
