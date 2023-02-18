@@ -27,9 +27,9 @@ OBJS_COMPILER   := $(patsubst $(SOURCES)$(TARGET_COMPILER)/%.c,$(BUILD)%.o,$(wil
 
 ifdef WINDOWS
 ifdef WIN64
-	GCCPREFIX := x86_64-w64-mingw32-
+	GCCPREFIX        := x86_64-w64-mingw32-
 else
-	GCCPREFIX := i686-w64-mingw32-
+	GCCPREFIX        := i686-w64-mingw32-
 endif
 	TARGET_ENGINE    := $(TARGET_ENGINE).exe
 	TARGET_COMPILER  := $(TARGET_COMPILER).exe
@@ -71,14 +71,14 @@ LDFLAGS  := $(CFLAGS)
 ## ---------------------------------------------------------------------
 
 ## Generate a 7zip release archive (requires p7zip).
-%.7z: all default.nst LICENSE README.md
+%.7z: default.nst LICENSE README.md $(TARGET_ENGINE) $(TARGET_COMPILER)
 	-@echo 'Compressing 7zip release archive ("$^"->"$@")'
 	$(STRIP) -vs $(TARGET_ENGINE)
 	$(STRIP) -vs $(TARGET_COMPILER)
 	7z a $@ $^
 
 ## Generate a zip release archive (requires infozip).
-%.zip: all default.nst LICENSE README.md
+%.zip: default.nst LICENSE README.md $(TARGET_ENGINE) $(TARGET_COMPILER)
 	-@echo 'Compressing zip release archive ("$^"->"$@")'
 	$(STRIP) -vs $(TARGET_ENGINE)
 	$(STRIP) -vs $(TARGET_COMPILER)
@@ -86,11 +86,12 @@ LDFLAGS  := $(CFLAGS)
 
 ## Compile all targets.
 all: engine compiler
-	-@chmod +x $@
 
 engine: $(TARGET_ENGINE)
+	-@chmod +x $@
 
 compiler: $(TARGET_COMPILER)
+	-@chmod +x $@
 
 ## Build Engine.
 $(TARGET_ENGINE): $(OBJS) $(OBJS_ENGINE)
