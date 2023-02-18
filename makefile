@@ -88,10 +88,10 @@ LDFLAGS  := $(CFLAGS)
 all: engine compiler
 
 engine: $(TARGET_ENGINE)
-	-@chmod +x $@
+	-@chmod +x $<
 
 compiler: $(TARGET_COMPILER)
-	-@chmod +x $@
+	-@chmod +x $<
 
 ## Build Engine.
 $(TARGET_ENGINE): $(OBJS) $(OBJS_ENGINE)
