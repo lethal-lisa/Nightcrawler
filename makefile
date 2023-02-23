@@ -45,7 +45,7 @@ else
 	STRIP     := strip
 endif
 
-CFLAGS   := -Wall -Os -fshort-enums -I$(SOURCES)
+CFLAGS    := -Wall -I$(SOURCES)
 ifndef CLANG
 	# -fno-printf-return-value unsupported on clang.
 	CFLAGS += -fno-printf-return-value
@@ -63,8 +63,12 @@ else
 	CFLAGS += -D_WIN32
 endif
 endif
+CFLAGS_ENGINE   := -Os -fshort-enums $(CFLAGS)
+CFLAGS_COMPILER := -O3 $(CFLAGS)
 
-LDFLAGS  := $(CFLAGS)
+LDFLAGS          := $(CFLAGS)
+LDFLAGS_ENGINE   := $(CFLAGS_ENGINE)
+LDFLAGS_COMPILER := $(CFLAGS_COMPILER)
 
 ## ---------------------------------------------------------------------
 ## Compilation rules.
@@ -96,12 +100,12 @@ compiler: $(TARGET_COMPILER)
 ## Build Engine.
 $(TARGET_ENGINE): $(OBJS) $(OBJS_ENGINE)
 	-@echo 'Linking objects for engine... ("$^"->"$@")'
-	$(LD) $(LDFLAGS) $^ -o $@
+	$(LD) $(LDFLAGS_ENGINE) $^ -o $@
 
 ## Build Compiler
 $(TARGET_COMPILER): $(OBJS) $(OBJS_COMPILER)
 	-@echo 'Linking objects for compiler... ("$^"->"$@")'
-	$(LD) $(LDFLAGS) $^ -o $@
+	$(LD) $(LDFLAGS_COMPILER) $^ -o $@
 
 ## Compile each C file.
 $(OBJS): $(BUILD)%.o : $(SOURCES)%.c
@@ -113,13 +117,13 @@ $(OBJS): $(BUILD)%.o : $(SOURCES)%.c
 $(OBJS_ENGINE): $(BUILD)%.o : $(SOURCES)$(TARGET_ENGINE)/%.c
 	-@mkdir -p $(BUILD)
 	-@echo 'Compiling engine object "$@"... ("$<"->"$@")'
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS_ENGINE) -c $< -o $@
 
 ## Compile Compiler Objects.
 $(OBJS_COMPILER): $(BUILD)%.o : $(SOURCES)$(TARGET_COMPILER)/%.c
 	-@mkdir -p $(BUILD)
 	-@echo 'Compiling compiler object "$@"... ("$<"->"$@")'
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS_COMPILER) -c $< -o $@
 
 ## Remove $(BUILD) dir.
 .IGNORE: clean
