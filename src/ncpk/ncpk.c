@@ -9,6 +9,9 @@ void printHelp (void);
 void printBuildInfo(void);
 void printLicense (void);
 
+// From lexer, to be moved to a header later
+int parseFile (const char *pszFileName);
+
 int main (int argc, char *argv[]) {
 
 	// Sizes and buffers for the input and output file names.
@@ -126,6 +129,12 @@ int main (int argc, char *argv[]) {
 	if (pszInputFileName == NULL) {
 		fprintf(stderr, "ERROR: %s: No input file.\n", __func__);
 		if (pszOutputFileName) free(pszOutputFileName);
+		exit(EXIT_FAILURE);
+	}
+
+	if (parseFile(pszInputFileName)) {
+		if (pszOutputFileName) free(pszOutputFileName);
+		if (pszInputFileName) free(pszInputFileName);
 		exit(EXIT_FAILURE);
 	}
 
