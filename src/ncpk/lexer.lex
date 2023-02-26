@@ -1,11 +1,15 @@
 %%
+%{
+#include <errno.h>
+%}
 <<EOF>>	return 0;
 STORY	return 1;
 END_STORY	return 2;
+[ \t\n]+	/* Eliminate whitespace */
 %%
 
 int yywrap () {
-	return 1;
+	return 0;
 }
 
 int parseFile (const char *pszFileName) {
