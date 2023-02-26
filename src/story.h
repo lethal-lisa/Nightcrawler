@@ -166,7 +166,7 @@ int closeStoryFile (FILE *fp);
 // routine prints its own error information to stderr.
 void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType);
 
-// Loads a string from a story file, fpStory, at nStrAddr. The string is 
+// Loads a string from a story file, fpStory, at nStrAddr. The string is
 // loaded into ppszStr, and has its size in chars stored in pcchStr. None of
 // these may be NULL pointers or zero. The string buffer will be automatically
 // allocated or resized.

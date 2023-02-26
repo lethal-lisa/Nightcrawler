@@ -97,7 +97,7 @@ int main (int argc, char *argv[]) {
 					}
 
 				case 'h': // Print out help.
-					printf("Nightcrawler Text Adventure Engine\n(c) 2022 Lisa-Annette Murray.\nUsage: %s [OPTIONS] ...\n", argv[0]);
+					printf("Nightcrawler Text Adventure Engine\n(c) 2022-2023 Lisa-Annette Murray.\nUsage: %s [OPTIONS] ...\n", argv[0]);
 					printHelp();
 					if (pszStoryFileName) free(pszStoryFileName);
 					return 0;
