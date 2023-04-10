@@ -3,6 +3,8 @@
 *.o
 *.elf
 *.bin
+ncpk
+nightcrawler
 
 ## Ignore save files
 *.sav
