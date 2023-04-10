@@ -1,0 +1,12 @@
+STORYB
+	TITLE "Test NSTS"
+	ISCENE "Iscene"
+ENDB
+
+SCENEB
+	NAME "Iscene"
+	MOVE "IsceneMove"
+	LOOK "IsceneLook"
+ENDB
+
+EOF
