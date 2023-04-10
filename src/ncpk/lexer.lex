@@ -7,6 +7,7 @@
 <<EOF>>		return TOK_EOF;
 EOF			return TOK_EOF;
 INCLUDE		return TOK_INCLUDE;
+\"[a-zA-Z0-9]\"	return TOK_STRING;
 STORY		return TOK_STORYB;
 ENDSTORY	return TOK_ENDSTORYB;
 SCENE		return TOK_SCENEB;
@@ -29,7 +30,7 @@ int parseFile (const char *pszFileName) {
 	int token;
 	do {
 		token = yylex();
-		printf("Found token: %d.\n", token);
+		printf("Found token: \"%s\" (%d).\n", yytext, token);
 	} while (token != 0);
 
 	fclose(fp);
