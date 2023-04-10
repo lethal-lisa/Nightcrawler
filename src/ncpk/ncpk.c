@@ -120,7 +120,7 @@ int main (int argc, char *argv[]) {
 	}
 
 #ifdef _DEBUG
-	fprintf(stderr, "DEBUG: %s: Selected files:\n\tInput:  \"%s\"\n\tOutput: \"%s\"\n", __func__,pszInputFileName, pszOutputFileName);
+	fprintf(stderr, "DEBUG: %s: Selected files:\n\tInput:  \"%s\"\n\tOutput: \"%s\"\n", __func__, pszInputFileName, pszOutputFileName);
 #endif
 
 	// Do main routine.

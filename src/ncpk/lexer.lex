@@ -5,6 +5,8 @@
 <<EOF>>	return 0;
 STORY	return 1;
 END_STORY	return 2;
+SCENE	return 3;
+END_SCENE	return 4;
 [ \t\n]+	/* Eliminate whitespace */
 %%
 
