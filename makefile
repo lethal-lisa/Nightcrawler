@@ -63,12 +63,12 @@ else
 	CFLAGS += -D_WIN32
 endif
 endif
-CFLAGS_ENGINE   := -Os -fshort-enums $(CFLAGS)
-CFLAGS_COMPILER := -O3 $(CFLAGS)
+CFLAGS_ENGINE   := -Os -fshort-enums $(CFLAGS) -I$(SOURCES)$(TARGET_ENGINE)
+CFLAGS_COMPILER := -O3 $(CFLAGS) -I$(SOURCES)$(TARGET_COMPILER)
 
 LDFLAGS          := $(CFLAGS)
 LDFLAGS_ENGINE   := $(CFLAGS_ENGINE)
-LDFLAGS_COMPILER := $(CFLAGS_COMPILER)
+LDFLAGS_COMPILER := $(CFLAGS_COMPILER) -lfl
 
 ## ---------------------------------------------------------------------
 ## Compilation rules.

@@ -1,12 +1,16 @@
 %%
 %{
 #include <errno.h>
+#include <stdio.h>
+#include <tokens.h>
 %}
-<<EOF>>	return 0;
-STORY	return 1;
-END_STORY	return 2;
-SCENE	return 3;
-END_SCENE	return 4;
+<<EOF>>		return TOK_EOF;
+EOF			return TOK_EOF;
+INCLUDE		return TOK_INCLUDE;
+STORY		return TOK_STORYB;
+ENDSTORY	return TOK_ENDSTORYB;
+SCENE		return TOK_SCENEB;
+ENDSCENE	return TOK_ENDSCENEB;
 [ \t\n]+	/* Eliminate whitespace */
 %%
 
