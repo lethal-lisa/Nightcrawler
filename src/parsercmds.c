@@ -1,5 +1,5 @@
 /* ANSI-C code produced by gperf version 3.1 */
-/* Command-line: gperf parsercmds.gperf  */
+/* Command-line: gperf src/parsercmds.gperf  */
 /* Computed positions: -k'1,3' */
 
 #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
@@ -29,10 +29,10 @@
 #error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gperf@gnu.org>."
 #endif
 
-#line 11 "parsercmds.gperf"
+#line 11 "src/parsercmds.gperf"
 
 #include "parsercmds.h"
-/* maximum key range = 54, duplicates = 0 */
+/* maximum key range = 59, duplicates = 0 */
 
 #ifndef GPERF_DOWNCASE
 #define GPERF_DOWNCASE 1
@@ -87,32 +87,32 @@ parserCmd_hash (register const char *str, register size_t len)
 {
   static const unsigned char asso_values[] =
     {
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 20, 55, 55, 55,  5,
-      55,  0, 15,  5, 55, 13, 30, 25, 10,  5,
-      55,  3,  5,  0,  0,  0, 15,  3, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 20, 55, 55,
-      55,  5, 55,  0, 15,  5, 55, 13, 30, 25,
-      10,  5, 55,  3,  5,  0,  0,  0, 15,  3,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-      55, 55, 55, 55, 55, 55
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 20, 60, 60, 60,  5,
+      60,  0, 25,  5, 60, 13, 30, 30, 10,  5,
+      60,  3,  5,  0,  0,  0, 15,  3, 30, 60,
+      60, 60, 60, 60, 60, 60, 60, 20, 60, 60,
+      60,  5, 60,  0, 25,  5, 60, 13, 30, 30,
+      10,  5, 60,  3,  5,  0,  0,  0, 15,  3,
+      30, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      60, 60, 60, 60, 60, 60
     };
   register unsigned int hval = len;
 
@@ -134,69 +134,71 @@ parserCmd_inWordSet (register const char *str, register size_t len)
 {
   enum
     {
-      TOTAL_KEYWORDS = 27,
+      TOTAL_KEYWORDS = 28,
       MIN_WORD_LENGTH = 1,
       MAX_WORD_LENGTH = 9,
       MIN_HASH_VALUE = 1,
-      MAX_HASH_VALUE = 54
+      MAX_HASH_VALUE = 59
     };
 
   static const struct parserCmd wordlist[] =
     {
-#line 40 "parsercmds.gperf"
+#line 41 "src/parsercmds.gperf"
       {"S",         102},
-#line 18 "parsercmds.gperf"
+#line 18 "src/parsercmds.gperf"
       {"GO",        1},
-#line 21 "parsercmds.gperf"
+#line 21 "src/parsercmds.gperf"
       {"GET",       3},
-#line 42 "parsercmds.gperf"
+#line 43 "src/parsercmds.gperf"
       {"W",         104},
-#line 36 "parsercmds.gperf"
+#line 37 "src/parsercmds.gperf"
       {"SOUTH",     102},
-#line 41 "parsercmds.gperf"
+#line 42 "src/parsercmds.gperf"
       {"E",         103},
-#line 38 "parsercmds.gperf"
+#line 39 "src/parsercmds.gperf"
       {"WEST",      104},
-#line 25 "parsercmds.gperf"
+#line 25 "src/parsercmds.gperf"
       {"USE",       5},
-#line 37 "parsercmds.gperf"
+#line 38 "src/parsercmds.gperf"
       {"EAST",      103},
-#line 39 "parsercmds.gperf"
+#line 40 "src/parsercmds.gperf"
       {"N",         101},
-#line 32 "parsercmds.gperf"
+#line 33 "src/parsercmds.gperf"
       {"QUIT",      99},
-#line 26 "parsercmds.gperf"
+#line 26 "src/parsercmds.gperf"
       {"INTERACT",  5},
-#line 33 "parsercmds.gperf"
+#line 34 "src/parsercmds.gperf"
       {"EXIT",      99},
-#line 28 "parsercmds.gperf"
+#line 28 "src/parsercmds.gperf"
       {"ITEMS",     6},
-#line 23 "parsercmds.gperf"
+#line 23 "src/parsercmds.gperf"
       {"TAKE",      3},
-#line 30 "parsercmds.gperf"
+#line 31 "src/parsercmds.gperf"
       {"SAVE",      50},
-#line 35 "parsercmds.gperf"
+#line 36 "src/parsercmds.gperf"
       {"NORTH",     101},
-#line 29 "parsercmds.gperf"
+#line 29 "src/parsercmds.gperf"
       {"INV",       6},
-#line 22 "parsercmds.gperf"
+#line 22 "src/parsercmds.gperf"
       {"GRAB",      3},
-#line 27 "parsercmds.gperf"
+#line 27 "src/parsercmds.gperf"
       {"INVENTORY", 6},
-#line 34 "parsercmds.gperf"
+#line 35 "src/parsercmds.gperf"
       {"AROUND",    100},
-#line 20 "parsercmds.gperf"
+#line 20 "src/parsercmds.gperf"
       {"EXAMINE",   2},
-#line 24 "parsercmds.gperf"
+#line 24 "src/parsercmds.gperf"
       {"TALK",      4},
-#line 19 "parsercmds.gperf"
+#line 19 "src/parsercmds.gperf"
       {"LOOK",      2},
-#line 17 "parsercmds.gperf"
+#line 30 "src/parsercmds.gperf"
+      {"NEXT",      7},
+#line 17 "src/parsercmds.gperf"
       {"MOVE",      1},
-#line 16 "parsercmds.gperf"
-      {"HELP",      0},
-#line 31 "parsercmds.gperf"
-      {"LOAD",      51}
+#line 32 "src/parsercmds.gperf"
+      {"LOAD",      51},
+#line 16 "src/parsercmds.gperf"
+      {"HELP",      0}
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
@@ -297,6 +299,9 @@ parserCmd_inWordSet (register const char *str, register size_t len)
                     goto compare;
                   case 37:
                     resword = &wordlist[26];
+                    goto compare;
+                  case 42:
+                    resword = &wordlist[27];
                     goto compare;
                 }
             }

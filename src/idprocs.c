@@ -75,6 +75,10 @@ Command List (case does not matter):\n\
 			return procTalk(pszParam);
 			break;
 
+		case CI_NEXT: // Next scene.
+			return procMove("NORTH");
+			break;
+
 		case CI_SAVE: // Save the game.
 			return saveGame();
 			break;
@@ -85,7 +89,11 @@ Command List (case does not matter):\n\
 			break;
 
 		case CI_QUIT: // Quit the game.
-			return 1;
+			puts("Are you sure? [y/N]");
+			int chFirst = toupper(getchar());
+			if (chFirst == '\n') break;
+			while (getchar() != '\n');
+			if (chFirst == 'Y') return 1;
 			break;
 
 		default:

@@ -27,6 +27,7 @@ INTERACT,  5
 INVENTORY, 6
 ITEMS,     6
 INV,       6
+NEXT,      7
 SAVE,      50
 LOAD,      51
 QUIT,      99

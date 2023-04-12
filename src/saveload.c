@@ -31,6 +31,7 @@ int saveGame (void) {
 
 		// Get first char and eat chars until newline.
 		int chFirst = toupper(getchar());
+		if (chFirst == '\n') return 0;
 		while (getchar() != '\n');
 
 		// Cancel save if not 'Y'.

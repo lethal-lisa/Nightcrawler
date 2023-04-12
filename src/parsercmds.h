@@ -14,6 +14,7 @@
 #define CI_TALK 4
 #define CI_USE 5
 #define CI_ITEMS 6
+#define CI_NEXT 7
 #define CI_SAVE 50
 #define CI_LOAD 51
 #define CI_QUIT 99
