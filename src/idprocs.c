@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h> // toupper
 
 #include "gamestate.h"
 #include "parsercmds.h"
