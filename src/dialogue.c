@@ -9,6 +9,7 @@
 #include "dialogue.h"
 #include "input.h"
 #include "validate.h"
+#include "idprocs.h"
 
 // Variables for beginOptsMode and error handling.
 // Stored as a struct to make error handling cheaper.
@@ -80,12 +81,6 @@ void killOptsData (struct optsModeData *pOptsData) {
 #endif
 	if (pOptsData->pDol) free(pOptsData->pDol);
 	if (pOptsData->puOptAddrs) free(pOptsData->puOptAddrs);
-	/* if (pOptsData->cOptsLoaded > 0) {
-		while (pOptsData->cOptsLoaded > 0) {
-			free(pOptsData->ppOpt[pOptsData->cOptsLoaded]);
-			--pOptsData->cOptsLoaded;
-		} */
-
 	if (pOptsData->ppOpt) {
 		for (int iOption = 0; iOption < pOptsData->cOptsLoaded; iOption++)
 			if (pOptsData->ppOpt[iOption]) free(pOptsData->ppOpt[iOption]);
@@ -216,6 +211,11 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	g_pGameState->fStory |= optsData.ppOpt[uUserInput]->fStory;
 	g_pGameState->fItem |= optsData.ppOpt[uUserInput]->fItem;
 
+	if (beginDialogue(optsData.ppOpt[uUserInput]->uDiaAddr)) {
+		killOptsData(&optsData);
+		return 1;
+	}
+
 	if (optsData.ppOpt[uUserInput]->uMoveAddr != 0) {
 		// Run LOOK AROUND after changing scenes.
 		g_pGameState->uCurSceneAddr = optsData.ppOpt[uUserInput]->uMoveAddr;
@@ -223,13 +223,6 @@ int beginOptsMode(const uint32_t uDolAddr) {
 			killOptsData(&optsData);
 			return 1;
 		}
-		killOptsData(&optsData);
-		return 0;
-	}
-
-	if (beginDialogue(optsData.ppOpt[uUserInput]->uDiaAddr)) {
-		killOptsData(&optsData);
-		return 1;
 	}
 
 	killOptsData(&optsData);

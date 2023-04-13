@@ -5,5 +5,6 @@
 #define IDPROCS_H_ 1
 
 int procCmdId (const unsigned int uId, const char *pszParam);
+int procLook (const char *pszParam);
 
 #endif /* IDPROCS_H_ */

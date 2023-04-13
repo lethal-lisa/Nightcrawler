@@ -5,7 +5,7 @@ INCLUDE "predefs.def"
 
 ; Header:
 db N_NST      ; Magic.
-dd 00000000h  ; NST format version.
+dd 00000001h  ; NST format version.
 dd gameTitle  ; Title string addr.
 dd 0          ; Prompt string addr.
 dd helpStr    ; Help string addr.
@@ -281,6 +281,7 @@ dw 0000h         ; Required story flags.
 dw 0000h         ; Required item flags.
 dd .tedOptHugTxt ; Text this should print out.
 dd .tedDiaThank  ; DIA node this branches to.
+dd hallS         ; Node to move to.
 
 .tedOptKill:
 db N_OPT
@@ -290,6 +291,7 @@ dw 0000h
 dw 0000h
 dd .tedOptKillTxt
 dd death2
+dd 0
 
 .tedDiaThank:
 db N_DIA      ; Magic.
@@ -303,7 +305,6 @@ dd .tedThankTxt
 dd 0
 dd 0
 
-
 .teddyInitText:
 db '"Hi, I', "'m a teddy bear!", '" the bear speaks with a squeak.', NUL
 .tedOptHugTxt:
@@ -312,6 +313,7 @@ db 'Hug the teddy bear.', NUL
 db 'Strangle the bear.', NUL
 .tedThankTxt:
 db '"Thank you very much!" the bear blushes and smiles.', NL
-db '"I', "'", 'll open the door at the other end of the hall for you!"', NUL
+db '"I', "'", 'll open the door at the other end of the hall for you!"', NL
+db '"Follow me!"', NUL
 
 ; End-of-File

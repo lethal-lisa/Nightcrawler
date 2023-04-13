@@ -57,8 +57,8 @@ bool validDol (const dia_OptList *pDol) {
 }
 
 bool validOpt (const dia_OptNode *pOpt) {
-	if ((pOpt->uTextAddr == 0) ||
-		((pOpt->uDiaAddr != 0) && (pOpt->uMoveAddr != 0))) return false;
+	if (pOpt->uTextAddr == 0) return false;
+	// ((pOpt->uDiaAddr != 0) && (pOpt->uMoveAddr != 0))) return false;
 	return true;
 }
 

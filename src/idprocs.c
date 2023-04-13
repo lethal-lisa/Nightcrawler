@@ -3,13 +3,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h> // toupper
 
 #include "gamestate.h"
 #include "parsercmds.h"
 #include "dialogue.h"
 #include "saveload.h"
 #include "validate.h"
+#include "input.h"
 
 // Local procs.
 uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr);
