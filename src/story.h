@@ -129,8 +129,8 @@ typedef struct tagDia_OptNode
 	uint16_t fReqStory; // Required story flags to set.
 	uint16_t fReqItems; // Required item flags to set.
 	uint32_t uTextAddr; // Address to the name of the option.
-	uint32_t uDiaAddr; // Address of the DIA node to branch to. Cannot be used with uMoveAddr.
-	uint32_t uMoveAddr; // Address of the new NSC node to branch to. Cannot be used with uDiaAddr.
+	uint32_t uDiaAddr; // Address of the DIA node to branch to.
+	uint32_t uMoveAddr; // Address of the new NSC node to branch to.
 } __attribute((packed)) dia_OptNode;
 
 // Use node struct.

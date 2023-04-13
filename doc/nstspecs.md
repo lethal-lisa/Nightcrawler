@@ -157,7 +157,8 @@ respective actions.
 - uint16          : Required story flags to display the option.
 - uint16          : Required item flags to display the option.
 - uint32          : Address of the string for the option.
-- uint32          : Address of the `DIA` node to branch to.
+- uint32          : Address of the `DIA` node to branch to (optional).
+- uint32          : Address of the `NSC` node to move to (optional).
 
 ## USE Node Layout
 Defines the action of an `USE` command, including flags that are set,
