@@ -7,7 +7,7 @@
 
 #include "gamestate.h"
 #include "dialogue.h"
-#include "wingetline.h"
+#include "input.h"
 #include "validate.h"
 
 // Variables for beginOptsMode and error handling.
@@ -24,7 +24,6 @@ struct optsModeData
 void killOptsData (struct optsModeData *pOptsData);
 int beginOptsMode (const uint32_t uDolAddr);
 int promptUserForOpt (unsigned int *puUserInput);
-
 
 int beginDialogue (const uint32_t uDiaAddr) {
 
@@ -216,6 +215,18 @@ int beginOptsMode(const uint32_t uDolAddr) {
 
 	g_pGameState->fStory |= optsData.ppOpt[uUserInput]->fStory;
 	g_pGameState->fItem |= optsData.ppOpt[uUserInput]->fItem;
+
+	if (optsData.ppOpt[uUserInput]->uMoveAddr != 0) {
+		// Run LOOK AROUND after changing scenes.
+		g_pGameState->uCurSceneAddr = optsData.ppOpt[uUserInput]->uMoveAddr;
+		if (reloadScene() || procLook(NULL)) {
+			killOptsData(&optsData);
+			return 1;
+		}
+		killOptsData(&optsData);
+		return 0;
+	}
+
 	if (beginDialogue(optsData.ppOpt[uUserInput]->uDiaAddr)) {
 		killOptsData(&optsData);
 		return 1;
@@ -225,54 +236,3 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	return 0;
 }
 
-// Prompt for user's choice as an unsigned int.
-int promptUserForOpt (unsigned int *puUserInput) {
-
-	char *pszUserInput;
-	size_t cchUserInput;
-	char *endptr; // End pointer used by strtoul.
-
-	while (1) {
-		pszUserInput = NULL;
-		cchUserInput = 0;
-
-		// Get input from user.
-		printf("Select an option: ");
-		if (wingetline(&pszUserInput, &cchUserInput, stdin) == -1) {
-			if (feof(stdin)) {
-				fprintf(stderr, "ERROR: Encountered EOF.\n");
-				free(pszUserInput);
-				return 1;
-			}
-			if (ferror(stdin)) {
-				fprintf(stderr, "ERROR: Standard input error. Try again.\n");
-				free(pszUserInput);
-				clearerr(stdin);
-				continue;
-			}
-		}
-
-#ifdef _DEBUG
-		printf("DEBUG: Allocated %zu chars.\n", cchUserInput);
-#endif
-
-		// Convert to uint.
-		errno = 0;
-		*puUserInput = strtoul(pszUserInput, &endptr, 10);
-		if (errno != 0) {
-			perror("Unable to convert user input.");
-			free(pszUserInput);
-			return 1;
-		}
-
-		// If no input, try again.
-		if (endptr == pszUserInput) {
-			printf("Invalid input.\n");
-			free(pszUserInput);
-			continue;
-		}
-
-		free(pszUserInput);
-		return 0;
-	}
-}

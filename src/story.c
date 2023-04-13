@@ -6,7 +6,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include "wingetline.h"
+#include "input.h"
 #include "story.h"
 
 struct nodeMagicData

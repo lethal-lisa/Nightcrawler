@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <errno.h>
 #include <getopt.h>
 
-#include "wingetline.h"
+#include "input.h"
 #include "parsercmds.h"
 #include "idprocs.h"
 #include "story.h"

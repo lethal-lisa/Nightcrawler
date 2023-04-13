@@ -90,11 +90,7 @@ Command List (case does not matter):\n\
 			break;
 
 		case CI_QUIT: // Quit the game.
-			puts("Are you sure? [y/N]");
-			int chFirst = toupper(getchar());
-			if (chFirst == '\n') break;
-			while (getchar() != '\n');
-			if (chFirst == 'Y') return 1;
+			if (confirmYesNo("Are you sure?") == YN_YES) return 1;
 			break;
 
 		default:

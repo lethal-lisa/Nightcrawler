@@ -7,6 +7,7 @@
 #include <ctype.h> // toupper
 
 #include "gamestate.h"
+#include "input.h"
 #include "saveload.h"
 
 const char *s_pszNcSaveFile = "nightcrawler.sav";
@@ -27,15 +28,7 @@ int saveGame (void) {
 
 	// Prompt user to overwrite if file already exists.
 	if (access(s_pszNcSaveFile, F_OK) == 0) {
-		puts("Save file already exists. Ok to overwrite? [y/N]");
-
-		// Get first char and eat chars until newline.
-		int chFirst = toupper(getchar());
-		if (chFirst == '\n') return 0;
-		while (getchar() != '\n');
-
-		// Cancel save if not 'Y'.
-		if (chFirst != 'Y') {
+		if (confirmYesNo("Save file already exists. Ok to overwrite?") == YN_NO) {
 			puts("Save cancelled...");
 			return 0;
 		}

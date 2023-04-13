@@ -6,7 +6,7 @@
 #include <errno.h>
 
 #include "story.h"
-#include "wingetline.h"
+#include "input.h"
 #include "gamestate.h"
 #include "validate.h"
 

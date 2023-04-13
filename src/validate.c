@@ -6,7 +6,7 @@
 #include "story.h"
 
 bool validNst (const storyFileHdr *pStory) {
-	if (pStory->uVersion > NST_HIGHEST_SUPPORTED_VER) return false;
+	if (pStory->uVersion != NST_SUPPORTED_VER) return false;
 	if (pStory->cItems > NST_MAX_ITEM_COUNT) return false;
 	return true;
 }
@@ -57,7 +57,8 @@ bool validDol (const dia_OptList *pDol) {
 }
 
 bool validOpt (const dia_OptNode *pOpt) {
-	if (pOpt->uTextAddr == 0) return false;
+	if ((pOpt->uTextAddr == 0) ||
+		((pOpt->uDiaAddr != 0) && (pOpt->uMoveAddr != 0))) return false;
 	return true;
 }
 

@@ -27,7 +27,7 @@
 #define NT_WIN 9
 #define NT_DTH 10
 
-#define NST_HIGHEST_SUPPORTED_VER 0
+#define NST_SUPPORTED_VER 1
 #define NST_MAX_ITEM_COUNT 16
 
 // Toplevel story node struct.
@@ -129,7 +129,8 @@ typedef struct tagDia_OptNode
 	uint16_t fReqStory; // Required story flags to set.
 	uint16_t fReqItems; // Required item flags to set.
 	uint32_t uTextAddr; // Address to the name of the option.
-	uint32_t uDiaAddr; // Address of the DIA node to branch to.
+	uint32_t uDiaAddr; // Address of the DIA node to branch to. Cannot be used with uMoveAddr.
+	uint32_t uMoveAddr; // Address of the new NSC node to branch to. Cannot be used with uDiaAddr.
 } __attribute((packed)) dia_OptNode;
 
 // Use node struct.
