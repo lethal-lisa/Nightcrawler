@@ -6,5 +6,9 @@
 
 int procCmdId (const unsigned int uId, const char *pszParam);
 int procLook (const char *pszParam);
+int procMove (const char *pszParam);
+int procGet (const char *pszParam);
+int procUse (const char *pszParam);
+int procTalk (const char *pszParam);
 
 #endif /* IDPROCS_H_ */

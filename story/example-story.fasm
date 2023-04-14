@@ -93,9 +93,11 @@ dw 0000h      ; Item flags to set.
 dw 0000h      ; Required story flags.
 dw 0001h      ; Required item flags.
 dd .iS_UseKey ; Addr of string to print.
+dd sceneMainRoom ; Addr to move to.
 
 .iS_UseKey:
-db 'You insert the key into the door and turn. With a click the door opens.', NUL
+db 'You insert the key into the door and turn. With a click the door opens.', NL
+db 'You walk through...', NUL
 
 ; ----------------------------------------------------------------------------
 ; Hall South

@@ -10,16 +10,11 @@
 #include "saveload.h"
 #include "validate.h"
 #include "input.h"
+#include "idprocs.h"
 
 // Local procs.
 uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr);
 uint32_t isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr);
-
-int procLook (const char *pszParam);
-int procMove (const char *pszParam);
-int procGet (const char *pszParam);
-int procUse (const char *pszParam);
-int procTalk (const char *pszParam);
 
 // Process a command based on its ID.
 // IDs are defined in parsercmds.h, and returned by the gperf parser.
@@ -286,9 +281,11 @@ int procGet (const char *pszParam) {
 // Process CI_USE.
 int procUse (const char *pszParam) {
 
+	const char pszNoEffect[] = "No effect.";
+
 	// Reject with no error if no use cluster.
 	if (g_pGameState->pScene->uUseClustAddr == 0) {
-		puts("No effect.");
+		puts(pszNoEffect);
 		return 0;
 	}
 
@@ -319,8 +316,15 @@ int procUse (const char *pszParam) {
 			free(pUse);
 			return 1;
 		}
+		if (pUse->uMoveAddr != 0) {
+			g_pGameState->uCurSceneAddr = pUse->uMoveAddr;
+				if (reloadScene() || procLook(NULL)) {
+				free(pUse);
+				return 1;
+			}
+		}
 	} else {
-		puts("No effect.");
+		puts(pszNoEffect);
 	}
 
 	free(pUse);

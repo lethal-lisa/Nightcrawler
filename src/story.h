@@ -142,6 +142,7 @@ typedef struct tagScene_UseCluster
 	uint16_t fReqStory; // Required story flags.
 	uint16_t fReqItems; // Required item flags.
 	uint32_t uStrAddr; // Addr of string to print.
+	uint32_t uMoveAddr; // Addr of new NSC node to branch to.
 } __attribute((packed)) scene_UseCluster;
 
 // WIN node struct.
