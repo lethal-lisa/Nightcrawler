@@ -28,7 +28,7 @@
 #define NT_DTH 10
 
 #define NST_SUPPORTED_VER 1
-#define NST_MAX_ITEM_COUNT 16
+#define NST_MAX_ITEM_COUNT 32
 
 // Toplevel story node struct.
 typedef struct tagStoryFileHdr
@@ -49,7 +49,7 @@ typedef struct tagSceneNodeHdr
 	char szMagic[4]; // Magic number identifier "NSC".
 	uint32_t uMoveClustAddr; // MOVE cluster address.
 	uint32_t uLookClustAddr; // LOOK cluster address.
-	uint16_t uGetMask; // GET item mask.
+	uint32_t uGetMask; // GET item mask.
 	uint32_t uTalkClustAddr; // TALK cluster address.
 	uint32_t uUseClustAddr; // USE cluster address.
 } __attribute((packed)) sceneNodeHdr;
@@ -58,8 +58,8 @@ typedef struct tagSceneNodeHdr
 typedef struct tagScene_MoveCluster
 {
 	char szMagic[4]; // Magic number identifier "MOV".
-	uint16_t fReqdStory; // Required story flags to display alt text.
-	uint16_t fReqdItem; // Required item flags to display alt text.
+	uint32_t fReqdStory; // Required story flags to display alt text.
+	uint32_t fReqdItem; // Required item flags to display alt text.
 	uint32_t uNorthAddr; // Scene node to the North.
 	uint32_t uSouthAddr; // Scene node to the South.
 	uint32_t uEastAddr; // Scene node to the East.
@@ -74,9 +74,9 @@ typedef struct tagScene_MoveCluster
 typedef struct tagScene_LookCluster
 {
 	char szMagic[4]; // Magic number ID "LOK".
-	uint16_t fStory; // Story flags to set.
-	uint16_t fReqdStory; // Required story flags to display alt text.
-	uint16_t fReqdItem; // Required item flags to display alt text.
+	uint32_t fStory; // Story flags to set.
+	uint32_t fReqdStory; // Required story flags to display alt text.
+	uint32_t fReqdItem; // Required item flags to display alt text.
 	uint32_t uAroundAddr; // Look around str addr.
 	uint32_t uNorthAddr; // Look North str addr.
 	uint32_t uSouthAddr; // Look South str addr.
@@ -93,8 +93,8 @@ typedef struct tagScene_LookCluster
 typedef struct tagScene_TalkCluster
 {
 	char szMagic[4]; // Magic "TLK".
-	uint16_t fReqStory; // Required story flags.
-	uint16_t fReqItems; // Required item flags.
+	uint32_t fReqStory; // Required story flags.
+	uint32_t fReqItems; // Required item flags.
 	uint32_t uInitAddr; // Initial DIA node addr.
 } __attribute((packed)) scene_TalkCluster;
 
@@ -102,12 +102,12 @@ typedef struct tagScene_TalkCluster
 typedef struct tagTalk_DiaNode
 {
 	char szMagic[4]; // Magic "DIA".
-	uint16_t fStory; // Story flags to set.
-	uint16_t fItem; // Item flags to set.
-	uint16_t fAltStory; // Alt story flags to set.
-	uint16_t fAltItem; // Alt item flags to set.
-	uint16_t fReqStory; // Required story flags.
-	uint16_t fReqItems; // Required item flags.
+	uint32_t fStory; // Story flags to set.
+	uint32_t fItem; // Item flags to set.
+	uint32_t fAltStory; // Alt story flags to set.
+	uint32_t fAltItem; // Alt item flags to set.
+	uint32_t fReqStory; // Required story flags.
+	uint32_t fReqItems; // Required item flags.
 	uint32_t uTextAddr; // Address of primary text.
 	uint32_t uAltTextAddr; // Address of text to display when Req'd flags met (0 if none).
 	uint32_t uOptList; // OPT node list node addr (0 if none).
@@ -124,10 +124,10 @@ typedef struct tagDia_OptList
 typedef struct tagDia_OptNode
 {
 	char szMagic[4]; // Magic "OPT".
-	uint16_t fStory; // Story flags to set.
-	uint16_t fItem; // Item flags to set.
-	uint16_t fReqStory; // Required story flags to set.
-	uint16_t fReqItems; // Required item flags to set.
+	uint32_t fStory; // Story flags to set.
+	uint32_t fItem; // Item flags to set.
+	uint32_t fReqStory; // Required story flags to set.
+	uint32_t fReqItems; // Required item flags to set.
 	uint32_t uTextAddr; // Address to the name of the option.
 	uint32_t uDiaAddr; // Address of the DIA node to branch to.
 	uint32_t uMoveAddr; // Address of the new NSC node to branch to.
@@ -137,10 +137,10 @@ typedef struct tagDia_OptNode
 typedef struct tagScene_UseCluster
 {
 	char szMagic[4]; // Magic "USE".
-	uint16_t fStory; // Story flags to set.
-	uint16_t fItem; // Item flags to set.
-	uint16_t fReqStory; // Required story flags.
-	uint16_t fReqItems; // Required item flags.
+	uint32_t fStory; // Story flags to set.
+	uint32_t fItem; // Item flags to set.
+	uint32_t fReqStory; // Required story flags.
+	uint32_t fReqItems; // Required item flags.
 	uint32_t uStrAddr; // Addr of string to print.
 	uint32_t uMoveAddr; // Addr of new NSC node to branch to.
 } __attribute((packed)) scene_UseCluster;

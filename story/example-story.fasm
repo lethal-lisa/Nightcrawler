@@ -23,7 +23,7 @@ db '(c)2022-2023 Lisa-Annette Murray, part of the Nightcrawler codebase.', NL, N
 helpStr:      ; Help string.
 db 'Nightcrawler Example Story File', NL
 db '(c)2022 Lisa-Annette Murray', NL
-db 'This story file contains two scenes used to debug the Nightcrawler engine.', NL, NUL
+db 'This story file contains three scenes used to debug the Nightcrawler engine.', NL, NUL
 
 itemNames:    ; Item name list.
 db 'Door key', NUL
@@ -36,14 +36,14 @@ initScene:         ; Initial scene node.
 db N_NSC           ; Scene node header.
 dd .initScene_Move ; Move cluster address.
 dd .initScene_Look ; Look cluster address.
-dw 0001h           ; GET item mask.
+dd 0001h           ; GET item mask.
 dd 0               ; TALK cluster address.
 dd .initScene_Use  ; Use cluster offset.
 
 .initScene_Move:
 db N_MOV         ; Magic.
-dw 0001h         ; Required story flags for alt addresses.
-dw 0000h         ; Required item flags for alt addresses.
+dd 0001h         ; Required story flags for alt addresses.
+dd 0000h         ; Required item flags for alt addresses.
 dd 0             ; North.
 dd hallS         ; South.
 dd 0             ; East.
@@ -55,9 +55,9 @@ dd 0             ; Alt West.
 
 .initScene_Look:
 db N_LOK                     ; Magic.
-dw 0000h                     ; Story flags to set.
-dw 0001h                     ; Required story flags for alt text.
-dw 0000h                     ; Required item flags for alt text.
+dd 0000h                     ; Story flags to set.
+dd 0001h                     ; Required story flags for alt text.
+dd 0000h                     ; Required item flags for alt text.
 dd .initScene_LookAroundC    ; Around.
 dd .initScene_LookClosedDoor ; North.
 dd .initScene_LookHallS      ; South.
@@ -88,10 +88,10 @@ db 'The hall extends in this direction.', NUL
 
 .initScene_Use:
 db N_USE      ; Magic.
-dw 0001h      ; Story flags to set.
-dw 0000h      ; Item flags to set.
-dw 0000h      ; Required story flags.
-dw 0001h      ; Required item flags.
+dd 0001h      ; Story flags to set.
+dd 0000h      ; Item flags to set.
+dd 0000h      ; Required story flags.
+dd 0001h      ; Required item flags.
 dd .iS_UseKey ; Addr of string to print.
 dd sceneMainRoom ; Addr to move to.
 
@@ -107,14 +107,14 @@ hallS:         ; South hall
 db N_NSC       ; Scene node header.
 dd .hallS_Move ; Move cluster address.
 dd .hallS_Look ; Look cluster address.
-dw 0001h       ; GET item mask.
+dd 0001h       ; GET item mask.
 dd 0           ; TALK cluster address.
 dd 0           ; Use cluster offset.
 
 .hallS_Move:
 db N_MOV      ; Magic.
-dw 0002h      ; Required story flags for alt addresses.
-dw 0000h      ; Required item flags for alt addresses.
+dd 0002h      ; Required story flags for alt addresses.
+dd 0000h      ; Required item flags for alt addresses.
 dd initScene  ; North.
 dd 0          ; South.
 dd 0          ; East.
@@ -126,9 +126,9 @@ dd 0          ; Alt West.
 
 .hallS_Look:
 db N_LOK                ; Magic.
-dw 0000h                ; Story flags to set.
-dw 0002h                ; Required story flags for alt text.
-dw 0000h                ; Required item flags for alt text.
+dd 0000h                ; Story flags to set.
+dd 0002h                ; Required story flags for alt text.
+dd 0000h                ; Required item flags for alt text.
 dd .hallS_LookAroundC   ; Around.
 dd .hallS_LookN         ; North.
 dd .hallS_LookCloseDoor ; South.
@@ -204,14 +204,14 @@ sceneMainRoom:
 db N_NSC          ; Magic.
 dd .mainRoom_Move ; MOVE cluster.
 dd .mainRoom_Look ; LOOK cluster.
-dw 0000h          ; GET item mask.
+dd 0000h          ; GET item mask.
 dd .mainRoom_Talk ; TALK cluster
 dd deathNode1     ; USE cluster.
 
 .mainRoom_Move:
 db N_MOV      ; Magic.
-dw 0000h      ; Required story flags for alt addresses.
-dw 0000h      ; Required item flags for alt addresses.
+dd 0000h      ; Required story flags for alt addresses.
+dd 0000h      ; Required item flags for alt addresses.
 dd 0          ; North.
 dd initScene  ; South.
 dd 0          ; East.
@@ -223,9 +223,9 @@ dd 0          ; Alt West.
 
 .mainRoom_Look:
 db N_LOK                ; Magic.
-dw 0000h                ; Story flags to set.
-dw 0000h                ; Required story flags for alt text.
-dw 0000h                ; Required item flags for alt text.
+dd 0000h                ; Story flags to set.
+dd 0000h                ; Required story flags for alt text.
+dd 0000h                ; Required item flags for alt text.
 dd .mainRoom_LookAround ; Around.
 dd .mainRoom_LookWall   ; North.
 dd .mainRoom_LookBack   ; South.
@@ -249,8 +249,8 @@ db 'from.', NUL
 
 .mainRoom_Talk:
 db N_TLK          ; Magic.
-dw 0000h          ; Required story flags.
-dw 0000h          ; Required item flags.
+dd 0000h          ; Required story flags.
+dd 0000h          ; Required item flags.
 dd teddyInitDia   ; Initial DIA node addr.
 
 ; ----------------------------------------------------------------------------
@@ -259,12 +259,12 @@ dd teddyInitDia   ; Initial DIA node addr.
 
 teddyInitDia:
 db N_DIA          ; Magic.
-dw 0001h          ; Story flags to set.
-dw 0000h          ; Item flags to set.
-dw 0000h          ; Alt story flags to set.
-dw 0000h          ; Alt item flags to set.
-dw 0000h          ; Required story flags for alt text & flags.
-dw 0002h          ; Required item flags for alt text & flags.
+dd 0001h          ; Story flags to set.
+dd 0000h          ; Item flags to set.
+dd 0000h          ; Alt story flags to set.
+dd 0000h          ; Alt item flags to set.
+dd 0000h          ; Required story flags for alt text & flags.
+dd 0002h          ; Required item flags for alt text & flags.
 dd .teddyInitText ; String to print.
 dd .tedThankTxt   ; Alt string to print.
 dd .teddyOptList1 ; Opt node list addr.
@@ -277,32 +277,32 @@ dd .tedOptKill
 
 .tedOptHug:
 db N_OPT         ; Magic.
-dw 0002h         ; Story flags to set.
-dw 0000h         ; Item flags to set.
-dw 0000h         ; Required story flags.
-dw 0000h         ; Required item flags.
+dd 0002h         ; Story flags to set.
+dd 0000h         ; Item flags to set.
+dd 0000h         ; Required story flags.
+dd 0000h         ; Required item flags.
 dd .tedOptHugTxt ; Text this should print out.
 dd .tedDiaThank  ; DIA node this branches to.
 dd hallS         ; Node to move to.
 
 .tedOptKill:
 db N_OPT
-dw 0000h
-dw 0000h
-dw 0000h
-dw 0000h
+dd 0000h
+dd 0000h
+dd 0000h
+dd 0000h
 dd .tedOptKillTxt
 dd death2
 dd 0
 
 .tedDiaThank:
 db N_DIA      ; Magic.
-dw 0000h      ; Story flags to set.
-dw 0000h      ; Item flags to set.
-dw 0000h      ; Alt story flags to set.
-dw 0000h      ; Alt item flags to set.
-dw 0002h      ; Required story flags.
-dw 0000h      ; Required item flags.
+dd 0000h      ; Story flags to set.
+dd 0000h      ; Item flags to set.
+dd 0000h      ; Alt story flags to set.
+dd 0000h      ; Alt item flags to set.
+dd 0002h      ; Required story flags.
+dd 0000h      ; Required item flags.
 dd .tedThankTxt
 dd 0
 dd 0
