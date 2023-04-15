@@ -171,6 +171,7 @@ no flags will be set and the user will get a `"No effect."` message.
 - uint32          : Required story flags to run the `USE` command.
 - uint32          : Required item flags to run the `USE` command.
 - uint32          : Address of the string to print on successful `USE` command.
+- uint32          : Address of the `NSC` node to move to (optional).
 
 ## WIN and DTH Node Layout
 Win and Death nodes are structured exactly the same, but do different things
