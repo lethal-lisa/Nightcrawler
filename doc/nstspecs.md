@@ -40,7 +40,7 @@ this type may exist per story.
 Binary layout to follow:
 
 - byte (char) [4] : Magic `"NST"`.
-- uint32          : Format Version (must be zero in this version).
+- uint32          : Format Version (must be one in this version).
 - uint32          : Address of the game's title screen string (zero if none).
 - uint32          : Address of the game's prompt string (zero if none). If no 
 prompt is specified a default prompt will be used.
@@ -74,8 +74,8 @@ move in a direction. Additionally instead of an `NSC` node, a `WIN` or `DTH`
 node's address may be used instead, and will perform the respective actions.
 
 - byte (char) [4] : Magic `"MOV"`.
-- uint16          : Required story flags to use alt addresses.
-- uint16          : Required item flags to use alt addresses.
+- uint32          : Required story flags to use alt addresses.
+- uint32          : Required item flags to use alt addresses.
 - uint32          : Address of NSC node to use for North.
 - uint32          : Address of NSC node to use for South.
 - uint32          : Address of NSC node to use for East.
@@ -92,9 +92,9 @@ flags. Story flags are set before being compared for displaying alternate text.
 Addresses must not be zero.
 
 - byte (char) [4] : Magic `"LOK"`.
-- uint16          : Story flags to set.
-- uint16          : Required story flags to use alt addresses.
-- uint16          : Required item flags to use alt addresses.
+- uint32          : Story flags to set.
+- uint32          : Required story flags to use alt addresses.
+- uint32          : Required item flags to use alt addresses.
 - uint32          : Address of string to use for "Around".
 - uint32          : Address of string to use for North.
 - uint32          : Address of string to use for South.
@@ -112,8 +112,8 @@ flags and the initial `DIA` node. If the required flags are not met a `"There is
 no one here to talk to."` message is displayed.
 
 - byte (char) [4] : Magic `"TLK"`.
-- uint16          : Required story flags to initiate dialogue.
-- uint16          : Required item flags to initiate dialogue.
+- uint32          : Required story flags to initiate dialogue.
+- uint32          : Required item flags to initiate dialogue.
 - uint32          : Address of initial `DIA` node.
 
 ## DIA Node Layout
@@ -125,12 +125,12 @@ from a list of options, if not, the dialogue mode will end and the game will
 return to its standard input processing mode.
 
 - byte (char) [4] : Magic `"DIA"`.
-- uint16          : Story flags to set.
-- uint16          : Item flags to set.
-- uint16          : Alternate story flags to set.
-- uint16          : Alternate item flags to set.
-- uint16          : Required story flags for alternate fields.
-- uint16          : Required item flags for alternate fields.
+- uint32          : Story flags to set.
+- uint32          : Item flags to set.
+- uint32          : Alternate story flags to set.
+- uint32          : Alternate item flags to set.
+- uint32          : Required story flags for alternate fields.
+- uint32          : Required item flags for alternate fields.
 - uint32          : Address of string to display.
 - uint32          : Address of alternate string to display.
 - uint32          : Address of options list (zero if none).
@@ -152,10 +152,10 @@ the node will be omitted in the list. Additionally instead of pointing to a
 respective actions.
 
 - byte (char) [4] : Magic `"OPT"`.
-- uint16          : Story flags to set.
-- uint16          : Item flags to set.
-- uint16          : Required story flags to display the option.
-- uint16          : Required item flags to display the option.
+- uint32          : Story flags to set.
+- uint32          : Item flags to set.
+- uint32          : Required story flags to display the option.
+- uint32          : Required item flags to display the option.
 - uint32          : Address of the string for the option.
 - uint32          : Address of the `DIA` node to branch to (optional).
 - uint32          : Address of the `NSC` node to move to (optional).
@@ -166,10 +166,10 @@ prerequisites, and the text to display. If the prerequisite flags are not met
 no flags will be set and the user will get a `"No effect."` message.
 
 - byte (char) [4] : Magic `"USE"`.
-- uint16          : Story flags to set.
-- uint16          : Item flags to set.
-- uint16          : Required story flags to run the `USE` command.
-- uint16          : Required item flags to run the `USE` command.
+- uint32          : Story flags to set.
+- uint32          : Item flags to set.
+- uint32          : Required story flags to run the `USE` command.
+- uint32          : Required item flags to run the `USE` command.
 - uint32          : Address of the string to print on successful `USE` command.
 
 ## WIN and DTH Node Layout
