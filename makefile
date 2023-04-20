@@ -41,10 +41,14 @@ else
 	STRIP     := strip
 endif
 
-CFLAGS   := -Wall -Os -fshort-enums
+CFLAGS   := -Wall -Oz -fshort-enums
 ifndef CLANG
 	# -fno-printf-return-value unsupported on clang.
 	CFLAGS += -fno-printf-return-value
+endif
+
+ifdef DEBUG
+	CFLAGS += -g -D_DEBUG
 endif
 
 ifdef WINDOWS
@@ -67,16 +71,14 @@ LDFLAGS  := $(CFLAGS)
 	-@echo 'Compressing 7zip release archive ("$^"->"$@")'
 	$(STRIP) -vs $(TARGET)
 	7z a $@ $^
+	sha256sum -b $@ > $@.sha256
 
 ## Generate a zip release archive (requires infozip).
 %.zip: default.nst LICENSE README.md $(TARGET)
 	-@echo 'Compressing zip release archive ("$^"->"$@")'
 	$(STRIP) -vs $(TARGET)
 	zip -v -9 $@ $^
-
-## Use debug build.
-debug: CFLAGS += -D_DEBUG -g
-debug: all
+	sha256sum -b $@ > $@.sha256
 
 ## Compile all targets.
 all: $(TARGET)
