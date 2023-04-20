@@ -147,6 +147,7 @@ int printStrFromStory (FILE *fpStory, const int strAddr) {
 
 	char *pszString = NULL;
 	size_t cchString;
+	size_t cNewLines = 0;
 
 	if (loadStrFromStory(fpStory, strAddr, &cchString, &pszString)) {
 		fprintf(stderr, "ERROR: %s: Unable to load string.\n", __func__);
@@ -154,7 +155,18 @@ int printStrFromStory (FILE *fpStory, const int strAddr) {
 	}
 
 	// Write string out to stdout.
-	puts(pszString);
+	//puts(pszString);
+	for (size_t iChar = 0; iChar < cchString; iChar++) {
+		if (pszString[iChar] == '\0') break;
+		if (pszString[iChar] == '\n') {
+			if (cNewLines++ == MAX_DISPLAYED_LINES) {
+				puts("-- Press Return to Continue... --");
+				getchar();
+			}
+		}
+		putchar(pszString[iChar]);
+	}
+	putchar('\n');
 	free(pszString);
 
 	return 0;

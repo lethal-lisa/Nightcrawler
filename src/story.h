@@ -29,6 +29,7 @@
 
 #define NST_SUPPORTED_VER 1
 #define NST_MAX_ITEM_COUNT 32
+#define MAX_DISPLAYED_LINES 22
 
 // Toplevel story node struct.
 typedef struct tagStoryFileHdr
