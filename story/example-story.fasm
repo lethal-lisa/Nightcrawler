@@ -1,12 +1,14 @@
 ; Nightcrawler Example Story File
 ; Assemble with fasm
+; vim:ft=asm:tw=80:ts=4
 
 INCLUDE "predefs.def"
 
 ; Header:
 db N_NST      ; Magic.
-dd 00000001h  ; NST format version.
+dd 2          ; NST format version.
 dd gameTitle  ; Title string addr.
+dd gameCreds  ; Credits string addr.
 dd 0          ; Prompt string addr.
 dd helpStr    ; Help string addr.
 dw 1          ; Count of item names.
@@ -15,7 +17,11 @@ dd initScene  ; Initial scene addr.
 
 gameTitle:    ; Game title string.
 db 'Example Nightcrawler Story File', NL
-db '(c)2022-2023 Lisa-Annette Murray, part of the Nightcrawler codebase.', NL, NUL
+db '(c)2022-2023 Lethal Lisa, part of the Nightcrawler codebase.', NL, NUL
+
+gameCreds:    ; Game credits string.
+db "Thank you very much for playing", NL
+db "(c)2022-2023 Lethal Lisa, dedicated to Chloii, my loving partner.", NUL
 
 ;promptStr:    ; Prompt string.
 ;db 'N> ', 0
@@ -34,6 +40,7 @@ db 'Door key', NUL
 
 initScene:         ; Initial scene node.
 db N_NSC           ; Scene node header.
+dd 0               ; Expose string.
 dd .initScene_Move ; Move cluster address.
 dd .initScene_Look ; Look cluster address.
 dd 0001h           ; GET item mask.
@@ -105,6 +112,7 @@ db 'You walk through...', NUL
 
 hallS:         ; South hall
 db N_NSC       ; Scene node header.
+dd 0           ; Expose string.
 dd .hallS_Move ; Move cluster address.
 dd .hallS_Look ; Look cluster address.
 dd 0001h       ; GET item mask.
@@ -167,10 +175,8 @@ dd .winStr
 
 .winStr:
 db NL, NL
-db 'Congratulations on completing this example story. You have now experienced', NL
-db 'most of the features of the Nightcrawler engine.', NL, NL
-db 'Thank you for playing.', NL
-db '(c)2022 Lisa-Annette Murray, dedicated to Chloii, my partner.', NUL
+db "Congratulations on completing this example story. You have now experienced", NL
+db "most of the features of the Nightcrawler engine.", NUL
 
 ; ----------------------------------------------------------------------------
 ; Death Node
@@ -202,6 +208,7 @@ db 'GAME OVER', NL, NL, NUL
 
 sceneMainRoom:
 db N_NSC          ; Magic.
+dd .mainRoom_Expo ; Expose string.
 dd .mainRoom_Move ; MOVE cluster.
 dd .mainRoom_Look ; LOOK cluster.
 dd 0000h          ; GET item mask.
@@ -237,6 +244,10 @@ dd 0                    ; South alt.
 dd 0                    ; East alt.
 dd 0                    ; West alt.
 
+.mainRoom_Expo:
+db "There is an enormous room here with a teddy bear in the middle. You think to", NL
+db "yourself that it looks like a training room of some type, and the bear looks", NL
+db "very snuggly.", NUL
 .mainRoom_LookAround:
 db 'A massive room swells around you; its expanse towering 12 feet all around', NL
 db 'you. In the center is a plain dummy in the shape of a teddy bear mounted', NL

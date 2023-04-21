@@ -9,7 +9,6 @@
 #include "dialogue.h"
 #include "input.h"
 #include "validate.h"
-#include "idprocs.h"
 
 // Variables for beginOptsMode and error handling.
 // Stored as a struct to make error handling cheaper.
@@ -219,7 +218,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	if (optsData.ppOpt[uUserInput]->uMoveAddr != 0) {
 		// Run LOOK AROUND after changing scenes.
 		g_pGameState->uCurSceneAddr = optsData.ppOpt[uUserInput]->uMoveAddr;
-		if (reloadScene() || procLook(NULL)) {
+		if (reloadScene()) {
 			killOptsData(&optsData);
 			return 1;
 		}

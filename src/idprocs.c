@@ -241,7 +241,7 @@ int procMove (const char *pszParam) {
 
 		// Run LOOK AROUND after changing scenes.
 		g_pGameState->uCurSceneAddr = uNewSceneAddr;
-		if (reloadScene() || procLook(NULL)) {
+		if (reloadScene()) {
 			free(pMove);
 			return 1;
 		}
@@ -318,7 +318,7 @@ int procUse (const char *pszParam) {
 		}
 		if (pUse->uMoveAddr != 0) {
 			g_pGameState->uCurSceneAddr = pUse->uMoveAddr;
-				if (reloadScene() || procLook(NULL)) {
+				if (reloadScene()) {
 				free(pUse);
 				return 1;
 			}

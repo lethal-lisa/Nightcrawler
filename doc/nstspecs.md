@@ -42,15 +42,17 @@ Binary layout to follow:
 - byte (char) [4] : Magic `"NST"`.
 - uint32          : Format Version (must be one in this version).
 - uint32          : Address of the game's title screen string (zero if none).
-- uint32          : Address of the game's prompt string (zero if none). If no 
-prompt is specified a default prompt will be used.
-- uint32          : Address of the game's help string (zero if none). The help 
-string is appended to the engine's help message when the player runs `HELP`.
-- uint16          : Count of items in the game (zero if none). No more than 16 
-items are allowed.
+- uint32          : Address of the game's credits screen (zero if none).
+  Credits are displayed after the game is won.
+- uint32          : Address of the game's prompt string (zero if none). If no
+  prompt is specified a default prompt will be used.
+- uint32          : Address of the game's help string (zero if none). The help
+  string is appended to the engine's help message when the player runs `HELP`.
+- uint16          : Count of items in the game (zero if none). No more than 16
+  items are allowed.
 - uint32          : Address where the list of item names begins.
-- uint32          : Address of the initial scene of the game. This value must 
-be specified.
+- uint32          : Address of the initial scene of the game. This value must
+  be specified.
 
 ## NSC Node Layout
 These are Scene nodes, which mostly wrap the `MOV`, `LOK`, `TLK`, and `USE`
@@ -59,10 +61,12 @@ flags. The `USE` node address may also point to a `WIN` or `DTH` node which will
 run appropriate actions.
 
 - byte (char) [4] : Magic `"NSC"`.
+- uint32          : Address of the scene's exposition string. This will be
+  displayed when the scene is loaded.
 - uint32          : Address of the scene's `MOV` node (must not be zero).
 - uint32          : Address of the scene's `LOK` node (must not be zero).
-- uint16          : Mask of items to OR with the game's item flags when `GET` is
-run.
+- uint16          : Mask of items to OR with the game's item flags when `GET`
+  is run.
 - uint32          : Address of the scene's `TLK` node (optional, zero if none).
 - uint32          : Address of the scene's `USE` node (optional, zero if none).
 

@@ -27,7 +27,7 @@
 #define NT_WIN 9
 #define NT_DTH 10
 
-#define NST_SUPPORTED_VER 1
+#define NST_SUPPORTED_VER 2
 #define NST_MAX_ITEM_COUNT 32
 #define MAX_DISPLAYED_LINES 22
 
@@ -37,6 +37,7 @@ typedef struct tagStoryFileHdr
 	char szMagic[4]; // Magic number identifer "NST".
 	uint32_t uVersion; // Must be set to 0 for now.
 	uint32_t uGameTitleAddr; // Address in the file where game title string begins.
+	uint32_t uCreditsAddr; // Address in the file where the credits string begins (0 for none).
 	uint32_t uPromptStrAddr; // Address in the file where the prompt string begins (0 for none).
 	uint32_t uHelpStrAddr; // Address in the file where the help string begins (0 for none).
 	uint16_t cItems; // Count of items.
@@ -48,6 +49,7 @@ typedef struct tagStoryFileHdr
 typedef struct tagSceneNodeHdr
 {
 	char szMagic[4]; // Magic number identifier "NSC".
+	uint32_t uExposeAddr; // Exposition string address.
 	uint32_t uMoveClustAddr; // MOVE cluster address.
 	uint32_t uLookClustAddr; // LOOK cluster address.
 	uint32_t uGetMask; // GET item mask.

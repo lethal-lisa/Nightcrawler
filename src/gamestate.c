@@ -79,6 +79,11 @@ int reloadScene (void) {
 		return 1;
 	}
 
+	// Print exposition string.
+	if (g_pGameState->pScene->uExposeAddr != 0) {
+		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pScene->uExposeAddr)) return 1;
+	}
+
 	return 0;
 }
 
