@@ -81,7 +81,6 @@ Command List (case does not matter):\n\
 
 		case CI_LOAD: // Load the game.
 			if (loadGame()) return 1;
-			return procLook(NULL);
 			break;
 
 		case CI_QUIT: // Quit the game.

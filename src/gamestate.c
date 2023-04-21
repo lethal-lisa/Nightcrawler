@@ -157,6 +157,9 @@ int procWin (const int nodeAddr) {
 	}
 
 	if (printStrFromStory(g_pGameState->fpStory, pWin->uStrAddr)) return 1;
+	if (g_pGameState->pStory->uCreditsAddr != 0) {
+		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uCreditsAddr)) return 1;
+	} 
 
 	g_pGameState->nWonLost = GS_WON;
 
