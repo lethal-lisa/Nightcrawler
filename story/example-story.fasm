@@ -225,7 +225,7 @@ db 'GAME OVER', NL, NL, NUL
 
 sceneMainRoom:
 db N_NSC          ; Magic.
-dw SF_ATLK        ; Scene flags.
+dw 0              ; Scene flags.
 dd .mainRoom_Expo ; Expose string.
 dd .mainRoom_Move ; MOVE cluster.
 dd .mainRoom_Look ; LOOK cluster.
