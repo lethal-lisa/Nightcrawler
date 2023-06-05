@@ -218,6 +218,15 @@ int getStrsFromStoryFile () {
 	// Load item names.
 	if (g_pGameState->pStory->cItems != 0) {
 
+#ifdef _DEBUG
+		printf("DEBUG: %s: Loading %d item names from @0x%X.\n", __func__, g_pGameState->pStory->cItems, g_pGameState->pStory->uItemNameAddr);
+#endif
+
+		if (fseek(g_pGameState->fpStory, g_pGameState->pStory->uItemNameAddr, SEEK_SET)) {
+			perror("Unable to seek to item names.");
+			return 1;
+		}
+
 		// Allocate space for each item.
 		g_pGameState->pcchItemName = calloc(g_pGameState->pStory->cItems, sizeof(size_t));
 		g_pGameState->ppszItemName = calloc(g_pGameState->pStory->cItems, sizeof(char *));
