@@ -119,7 +119,7 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 int loadStrFromStory (FILE *fpStory, const int nStrAddr, size_t *pcchStr, char **ppszStr) {
 
 #ifdef _DEBUG
-	printf("DEBUG: %s: Loading a string from 0x%X.\n", __func__, nStrAddr);
+	printf("DEBUG: %s: Loading a string from @0x%X.\n", __func__, nStrAddr);
 #endif
 
 	if (fseek(fpStory, nStrAddr, SEEK_SET)) {
