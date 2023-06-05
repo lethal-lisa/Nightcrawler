@@ -163,6 +163,15 @@ int main (int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
+	// Display launch string.
+	if (g_pGameState->pStory->uGameTitleAddr) {
+		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uLaunchStrAddr)) {
+			fprintf(stderr, "ERROR: Could not print launch string.\n");
+			killGameState();
+			exit(EXIT_FAILURE);
+		}
+	}
+
 	// Display game title.
 	if (g_pGameState->pStory->uGameTitleAddr) {
 		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uGameTitleAddr)) {
