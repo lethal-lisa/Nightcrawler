@@ -52,12 +52,12 @@ int resetGameState () {
 	g_pGameState->uCurSceneAddr = g_pGameState->pStory->uInitSceneAddr;
 	g_pGameState->nWonLost = GS_NORMAL;
 
-	if (reloadScene() != 0) return 1;
-
 	// Display game's title again.
 	if (g_pGameState->pStory->uGameTitleAddr) {
 		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uGameTitleAddr)) return 1;
 	}
+
+	if (reloadScene() != 0) return 1;
 
 	return 0;
 }
