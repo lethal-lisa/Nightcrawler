@@ -245,7 +245,7 @@ int procMove (const char *pszParam) {
 			return 1;
 		}
 	} else {
-		fprintf(stderr, "Unable to move that way.\n");
+		puts("Unable to move that way.");
 	}
 
 	free(pMove);
