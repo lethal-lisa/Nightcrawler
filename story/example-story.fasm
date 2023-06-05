@@ -6,11 +6,13 @@ INCLUDE "predefs.def"
 
 ; Header:
 db N_NST      ; Magic.
-dd 2          ; NST format version.
+dd 3          ; NST format version.
 dd gameTitle  ; Title string addr.
 dd gameCreds  ; Credits string addr.
 dd 0          ; Prompt string addr.
 dd helpStr    ; Help string addr.
+dd launchStr  ; Launch string
+dd deathStr   ; Death string.
 dw 1          ; Count of item names.
 dd itemNames  ; Item name addr.
 dd initScene  ; Initial scene addr.
@@ -28,8 +30,21 @@ db "(c)2022-2023 Lethal Lisa, dedicated to Chloii, my loving partner.", NUL
 
 helpStr:      ; Help string.
 db 'Nightcrawler Example Story File', NL
-db '(c)2022 Lisa-Annette Murray', NL
+db '(c)2022-2023 Lethal Lisa', NL
 db 'This story file contains three scenes used to debug the Nightcrawler engine.', NL, NUL
+
+launchStr:    ; Launch string.
+db "   ____                     __      ______", NL
+db "  / __/_ _____ ___ _  ___  / /__   / __/ /____  ______ __", NL
+db " / _/ \ \ / _ `/  ' \/ _ \/ / -_) _\ \/ __/ _ \/ __/ // /", NL
+db "/___//_\_\\_,_/_/_/_/ .__/_/\__/ /___/\__/\___/_/  \_, /", NL
+db "                   /_/                            /___/", NL, NUL
+
+deathStr:     ; Death string.
+db "  _____                 ____", NL
+db " / ___/__ ___ _  ___   / __ \_  _____ ____", NL
+db "/ (_ / _ `/  ' \/ -_) / /_/ / |/ / -_) __/", NL
+db "\___/\_,_/_/_/_/\__/  \____/|___/\__/_/", NL, NUL
 
 itemNames:    ; Item name list.
 db 'Door key', NUL
@@ -40,6 +55,7 @@ db 'Door key', NUL
 
 initScene:         ; Initial scene node.
 db N_NSC           ; Scene node header.
+dw 0               ; Scene flags.
 dd 0               ; Expose string.
 dd .initScene_Move ; Move cluster address.
 dd .initScene_Look ; Look cluster address.
@@ -112,6 +128,7 @@ db 'You walk through...', NUL
 
 hallS:         ; South hall
 db N_NSC       ; Scene node header.
+dw 0           ; Scene flags.
 dd 0           ; Expose string.
 dd .hallS_Move ; Move cluster address.
 dd .hallS_Look ; Look cluster address.
@@ -208,6 +225,7 @@ db 'GAME OVER', NL, NL, NUL
 
 sceneMainRoom:
 db N_NSC          ; Magic.
+dw SF_ATLK        ; Scene flags.
 dd .mainRoom_Expo ; Expose string.
 dd .mainRoom_Move ; MOVE cluster.
 dd .mainRoom_Look ; LOOK cluster.

@@ -9,6 +9,7 @@
 #include "input.h"
 #include "gamestate.h"
 #include "validate.h"
+#include "idprocs.h"
 
 struct gameState *g_pGameState;
 
@@ -84,6 +85,26 @@ int reloadScene (void) {
 		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pScene->uExposeAddr)) return 1;
 	}
 
+	if (g_pGameState->pScene->uFlags & SF_AUTOTALK) {
+		if (procTalk(NULL)) return 1;
+		return 0;
+	}
+
+	if (g_pGameState->pScene->uFlags & SF_AUTOLOOK) {
+		if (procLook(NULL)) return 1;
+		return 0;
+	}
+
+	if (g_pGameState->pScene->uFlags & SF_AUTOGET) {
+		if (procGet(NULL)) return 1;
+		return 0;
+	}
+
+	if (g_pGameState->pScene->uFlags & SF_AUTOUSE) {
+		if (procUse(NULL)) return 1;
+		return 0;
+	}
+
 	return 0;
 }
 
@@ -118,6 +139,7 @@ int procDeath (const int nodeAddr) {
 		return 1;
 	}
 
+	if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uDeathStrAddr)) return 1;
 	if (printStrFromStory(g_pGameState->fpStory, pDth->uStrAddr)) return 1;
 
 	g_pGameState->nWonLost = GS_LOST;
@@ -208,7 +230,7 @@ int getStrsFromStoryFile () {
 		for (int iItem = 0; iItem < g_pGameState->pStory->cItems; iItem++) {
 			if (wingetdelim(&g_pGameState->ppszItemName[iItem], &g_pGameState->pcchItemName[iItem], '\0', g_pGameState->fpStory) == -1) {
 				if (ferror(g_pGameState->fpStory)) fprintf(stderr, "ERROR: %s: Error reading string: %s.\n", __func__, strerror(errno));
-				if (feof(g_pGameState->fpStory)) fprintf(stderr, "WARN: %s: Error reading string: End of file reached.\n", __func__);
+				if (feof(g_pGameState->fpStory)) fprintf(stderr, "ERROR: %s: Error reading string: End of file reached.\n", __func__);
 				return 1;
 			}
 		}

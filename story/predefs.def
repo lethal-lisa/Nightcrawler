@@ -1,5 +1,6 @@
 ; Nightcrawler Story File Predefines
 ; Macro Defines for fasm
+; vim:ft=asm:tw=80:ts=4
 
 ; NUL Char:
 NUL equ 00h
@@ -19,3 +20,8 @@ N_OPT equ 'OPT', NUL
 N_USE equ 'USE', NUL
 N_WIN equ 'WIN', NUL
 N_DTH equ 'DTH', NUL
+
+SF_ATLK equ 0001h
+SF_ALOK equ 0002h
+SF_AGET equ 0004h
+SF_AUSE equ 0008h
