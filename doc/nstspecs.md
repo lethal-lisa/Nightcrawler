@@ -48,6 +48,10 @@ Binary layout to follow:
   prompt is specified a default prompt will be used.
 - uint32          : Address of the game's help string (zero if none). The help
   string is appended to the engine's help message when the player runs `HELP`.
+- uint32          : Address of the game's "launch" string. Displayed when the
+  engine starts.
+- uint32          : Address of the game's "death" string. Displayed when a game
+  over occurs.
 - uint16          : Count of items in the game (zero if none). No more than 16
   items are allowed.
 - uint32          : Address where the list of item names begins.
@@ -61,6 +65,7 @@ flags. The `USE` node address may also point to a `WIN` or `DTH` node which will
 run appropriate actions.
 
 - byte (char) [4] : Magic `"NSC"`.
+- uint16          : Flags used to determine autocommands.
 - uint32          : Address of the scene's exposition string. This will be
   displayed when the scene is loaded.
 - uint32          : Address of the scene's `MOV` node (must not be zero).
@@ -69,6 +74,14 @@ run appropriate actions.
   is run.
 - uint32          : Address of the scene's `TLK` node (optional, zero if none).
 - uint32          : Address of the scene's `USE` node (optional, zero if none).
+
+### Autocommands
+Setting certain bits in the flags field will automatically trigger commands
+when the scene is loaded.
+0x1: `TALK`
+0x2: `LOOK`
+0x4: `GET`
+0x8: `USE`
 
 ## MOV Node Layout
 These are nodes that contain addresses to other `NSC` nodes, and optionally can
