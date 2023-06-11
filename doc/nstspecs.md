@@ -40,7 +40,7 @@ this type may exist per story.
 Binary layout to follow:
 
 - byte (char) [4] : Magic `"NST"`.
-- uint32          : Format Version (must be one in this version).
+- uint32          : Format Version (must be three in this version).
 - uint32          : Address of the game's title screen string (zero if none).
 - uint32          : Address of the game's credits screen (zero if none).
   Credits are displayed after the game is won.
