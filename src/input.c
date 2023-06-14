@@ -134,7 +134,7 @@ int promptUserForOpt (unsigned int *puUserInput) {
 
 int confirmYesNo (const char *pszPrompt) {
 
-	printf("%s [y/N]", pszPrompt);
+	printf("%s [y/N] ", pszPrompt);
 
 	// Get first char and eat chars until newline.
 	int chFirst = toupper(getchar());

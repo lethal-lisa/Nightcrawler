@@ -87,10 +87,10 @@ int loadGame (void) {
 	g_pGameState->fStory = sgd.fStory;
 	g_pGameState->fItem = sgd.fItem;
 
+	puts("Load successful...");
+
 	// Reload scene.
 	if (reloadScene() != 0) return 1;
-
-	puts("Load successful...");
 
 	return 0;
 }

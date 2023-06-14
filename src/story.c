@@ -47,7 +47,7 @@ FILE *openStoryFile (char *pszFileName) {
 	}
 
 	// Open the file spec'd by pszFileName.
-	if ((fp = fopen(pszFileName, "r")) == NULL) {
+	if ((fp = fopen(pszFileName, "rb")) == NULL) {
 		perror("Failed to open story file");
 		return NULL;
 	}
