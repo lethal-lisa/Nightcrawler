@@ -24,8 +24,8 @@ struct gameState
 	FILE *fpStory; // Story file stream.
 	uint32_t uCurSceneAddr; // Address of the current scene's node.
 	sceneNodeHdr *pScene; // Current scene node object.
-	uint16_t fStory; // Current story flags.
-	uint16_t fItem; // Current item flags.
+	uint32_t fStory; // Current story flags.
+	uint32_t fItem; // Current item flags.
 	size_t *pcchItemName; // Lengths of strings in ppszItemName.
 	char **ppszItemName; // Pointers to item name strings.
 	size_t cchPromptString; // Length of pszPromptString.

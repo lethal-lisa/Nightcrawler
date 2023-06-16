@@ -11,14 +11,14 @@
 #include "saveload.h"
 
 const char *s_pszNcSaveFile = "nightcrawler.sav";
-const uint32_t s_uSaveGameVersion = 0;
+const uint32_t s_uSaveGameVersion = 1;
 
 struct l_saveGameData
 {
 	uint32_t uSaveGameVer;
 	uint32_t uCurSceneAddr;
-	uint16_t fStory;
-	uint16_t fItem;
+	uint32_t fStory;
+	uint32_t fItem;
 } __attribute((packed));
 
 int saveGame (void) {
