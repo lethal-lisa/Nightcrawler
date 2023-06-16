@@ -86,3 +86,9 @@ The Nightcrawler engine is licensed under the BSD 3-Clause license (see
 [LICENSE](LICENSE). Story files compatible with Nightcrawler may be licensed
 however the author of these files sees fit.
 
+## To Do
+
+* [ ] Initial scene's exposition string does not auto-print until death &
+  restart.
+* [ ] Swap order of game over string with individual death strings.
+* [ ] Options to auto-set story flags on scene load.
