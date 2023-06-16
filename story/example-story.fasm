@@ -6,7 +6,7 @@ INCLUDE "predefs.def"
 
 ; Header:
 db N_NST      ; Magic.
-dd 3          ; NST format version.
+dd 4          ; NST format version.
 dd gameTitle  ; Title string addr.
 dd gameCreds  ; Credits string addr.
 dd 0          ; Prompt string addr.
@@ -56,6 +56,7 @@ db 'Door key', NUL
 initScene:         ; Initial scene node.
 db N_NSC           ; Scene node header.
 dw 0               ; Scene flags.
+dd 0               ; Story flags.
 dd 0               ; Expose string.
 dd .initScene_Move ; Move cluster address.
 dd .initScene_Look ; Look cluster address.
@@ -129,6 +130,7 @@ db 'You walk through...', NUL
 hallS:         ; South hall
 db N_NSC       ; Scene node header.
 dw 0           ; Scene flags.
+dd 0           ; Story flags.
 dd 0           ; Expose string.
 dd .hallS_Move ; Move cluster address.
 dd .hallS_Look ; Look cluster address.
@@ -226,6 +228,7 @@ db 'GAME OVER', NL, NL, NUL
 sceneMainRoom:
 db N_NSC          ; Magic.
 dw 0              ; Scene flags.
+dd 0              ; Story flags.
 dd .mainRoom_Expo ; Expose string.
 dd .mainRoom_Move ; MOVE cluster.
 dd .mainRoom_Look ; LOOK cluster.

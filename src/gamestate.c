@@ -80,6 +80,9 @@ int reloadScene (void) {
 		return 1;
 	}
 
+	// Set story flags.
+	g_pGameState->fStory |= g_pGameState->pScene->fStory;
+
 	// Print exposition string.
 	if (g_pGameState->pScene->uExposeAddr) {
 		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pScene->uExposeAddr)) return 1;

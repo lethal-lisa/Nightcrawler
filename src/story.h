@@ -27,7 +27,7 @@
 #define NT_WIN 9
 #define NT_DTH 10
 
-#define NST_SUPPORTED_VER 3
+#define NST_SUPPORTED_VER 4
 #define NST_MAX_ITEM_COUNT 32
 #define MAX_DISPLAYED_LINES 22
 
@@ -58,6 +58,7 @@ typedef struct tagSceneNodeHdr
 {
 	char szMagic[4]; // Magic number identifier "NSC".
 	uint16_t uFlags; // Extra scene flags.
+	uint32_t fStory; // Story flags to set on scene load.
 	uint32_t uExposeAddr; // Exposition string address.
 	uint32_t uMoveClustAddr; // MOVE cluster address.
 	uint32_t uLookClustAddr; // LOOK cluster address.
