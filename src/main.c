@@ -1,5 +1,5 @@
 /*
-Copyright 2022-2023 Lisa-Annette Murray
+Copyright 2022-2023 Lethal Lisa
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 // Nightcrawler Engine - Main Module
-// (C) 2022 Lisa Murray
+// (C) 2022-2023 Lethal Lisa
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -201,6 +201,11 @@ int main (int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
+	// Print exposition string.
+	if (g_pGameState->pScene->uExposeAddr) {
+		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pScene->uExposeAddr)) return 1;
+	}
+
 	// Main game loop.
 	while (1) {
 		static char *pszUserInput; // Buffer for user input.
@@ -270,6 +275,8 @@ int main (int argc, char *argv[]) {
 
 			// Reset game if player lost.
 			if (g_pGameState->nWonLost == GS_LOST) {
+				puts("Press Enter to restart game...");
+				getchar();
 				if (resetGameState()) {
 					fprintf(stderr, "ERROR: Unable to reset game state.\n");
 					killGameState();

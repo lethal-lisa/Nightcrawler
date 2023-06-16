@@ -81,7 +81,7 @@ int reloadScene (void) {
 	}
 
 	// Print exposition string.
-	if (g_pGameState->pScene->uExposeAddr != 0) {
+	if (g_pGameState->pScene->uExposeAddr) {
 		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pScene->uExposeAddr)) return 1;
 	}
 
@@ -139,8 +139,10 @@ int procDeath (const int nodeAddr) {
 		return 1;
 	}
 
-	if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uDeathStrAddr)) return 1;
 	if (printStrFromStory(g_pGameState->fpStory, pDth->uStrAddr)) return 1;
+	if (g_pGameState->pStory->uDeathStrAddr) {
+		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uDeathStrAddr)) return 1;
+	}
 
 	g_pGameState->nWonLost = GS_LOST;
 
@@ -181,7 +183,7 @@ int procWin (const int nodeAddr) {
 	if (printStrFromStory(g_pGameState->fpStory, pWin->uStrAddr)) return 1;
 	if (g_pGameState->pStory->uCreditsAddr != 0) {
 		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uCreditsAddr)) return 1;
-	} 
+	}
 
 	g_pGameState->nWonLost = GS_WON;
 

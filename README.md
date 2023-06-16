@@ -88,7 +88,8 @@ however the author of these files sees fit.
 
 ## To Do
 
-* [ ] Initial scene's exposition string does not auto-print until death &
+* [x] Initial scene's exposition string does not auto-print until death &
   restart.
-* [ ] Swap order of game over string with individual death strings.
+* [x] Swap order of game over string with individual death strings.
 * [ ] Options to auto-set story flags on scene load.
+* [x] Restart prompt on game over.
