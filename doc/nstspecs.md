@@ -1,15 +1,15 @@
 # NST Story File Format
-The NST story format contains all information that the Nightcrawler engine can 
+The NST story format contains all information that the Nightcrawler engine can
 display.
-This format is built around *nodes* which are each identified with a *magic 
-number* string. Each node can be anywhere within a single file, with the sole 
-exception to this being the story node, which must begin at the beginning of 
+This format is built around *nodes* which are each identified with a *magic
+number* string. Each node can be anywhere within a single file, with the sole
+exception to this being the story node, which must begin at the beginning of
 the file, and only one of which may exist.
 
-On the general data format, all addresses within files are absolute, and all 
-binary data is little-endian, and all strings are NUL terminated. Sometimes 
-nodes will have fields for *required flags*, in most cases these flags can be 
-set to display alternative text if the engine's progress flags pass an AND 
+On the general data format, all addresses within files are absolute, and all
+binary data is little-endian, and all strings are NUL terminated. Sometimes
+nodes will have fields for *required flags*, in most cases these flags can be
+set to display alternative text if the engine's progress flags pass an AND
 operation on them, or to change the way a node functions.
 
 All the information below is from the file [inc/story.h](../inc/story.h).
@@ -33,14 +33,14 @@ NUL char. Magic numbers are used by the engine to identify the type of node.
 - `DTH` : For "death" nodes.
 
 ## NST Node Layout
-This type of node contains vital information about the story file overall, 
-including story format version, global strings, the game's starting scene, and 
-item names. It must be located at position 0 in the file, and only one node of 
+This type of node contains vital information about the story file overall,
+including story format version, global strings, the game's starting scene, and
+item names. It must be located at position 0 in the file, and only one node of
 this type may exist per story.
 Binary layout to follow:
 
 - byte (char) [4] : Magic `"NST"`.
-- uint32          : Format Version (must be three in this version).
+- uint32          : Format Version (must be `4` in this version).
 - uint32          : Address of the game's title screen string (zero if none).
 - uint32          : Address of the game's credits screen (zero if none).
   Credits are displayed after the game is won.
@@ -66,6 +66,7 @@ run appropriate actions.
 
 - byte (char) [4] : Magic `"NSC"`.
 - uint16          : Flags used to determine autocommands.
+- uint32          : Story flags to set on load.
 - uint32          : Address of the scene's exposition string. This will be
   displayed when the scene is loaded.
 - uint32          : Address of the scene's `MOV` node (must not be zero).
