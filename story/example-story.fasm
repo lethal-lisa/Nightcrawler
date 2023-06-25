@@ -57,7 +57,7 @@ initScene:         ; Initial scene node.
 db N_NSC           ; Scene node header.
 dw 0               ; Scene flags.
 dd 0               ; Story flags.
-dd 0               ; Expose string.
+dd .initScene_Expo ; Expose string.
 dd .initScene_Move ; Move cluster address.
 dd .initScene_Look ; Look cluster address.
 dd 0001h           ; GET item mask.
@@ -93,6 +93,8 @@ dd 0                         ; South alt.
 dd 0                         ; East alt.
 dd 0                         ; West alt.
 
+.initScene_Expo:
+db 'This is the exposition string for the initial scene.', NUL
 .initScene_LookAroundO:
 db 'The door at the end of the hall is open now, and bright light fills the', NL
 db 'empty passage.', NUL
