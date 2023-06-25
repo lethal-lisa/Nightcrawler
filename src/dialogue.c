@@ -207,16 +207,18 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		return 1;
 	}
 
+	// Set flags based on selected OPT node.
 	g_pGameState->fStory |= optsData.ppOpt[uUserInput]->fStory;
 	g_pGameState->fItem |= optsData.ppOpt[uUserInput]->fItem;
 
+	// Recurse into next level of options.
 	if (beginDialogue(optsData.ppOpt[uUserInput]->uDiaAddr)) {
 		killOptsData(&optsData);
 		return 1;
 	}
 
+	// Change scenes if requested.
 	if (optsData.ppOpt[uUserInput]->uMoveAddr != 0) {
-		// Run LOOK AROUND after changing scenes.
 		g_pGameState->uCurSceneAddr = optsData.ppOpt[uUserInput]->uMoveAddr;
 		if (reloadScene()) {
 			killOptsData(&optsData);
@@ -227,4 +229,3 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	killOptsData(&optsData);
 	return 0;
 }
-
