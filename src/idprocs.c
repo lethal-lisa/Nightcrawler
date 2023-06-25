@@ -125,11 +125,6 @@ int procLook (const char *pszParam) {
 		return 1;
 	}
 
-	// Set story flags based on values in the scene.
-	g_pGameState->fStory |= pLook->fStory;
-
-	uint32_t uStrAddr;
-
 	// If no parameter use the "around" string.
 	if (pszParam == NULL || strlen(pszParam) == 0) {
 		if (printStrFromStory(g_pGameState->fpStory, isAltLookTxtAvailable(pLook, pLook->uAroundAddr, pLook->uAltAroundAddr))) return 1;
@@ -144,8 +139,14 @@ int procLook (const char *pszParam) {
 		return 0;
 	}
 
+	// Print respective look text.
+	uint32_t uStrAddr;
 	switch (pparserCmd->uId) {
 		case CI_AROUND:
+
+			// Set story flags based on values in the scene.
+			g_pGameState->fStory |= pLook->fStory;
+
 			uStrAddr = isAltLookTxtAvailable(pLook, pLook->uAroundAddr, pLook->uAltAroundAddr);
 			break;
 
