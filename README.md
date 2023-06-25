@@ -100,7 +100,7 @@ however the author of these files sees fit.
   restart.
 * [ ] Visible dialogue option numbering is affected by hidden options, and
   shouldn't be.
-* [ ] Hidden dialogue options can be selected, and shouldn't be.
+* [x] Hidden dialogue options can be selected, and shouldn't be.
 * [ ] Exposition string prints after game over prompt if player selects a
   dialogue node that navigates to a scene node and then selects another dialogue
   option that results in a game over.
