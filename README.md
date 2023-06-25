@@ -91,7 +91,7 @@ however the author of these files sees fit.
 * [x] Swap order of game over string with individual death strings.
 * [ ] Options to auto-set story flags on scene load.
 * [x] Restart prompt on game over.
-* [ ] Narrow scope of flag setting from `LOOK` action to strictly `LOOK AROUND`.
+* [x] Narrow scope of flag setting from `LOOK` action to strictly `LOOK AROUND`.
 * [ ] Add fields for alternate exposition strings based on story/item flags.
 
 ## Bugs
@@ -104,3 +104,4 @@ however the author of these files sees fit.
 * [ ] Exposition string prints after game over prompt if player selects a
   dialogue node that navigates to a scene node and then selects another dialogue
   option that results in a game over.
+* [ ] Dialogue system leaks a few bytes, likely in `killOptsData`.
