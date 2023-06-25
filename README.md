@@ -4,7 +4,7 @@
 
 ## Summary
 
-A simplistic text-adventure engine designed primarily to fit within a miniscule 
+A simplistic text-adventure engine designed primarily to fit within a miniscule
 binary footprint (i.e. a floppy disk) and uses simple prompt based interaction
 with predefined keywords used to crawl through a binary story file containing
 the game information.
@@ -25,7 +25,7 @@ to digest format.
 ## Engine Restrictions and Limits
 
 - Data files are limited to 2GiB in size due to using 32-bit absolute addresses.
-- Engine is built around 32/64-bit little-endian architectures using GCC. Other 
+- Engine is built around 32/64-bit little-endian architectures using GCC. Other
 systems may not function.
 
 ## Platform
@@ -35,8 +35,8 @@ be for Win32, tested against Wine on Linux & Mac, though the source code will be
 in C and built against x86_64 Linux with GCC for testing, and should be capable
 of compiling on any decently modern 64 or 32-bit OS.
 
-You may be able to get the engine to compile on platforms besides these with 
-GCC installed. Early versions were proven to work on Termux with some minor 
+You may be able to get the engine to compile on platforms besides these with
+GCC installed. Early versions were proven to work on Termux with some minor
 makefile changes.
 
 ## Tools Needed/Used
@@ -69,11 +69,11 @@ a file in the current working directory called `"nightcrawler.sav"`.
 
 - `HELP` Shows engine help & then help included in a story file.
 - `MOVE|GO NORTH|SOUTH|EAST|WEST|N|S|E|W` Moves to a different scene.
-- `LOOK|EXAMINE [AROUND|NORTH|SOUTH|EAST|WEST|N|S|E|W]` Triggers look node for 
+- `LOOK|EXAMINE [AROUND|NORTH|SOUTH|EAST|WEST|N|S|E|W]` Triggers look node for
 the scene.
 - `GET|GRAB|TAKE` Adds the item in the scene to the player's inventory.
 - `TALK` Triggers the dialogue tree for the scene.
-- `USE` Interact with the scene, optionally using an item in the inventory, 
+- `USE` Interact with the scene, optionally using an item in the inventory,
 selected automatically.
 - `ITEMS|INVENTORY|INV` Displays your inventory.
 - `SAVE` Saves the game state to a `"nightcrawler.sav"` file.
@@ -82,14 +82,25 @@ selected automatically.
 
 ## License
 
-The Nightcrawler engine is licensed under the BSD 3-Clause license (see 
+The Nightcrawler engine is licensed under the BSD 3-Clause license (see
 [LICENSE](LICENSE). Story files compatible with Nightcrawler may be licensed
 however the author of these files sees fit.
 
 ## To Do
 
-* [x] Initial scene's exposition string does not auto-print until death &
-  restart.
 * [x] Swap order of game over string with individual death strings.
 * [ ] Options to auto-set story flags on scene load.
 * [x] Restart prompt on game over.
+* [ ] Narrow scope of flag setting from `LOOK` action to strictly `LOOK AROUND`.
+* [ ] Add fields for alternate exposition strings based on story/item flags.
+
+## Bugs
+
+* [x] Initial scene's exposition string does not auto-print until death &
+  restart.
+* [ ] Visible dialogue option numbering is affected by hidden options, and
+  shouldn't be.
+* [ ] Hidden dialogue options can be selected, and shouldn't be.
+* [ ] Exposition string prints after game over prompt if player selects a
+  dialogue node that navigates to a scene node and then selects another dialogue
+  option that results in a game over.
