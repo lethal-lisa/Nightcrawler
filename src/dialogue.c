@@ -17,6 +17,7 @@ struct optsModeData
 	dia_OptList *pDol; // DOL node.
 	uint32_t *puOptAddrs; // List of option addresses.
 	dia_OptNode **ppOpt; // List of OPT nodes.
+	bool *pbSelectable; // Selectable options.
 	int cOptsLoaded; // Count of loaded OPT nodes.
 };
 
@@ -80,6 +81,7 @@ void killOptsData (struct optsModeData *pOptsData) {
 #endif
 	if (pOptsData->pDol) free(pOptsData->pDol);
 	if (pOptsData->puOptAddrs) free(pOptsData->puOptAddrs);
+	if (pOptsData->pbSelectable) free(pOptsData->pbSelectable);
 	if (pOptsData->ppOpt) {
 		for (int iOption = 0; iOption < pOptsData->cOptsLoaded; iOption++)
 			if (pOptsData->ppOpt[iOption]) free(pOptsData->ppOpt[iOption]);
@@ -136,6 +138,10 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		killOptsData(&optsData);
 		return 1;
 	}
+	if ((optsData.pbSelectable = calloc(optsData.pDol->cOpts, sizeof(bool))) == NULL) {
+		killOptsData(&optsData);
+		return 1;
+	}
 
 	// Load each opt node and print out strings.
 	optsData.cOptsLoaded = 0;
@@ -164,6 +170,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 				killOptsData(&optsData);
 				return 1;
 			}
+			optsData.pbSelectable[iOpt] = true;
 		}
 	}
 
@@ -181,8 +188,8 @@ int beginOptsMode(const uint32_t uDolAddr) {
 #endif
 
 		// Try again if invalid selection.
-		if ((uUserInput > (optsData.pDol->cOpts - 1)) || (uUserInput < 0)) {
-			printf("Invalid selection.\n");
+		if ((uUserInput > (optsData.pDol->cOpts - 1)) || (uUserInput < 0) || (optsData.pbSelectable[uUserInput] == false)) {
+			puts("Invalid selection.");
 			continue;
 		}
 
@@ -193,7 +200,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		// Try again if requirements not met.
 		if (!((optsData.ppOpt[uUserInput]->fReqStory == 0) || (optsData.ppOpt[uUserInput]->fReqStory & g_pGameState->fStory)) &&
 			!((optsData.ppOpt[uUserInput]->fReqItems == 0) || (optsData.ppOpt[uUserInput]->fReqItems & g_pGameState->fItem))) {
-			printf("Invalid selection.\n");
+			puts("Invalid selection.");
 			continue;
 		}
 
