@@ -41,7 +41,7 @@ FILE *openStoryFile (char *pszFileName) {
 
 	if (pszFileName == NULL) {
 #ifdef _DEBUG
-		printf("DEBUG: Falling back on default story file.\n");
+		puts("DEBUG: Falling back on default story file.");
 #endif
 		pszFileName = pszDefFileName;
 	}

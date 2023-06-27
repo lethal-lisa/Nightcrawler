@@ -122,7 +122,7 @@ int promptUserForOpt (unsigned int *puUserInput) {
 
 		// If no input, try again.
 		if (endptr == pszUserInput) {
-			printf("Invalid input.\n");
+			puts("Invalid input.");
 			free(pszUserInput);
 			continue;
 		}
