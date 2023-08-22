@@ -164,7 +164,7 @@ int printStrFromStory (FILE *fpStory, const int strAddr) {
 		if (pszString[iChar] == '\0') break;
 		if (pszString[iChar] == '\n') {
 			if (cNewLines++ == MAX_DISPLAYED_LINES) {
-				puts("-- Press Return to Continue... --");
+				puts("\n-- Press Return to Continue... --");
 				getchar();
 			}
 		}

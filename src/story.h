@@ -29,7 +29,7 @@
 
 #define NST_SUPPORTED_VER 4
 #define NST_MAX_ITEM_COUNT 32
-#define MAX_DISPLAYED_LINES 22
+#define MAX_DISPLAYED_LINES 23
 
 // Scene flags
 #define SF_AUTOTALK 0x0001
