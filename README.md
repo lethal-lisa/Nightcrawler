@@ -1,6 +1,6 @@
 # Nightcrawler Text Adventure Engine
 
-(c) 2022-2023 Lisa-Annette Murray Commissioned by Dan Butler from Techno Mage
+(c) 2022-2024 Lisa-Annette Murray Commissioned by Dan Butler from Techno Mage
 
 ## Summary
 
