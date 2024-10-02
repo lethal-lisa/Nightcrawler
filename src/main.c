@@ -33,7 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 #include <getopt.h>
 
 #include "input.h"
@@ -41,7 +40,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "idprocs.h"
 #include "story.h"
 #include "gamestate.h"
-#include "saveload.h"
 #include "validate.h"
 
 void printHelp (void);
@@ -252,7 +250,7 @@ int main (int argc, char *argv[]) {
 
 		// Process command.
 		static struct parserCmd *pparserCmd;
-		if ((pparserCmd = parserCmd_inWordSet(pszCmdSubstr, strlen(pszCmdSubstr))) == NULL) {
+		if ((pparserCmd = (struct parserCmd *)parserCmd_inWordSet(pszCmdSubstr, strlen(pszCmdSubstr))) == NULL) {
 			fprintf(stderr, "\"%s\" is not a valid command. Try HELP.\n", pszCmdSubstr);
 		} else {
 #ifdef _DEBUG

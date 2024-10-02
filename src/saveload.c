@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h> // access
-#include <ctype.h> // toupper
 
 #include "gamestate.h"
 #include "input.h"

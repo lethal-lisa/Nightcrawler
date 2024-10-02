@@ -134,7 +134,7 @@ int procLook (const char *pszParam) {
 	}
 
 	struct parserCmd *pparserCmd;
-	if ((pparserCmd = parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
+	if ((pparserCmd = (struct parserCmd *)parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
 		fprintf(stderr, "ERROR: Unrecognized keyword \"%s\".\n", pszParam);
 		free(pLook);
 		return 0;
@@ -201,7 +201,7 @@ int procMove (const char *pszParam) {
 	}
 
 	struct parserCmd *pparserCmd;
-	if ((pparserCmd = parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
+	if ((pparserCmd = (struct parserCmd *)parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
 		fprintf(stderr, "ERROR: Unrecognized keyword \"%s\".\n", pszParam);
 		free(pMove);
 		return 0;
