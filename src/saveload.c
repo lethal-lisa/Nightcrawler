@@ -4,27 +4,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h> // access
-#include <ctype.h> // toupper
 
 #include "gamestate.h"
 #include "input.h"
 #include "saveload.h"
 
+// Hard-coded save file name.
 const char *s_pszNcSaveFile = "nightcrawler.sav";
+
+// Hard-coded save game version that THIS version of Nightcrawler is compatible
+// with.
 const uint32_t s_uSaveGameVersion = 1;
 
+// Local structure that defines the layout of the save game data.
 struct l_saveGameData
 {
-	uint32_t uSaveGameVer;
-	uint32_t uCurSceneAddr;
-	uint32_t fStory;
-	uint32_t fItem;
+	uint32_t uSaveGameVer; // Save game version
+	uint32_t uCurSceneAddr; // Address of current scene in loaded file
+	uint32_t fStory; // Current story flags
+	uint32_t fItem; // Current item flags
 } __attribute((packed));
 
 int saveGame (void) {
 
-	FILE *fp;
-	struct l_saveGameData sgd;
+	FILE *fp; // Save file pointer.
+	struct l_saveGameData sgd; // Save game data buffer structure.
 
 	// Prompt user to overwrite if file already exists.
 	if (access(s_pszNcSaveFile, F_OK) == 0) {
@@ -34,6 +38,7 @@ int saveGame (void) {
 		}
 	}
 
+	// Actually open the file.
 	if ((fp = fopen(s_pszNcSaveFile, "w")) == NULL) {
 		perror("Failed to open Nightcrawler save file");
 		return 0;

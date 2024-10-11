@@ -1,6 +1,6 @@
 ; Nightcrawler Example Story File
 ; Assemble with fasm
-; vim:ft=asm:tw=80:ts=4
+; vim:ft=fasm:tw=80
 
 INCLUDE "predefs.def"
 
@@ -19,18 +19,18 @@ dd initScene  ; Initial scene addr.
 
 gameTitle:    ; Game title string.
 db 'Example Nightcrawler Story File', NL
-db '(c)2022-2023 Lethal Lisa, part of the Nightcrawler codebase.', NL, NUL
+db '(c)2022-2024 Lethal Lisa, part of the Nightcrawler codebase.', NL, NUL
 
 gameCreds:    ; Game credits string.
 db "Thank you very much for playing", NL
-db "(c)2022-2023 Lethal Lisa, dedicated to Chloii, my loving partner.", NUL
+db "(c)2022-2024 Lethal Lisa, dedicated to Chloii, my loving partner.", NUL
 
 ;promptStr:    ; Prompt string.
 ;db 'N> ', 0
 
 helpStr:      ; Help string.
 db 'Nightcrawler Example Story File', NL
-db '(c)2022-2023 Lethal Lisa', NL
+db '(c)2022-2024 Lethal Lisa', NL
 db 'This story file contains three scenes used to debug the Nightcrawler engine.', NL, NUL
 
 launchStr:    ; Launch string.

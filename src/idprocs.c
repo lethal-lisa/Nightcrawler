@@ -13,7 +13,13 @@
 #include "idprocs.h"
 
 // Local procs.
+
+// Determine if alternate look text is to be shown.
+// Returns an address of either the normal or alternate string.
 uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr);
+
+// Determine if alternate movement addresses are to be used.
+// Returns an address of either the normal or alternate string.
 uint32_t isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr);
 
 // Process a command based on its ID.
@@ -88,23 +94,22 @@ Command List (case does not matter):\n\
 			break;
 
 		default:
-			fprintf(stderr, "Invalid command ID %d. Try \"HELP\".\n", uId);
+			fprintf(stderr, "ERROR: %s, Invalid command ID %d. Try \"HELP\".\n", __func__, uId);
 			break;
 	}
 
 	return 0;
 }
 
-// Determine if alternate look text is to be shown.
-// Returns an address of either the normal or alternate string.
+// Wraps a ternary that checks for alternate look text results in a Look
+// cluster.
 uint32_t isAltLookTxtAvailable (const scene_LookCluster *pLook, const uint32_t uStrAddr, uint32_t uAltAddr) {
 	return (((pLook->fReqdStory == 0) || (g_pGameState->fStory & pLook->fReqdStory)) &&
 		((pLook->fReqdItem == 0) || (g_pGameState->fItem & pLook->fReqdItem)) &&
 		(uAltAddr != 0)) ? uAltAddr : uStrAddr;
 }
 
-// Determine if alternate movement addresses are to be used.
-// Returns an address of either the normal or alternate string.
+// Wraps a ternary that checks for alternate move locations in a move cluster.
 uint32_t isAltMoveAvailable (const scene_MoveCluster *pMove, const uint32_t uAddr, const uint32_t uAltAddr) {
 	return (((pMove->fReqdStory == 0) || (g_pGameState->fStory & pMove->fReqdStory)) &&
 		((pMove->fReqdItem == 0) || (g_pGameState->fItem & pMove->fReqdItem)) &&
@@ -121,7 +126,7 @@ int procLook (const char *pszParam) {
 
 	// Validate LOK node.
 	if (validLook(pLook) == false) {
-		fprintf(stderr, "ERROR: Invalid LOK node @0x%X.\n", g_pGameState->pScene->uLookClustAddr);
+		fprintf(stderr, "ERROR: %s: Invalid LOK node @0x%X.\n", __func__, g_pGameState->pScene->uLookClustAddr);
 		return 1;
 	}
 
@@ -134,8 +139,8 @@ int procLook (const char *pszParam) {
 	}
 
 	struct parserCmd *pparserCmd;
-	if ((pparserCmd = parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
-		fprintf(stderr, "ERROR: Unrecognized keyword \"%s\".\n", pszParam);
+	if ((pparserCmd = (struct parserCmd *)parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
+		printf("Unrecognized keyword \"%s\".\n", pszParam);
 		free(pLook);
 		return 0;
 	}
@@ -169,13 +174,15 @@ int procLook (const char *pszParam) {
 			break;
 
 		default:
-			fprintf(stderr, "ERROR: Bad directional value.\n");
+			fprintf(stderr, "ERROR: %s: Bad directional value.\n", __func__);
 			free(pLook);
 			return 0;
 	}
 
+	// Display look text.
 	if (printStrFromStory(g_pGameState->fpStory, uStrAddr)) return 1;
 
+	// Cleanup and return.
 	free(pLook);
 	return 0;
 }
@@ -183,7 +190,7 @@ int procLook (const char *pszParam) {
 // Process CI_MOVE.
 int procMove (const char *pszParam) {
 
-	// Print go where if no direction given.
+	// Print "go where" if no direction given.
 	if ((pszParam == NULL) || (strlen(pszParam) == 0)) {
 		puts("Go where?");
 		return 0;
@@ -196,19 +203,23 @@ int procMove (const char *pszParam) {
 
 	// Validate MOV node.
 	if (validMove(pMove) == false) {
-		fprintf(stderr, "ERROR: Invalid MOV node @0x%X.\n", g_pGameState->pScene->uMoveClustAddr);
+		fprintf(stderr, "ERROR: %s: Invalid MOV node @0x%X.\n", __func__, g_pGameState->pScene->uMoveClustAddr);
 		return 1;
 	}
 
+	// Get the direction subcommand.
 	struct parserCmd *pparserCmd;
-	if ((pparserCmd = parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
-		fprintf(stderr, "ERROR: Unrecognized keyword \"%s\".\n", pszParam);
+	if ((pparserCmd = (struct parserCmd *)parserCmd_inWordSet(pszParam, strlen(pszParam))) == 0) {
+		// NOTE: This is not an error and is actually output intended for the
+		// player, but this is the fastest way for this information to be
+		// dispensed.
+		printf("Unrecognized keyword \"%s\".\n", pszParam);
 		free(pMove);
 		return 0;
 	}
 
+	// Get the new scene address
 	uint32_t uNewSceneAddr;
-
 	switch (pparserCmd->uId) {
 		case CI_NORTH:
 			uNewSceneAddr = isAltMoveAvailable(pMove, pMove->uNorthAddr, pMove->uAltNorthAddr);
@@ -227,14 +238,13 @@ int procMove (const char *pszParam) {
 			break;
 
 		default:
-			fprintf(stderr, "ERROR: Bad directional value.\n");
+			fprintf(stderr, "ERROR: %s: Bad directional value.\n", __func__);
 			free(pMove);
 			return 0;
 	}
 
 	// Change scenes.
 	if (uNewSceneAddr != 0) {
-
 		if (procDeath(uNewSceneAddr) || procWin(uNewSceneAddr) || (g_pGameState->nWonLost != GS_NORMAL)) {
 			free(pMove);
 			if (g_pGameState->nWonLost == GS_LOST) return 0;
@@ -276,6 +286,7 @@ int procGet (const char *pszParam) {
 		}
 	}
 
+	// OR the scene's getmask with the player's inventory.
 	g_pGameState->fItem |= g_pGameState->pScene->uGetMask;
 	return 0;
 }
@@ -283,6 +294,8 @@ int procGet (const char *pszParam) {
 // Process CI_USE.
 int procUse (const char *pszParam) {
 
+	// It's a constant string that says "No effect." It's used when an item does
+	// nothing ORZ.
 	const char pszNoEffect[] = "No effect.";
 
 	// Reject with no error if no use cluster.
@@ -291,6 +304,7 @@ int procUse (const char *pszParam) {
 		return 0;
 	}
 
+	// See if the player should die for their actions >:3
 	if (procDeath(g_pGameState->pScene->uUseClustAddr) || procWin(g_pGameState->pScene->uUseClustAddr) || (g_pGameState->nWonLost != GS_NORMAL)) {
 		if (g_pGameState->nWonLost == GS_LOST) return 0;
 		return 1;
@@ -303,13 +317,15 @@ int procUse (const char *pszParam) {
 
 	// Validate USE node.
 	if (validUse(pUse) == false) {
-		fprintf(stderr, "ERROR: Invalid USE node @0x%X.\n", g_pGameState->pScene->uUseClustAddr);
+		fprintf(stderr, "ERROR: %s: Invalid USE node @0x%X.\n", __func__, g_pGameState->pScene->uUseClustAddr);
 		return 1;
 	}
 
+	// See if the player meets the requirements to use the item.
 	if (((pUse->fReqStory == 0) || (pUse->fReqStory & g_pGameState->fStory)) &&
 		((pUse->fReqItems == 0) || (pUse->fReqItems & g_pGameState->fItem))) {
 
+		// Update story and item flags.
 		g_pGameState->fStory |= pUse->fStory;
 		g_pGameState->fItem |= pUse->fItem;
 
@@ -318,9 +334,11 @@ int procUse (const char *pszParam) {
 			free(pUse);
 			return 1;
 		}
+
+		// See if the player should be moved.
 		if (pUse->uMoveAddr != 0) {
 			g_pGameState->uCurSceneAddr = pUse->uMoveAddr;
-				if (reloadScene()) {
+			if (reloadScene()) {
 				free(pUse);
 				return 1;
 			}
@@ -336,9 +354,11 @@ int procUse (const char *pszParam) {
 // Process CI_TALK.
 int procTalk (const char *pszParam) {
 
+	const char *pszNoOneHere = "There is no one here to talk to.";
+
 	// Reject with no error if no talk cluster.
 	if (g_pGameState->pScene->uTalkClustAddr == 0) {
-		puts("There is no one here to talk to.");
+		puts(pszNoOneHere);
 		return 0;
 	}
 
@@ -349,7 +369,7 @@ int procTalk (const char *pszParam) {
 
 	// Validate TLK node.
 	if (validTalk(pTalk) == false) {
-		fprintf(stderr, "ERROR: Invalid TLK node @0x%X.\n", g_pGameState->pScene->uTalkClustAddr);
+		fprintf(stderr, "ERROR: %s: Invalid TLK node @0x%X.\n", __func__, g_pGameState->pScene->uTalkClustAddr);
 		return 1;
 	}
 
@@ -364,7 +384,7 @@ int procTalk (const char *pszParam) {
 		}
 
 	} else {
-		puts("There is no one here to talk to.");
+		puts(pszNoOneHere);
 	}
 
 	free(pTalk);

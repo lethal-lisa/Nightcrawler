@@ -43,7 +43,7 @@ FILE *openStoryFile (char *pszFileName) {
 #ifdef _DEBUG
 		puts("DEBUG: Falling back on default story file.");
 #endif
-		pszFileName = pszDefFileName;
+		pszFileName = (char *)pszDefFileName;
 	}
 
 	// Open the file spec'd by pszFileName.

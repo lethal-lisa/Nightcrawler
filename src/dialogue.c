@@ -3,11 +3,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 
 #include "gamestate.h"
 #include "dialogue.h"
-#include "input.h"
 #include "validate.h"
 
 // Variables for beginOptsMode and error handling.

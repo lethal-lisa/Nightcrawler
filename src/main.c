@@ -1,5 +1,5 @@
 /*
-Copyright 2022-2023 Lethal Lisa
+Copyright 2022-2024 Lethal Lisa
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -28,12 +28,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 // Nightcrawler Engine - Main Module
-// (C) 2022-2023 Lethal Lisa
+// (C) 2022-2024 Lethal Lisa
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 #include <getopt.h>
 
 #include "input.h"
@@ -41,13 +40,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "idprocs.h"
 #include "story.h"
 #include "gamestate.h"
-#include "saveload.h"
 #include "validate.h"
 
+// Prints out the Nightcrawler help.
 void printHelp (void);
+
+// Prints out the Nightcrawler build info including compiler version, target OS,
+// build type and date.
 void printBuildInfo (void);
+
+// Prints out the BSD 3-clause license.
 void printLicense (void);
 
+// Program entry point.
 int main (int argc, char *argv[]) {
 
 	// Vars used for story file name.
@@ -97,7 +102,7 @@ int main (int argc, char *argv[]) {
 					}
 
 				case 'h': // Print out help.
-					printf("Nightcrawler Text Adventure Engine\n(c) 2022-2023 Lisa-Annette Murray.\nUsage: %s [OPTIONS] ...\n", argv[0]);
+					printf("Nightcrawler Text Adventure Engine\n(c) 2022-2024 Lethal Lisa.\nUsage: %s [OPTIONS] ...\n", argv[0]);
 					printHelp();
 					if (pszStoryFileName) free(pszStoryFileName);
 					return 0;
@@ -252,7 +257,7 @@ int main (int argc, char *argv[]) {
 
 		// Process command.
 		static struct parserCmd *pparserCmd;
-		if ((pparserCmd = parserCmd_inWordSet(pszCmdSubstr, strlen(pszCmdSubstr))) == NULL) {
+		if ((pparserCmd = (struct parserCmd *)parserCmd_inWordSet(pszCmdSubstr, strlen(pszCmdSubstr))) == NULL) {
 			fprintf(stderr, "\"%s\" is not a valid command. Try HELP.\n", pszCmdSubstr);
 		} else {
 #ifdef _DEBUG
@@ -345,7 +350,7 @@ void printBuildInfo (void) {
 void printLicense (void) {
 
 	puts("Nightcrawler Text Adventure Engine\n\
-Copyright 2022-2023 Lisa-Annette Murray\n\
+Copyright 2022-2024 Lethal Lisa\n\
 \n\
 Redistribution and use in source and binary forms, with or without\n\
 modification, are permitted provided that the following conditions are met:\n\
