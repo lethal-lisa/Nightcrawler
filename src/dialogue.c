@@ -20,8 +20,15 @@ struct optsModeData
 };
 
 // Local procs:
+
+// Basic cleanup proc for optsModeData.
 void killOptsData (struct optsModeData *pOptsData);
+
+// Enters the loop where the engine is asking for user input based on dialogue
+// options.
 int beginOptsMode (const uint32_t uDolAddr);
+
+// Grabs an unsigned integer from the user.
 int promptUserForOpt (unsigned int *puUserInput);
 
 int beginDialogue (const uint32_t uDiaAddr) {
@@ -33,7 +40,7 @@ int beginDialogue (const uint32_t uDiaAddr) {
 
 	// Validate DIA node.
 	if (validDia(pDia) == false) {
-		fprintf(stderr, "ERROR: Invalid DIA node @0x%X.\n", uDiaAddr);
+		fprintf(stderr, "ERROR: %s: Invalid DIA node @0x%X.\n", __func__, uDiaAddr);
 		return 1;
 	}
 
@@ -68,11 +75,11 @@ int beginDialogue (const uint32_t uDiaAddr) {
 		}
 	}
 
+	// Cleanup and return.
 	free(pDia);
 	return 0;
 }
 
-// Destroy an optsModeData struct.
 void killOptsData (struct optsModeData *pOptsData) {
 #ifdef _DEBUG
 	puts("DEBUG: Called killOptsData.");
@@ -87,8 +94,10 @@ void killOptsData (struct optsModeData *pOptsData) {
 	}
 }
 
-// Enter opts mode.
 int beginOptsMode(const uint32_t uDolAddr) {
+
+	// BUG: There is a memory leak somewhere in this routine, I believe. Someday
+	// I will profile it out... Maybe.
 
 	struct optsModeData optsData;
 
@@ -98,7 +107,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 
 	// Validate DOL node.
 	if (validDol(optsData.pDol) == false) {
-		fprintf(stderr, "ERROR: Invalid DOL node @0x%X.\n", uDolAddr);
+		fprintf(stderr, "ERROR: %s: Invalid DOL node @0x%X.\n", __func__, uDolAddr);
 		return 1;
 	}
 
@@ -106,7 +115,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	// NOTE: This technically means the story file is invalid, but there is no
 	// reason to treat this as a fatal error.
 	if (optsData.pDol->cOpts == 0) {
-		fprintf(stderr, "WARN: Ignoring DOL node with no entries.\n");
+		fprintf(stderr, "WARN: %s: Ignoring DOL node with no entries.\n", __func__);
 		killOptsData(&optsData);
 		return 0;
 	}
@@ -119,7 +128,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 
 	// Read in OPT node addresses.
 #ifdef _DEBUG
-	printf("DEBUG: Beginning reading addresses from 0x%lX.\n", ftell(g_pGameState->fpStory));
+	printf("DEBUG: %s: Beginning reading addresses from 0x%lX.\n", __func__, ftell(g_pGameState->fpStory));
 #endif
 	size_t cAddrsRead;
 	cAddrsRead = fread(&optsData.puOptAddrs[0], sizeof(uint32_t), optsData.pDol->cOpts, g_pGameState->fpStory);
@@ -145,7 +154,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 	optsData.cOptsLoaded = 0;
 	for (int iOpt = 0; iOpt < optsData.pDol->cOpts; iOpt++) {
 #ifdef _DEBUG
-		printf("DEBUG: Loading option #%d from 0x%X.\n", iOpt, optsData.puOptAddrs[iOpt]);
+		printf("DEBUG: %s: Loading option #%d from 0x%X.\n", __func__, iOpt, optsData.puOptAddrs[iOpt]);
 #endif
 		optsData.ppOpt[iOpt] = loadNode(g_pGameState->fpStory, optsData.puOptAddrs[iOpt], NT_OPT);
 		if (optsData.ppOpt[iOpt] == NULL) {
@@ -156,23 +165,33 @@ int beginOptsMode(const uint32_t uDolAddr) {
 
 		// Validate OPT node.
 		if (validOpt(optsData.ppOpt[iOpt]) == false) {
-			fprintf(stderr, "ERROR: Invalid OPT node @0x%X.\n", optsData.puOptAddrs[iOpt]);
+			fprintf(stderr, "ERROR: %s: Invalid OPT node @0x%X.\n", __func__, optsData.puOptAddrs[iOpt]);
 			return 1;
 		}
 
 		// Print out each string.
 		if (((optsData.ppOpt[iOpt]->fReqStory == 0) || (optsData.ppOpt[iOpt]->fReqStory & g_pGameState->fStory)) &&
 			((optsData.ppOpt[iOpt]->fReqItems == 0) || (optsData.ppOpt[iOpt]->fReqItems & g_pGameState->fItem))) {
+
+			// Print a leading number like "0:"
 			printf("\t%d: ", iOpt);
+
+			// Append the actual string.
 			if (printStrFromStory(g_pGameState->fpStory, optsData.ppOpt[iOpt]->uTextAddr)) {
 				killOptsData(&optsData);
 				return 1;
 			}
+
+			// Turn the option selectable bool on.
 			optsData.pbSelectable[iOpt] = true;
 		}
 	}
 
-	unsigned int uUserInput;
+	unsigned int uUserInput; // Value gotten from `promptUserForOpt`.
+	const char *pszInvalidSel = "Invalid selection."; // Constant string for
+													  // invalid selections for
+													  // selections are
+													  // invalid. :D
 	while (1) {
 
 		// Get user input.
@@ -182,12 +201,12 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		}
 
 #ifdef _DEBUG
-		printf("DEBUG: Selected %d.\n", uUserInput);
+		printf("DEBUG: %s: Selected %d.\n", __func__, uUserInput);
 #endif
 
 		// Try again if invalid selection.
 		if ((uUserInput > (optsData.pDol->cOpts - 1)) || (uUserInput < 0) || (optsData.pbSelectable[uUserInput] == false)) {
-			puts("Invalid selection.");
+			puts(pszInvalidSel);
 			continue;
 		}
 
@@ -198,14 +217,15 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		// Try again if requirements not met.
 		if (!((optsData.ppOpt[uUserInput]->fReqStory == 0) || (optsData.ppOpt[uUserInput]->fReqStory & g_pGameState->fStory)) &&
 			!((optsData.ppOpt[uUserInput]->fReqItems == 0) || (optsData.ppOpt[uUserInput]->fReqItems & g_pGameState->fItem))) {
-			puts("Invalid selection.");
+			puts(pszInvalidSel);
 			continue;
 		}
 
 		break;
 	}
 
-	// Act on desired opt node.
+	// Act on desired opt node by processing for win or death and then checking
+	// game state using logical OR operators.
 	if (procDeath(optsData.ppOpt[uUserInput]->uDiaAddr) || procWin(optsData.ppOpt[uUserInput]->uDiaAddr) || (g_pGameState->nWonLost != GS_NORMAL)) {
 		killOptsData(&optsData);
 		if (g_pGameState->nWonLost == GS_LOST) return 0;
@@ -231,6 +251,7 @@ int beginOptsMode(const uint32_t uDolAddr) {
 		}
 	}
 
+	// Cleanup and return.
 	killOptsData(&optsData);
 	return 0;
 }

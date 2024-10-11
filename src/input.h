@@ -13,7 +13,10 @@
 // This serves to implement getline and getdelim on platforms that
 // normally don't support them and wrap them on platforms that do.
 
+// Wrapper for getdelim on Linux, and custom implementation on Windows.
 ssize_t wingetdelim (char **lineptr, size_t *n, int delim, FILE *stream);
+
+// Wrapper for getline on Linux, and custom implementation on Windows.
 ssize_t wingetline (char **lineptr, size_t *n, FILE *stream);
 
 // Gets the user's choice as an unsigned integer.

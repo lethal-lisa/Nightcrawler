@@ -9,10 +9,12 @@
 #include "input.h"
 #include "story.h"
 
+// Local structure that holds magic data<->node size associations for
+// `loadNode`.
 struct nodeMagicData
 {
-	const char szMagic[4];
-	const size_t cbNode;
+	const char szMagic[4]; // Buffer that holds the four-byte magic identifier.
+	const size_t cbNode; // Size of the node in bytes.
 };
 
 const static struct nodeMagicData s_magicData[] = {
@@ -66,6 +68,7 @@ int closeStoryFile (FILE *fp) {
 	return 0;
 }
 
+// Loads a node from a story file.
 // NOTE: Be extra sure you know what you're doing before you start playing
 // around with this one. This function can return an arbitrary pointer if
 // something goes wrong.
@@ -84,6 +87,7 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 	size_t cbNode; // Size of node.
 	void *pNode; // Node pointer.
 
+	// Get size of node by associative array.
 	cbNode = s_magicData[nodeType].cbNode;
 
 	// Allocate space for the node.
@@ -144,21 +148,22 @@ int printStrFromStory (FILE *fpStory, const int strAddr) {
 		return 1;
 	}
 
+	// Sanity check string address.
 	if (strAddr == 0) {
 		fprintf(stderr, "ERROR: %s: Invalid string address.\n", __func__);
 		return 1;
 	}
 
-	char *pszString = NULL;
-	size_t cchString;
-	size_t cNewLines = 0;
+	char *pszString = NULL; // String buffer, initialize to NULL.
+	size_t cchString; // Size of string buffer in chars.
+	size_t cNewLines = 0; // Count of newlines
 
 	if (loadStrFromStory(fpStory, strAddr, &cchString, &pszString)) {
 		fprintf(stderr, "ERROR: %s: Unable to load string.\n", __func__);
 		return 1;
 	}
 
-	// Write string out to stdout.
+	// Write string out to stdout; breaking every MAX_DISPLAYED_LINES.
 	//puts(pszString);
 	for (size_t iChar = 0; iChar < cchString; iChar++) {
 		if (pszString[iChar] == '\0') break;
@@ -170,8 +175,13 @@ int printStrFromStory (FILE *fpStory, const int strAddr) {
 		}
 		putchar(pszString[iChar]);
 	}
-	putchar('\n');
-	free(pszString);
 
+	// Put trailing newline to replicate behavior of `puts()` as used in prior
+	// versions of Nightcrawler.
+	putchar('\n');
+
+	// Cleanup string buffer and return successfully.
+	memset(pszString, 0, cchString);
+	free(pszString);
 	return 0;
 }

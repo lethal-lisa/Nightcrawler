@@ -1,5 +1,5 @@
 #+title: Nightcrawler Story File (NST) Editor
-#+author: Lisa Murray
+#+author: Lethal Lisa
 #+date: [2022-11-16 Wed]
 #+options: num:nil toc:nil
 

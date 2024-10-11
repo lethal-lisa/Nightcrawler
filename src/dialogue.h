@@ -6,6 +6,7 @@
 
 #include <stdint.h>
 
+// Enters the dialogue subsystem.
 int beginDialogue (const uint32_t uDiaAddr);
 
 #endif /* DIALOGUE_H_ */

@@ -6,7 +6,10 @@
 
 #include <stdint.h>
 
+// Saves the game state to a file.
 int saveGame (void);
+
+// Loads the game state from a file.
 int loadGame (void);
 
 #endif /* SAVELOAD_H_ */

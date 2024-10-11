@@ -1,5 +1,5 @@
 - "Nightcrawler" Engine Pitch -
-2022-09-22 Lisa-Annette Murray
+2022-09-22 Lethal Lisa
 
 A simplistic text-adventure engine designed primarily to fit within a
 miniscule binary footprint (i.e. a floppy disk). Key features to follow.
