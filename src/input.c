@@ -13,6 +13,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <stdint.h>
@@ -95,12 +96,12 @@ int promptUserForOpt (unsigned int *puUserInput) {
 		printf("Select an option: ");
 		if (wingetline(&pszUserInput, &cchUserInput, stdin) == -1) {
 			if (feof(stdin)) {
-				fprintf(stderr, "ERROR: Encountered EOF.\n");
+				fprintf(stderr, "ERROR: %s: Encountered EOF.\n", __func__);
 				free(pszUserInput);
 				return 1;
 			}
 			if (ferror(stdin)) {
-				fprintf(stderr, "ERROR: Standard input error. Try again.\n");
+				fprintf(stderr, "ERROR: %s: Standard input error. Try again.\n", __func__);
 				free(pszUserInput);
 				clearerr(stdin);
 				continue;
@@ -115,7 +116,8 @@ int promptUserForOpt (unsigned int *puUserInput) {
 		errno = 0;
 		*puUserInput = strtoul(pszUserInput, &endptr, 10);
 		if (errno != 0) {
-			perror("Unable to convert user input.");
+			//perror("Unable to convert user input.");
+			fprintf(stderr, "ERROR: %s: Unable to convert user input: %s\n", __func__, strerror(errno));
 			free(pszUserInput);
 			return 1;
 		}

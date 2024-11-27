@@ -77,7 +77,7 @@ int reloadScene (void) {
 
 	// Validate new scene.
 	if (validNsc(g_pGameState->pScene) == false) {
-		fprintf(stderr, "ERROR: Invalid NSC node @0x%X.\n", g_pGameState->uCurSceneAddr);
+		fprintf(stderr, "ERROR: %s: Invalid NSC node @0x%X.\n", __func__, g_pGameState->uCurSceneAddr);
 		return 1;
 	}
 
@@ -118,7 +118,7 @@ int procDeath (const int nodeAddr) {
 
 	// Seek to the specified offset in the file.
 	if (fseek(g_pGameState->fpStory, nodeAddr, SEEK_SET)) {
-		perror("ERROR: procDeath: fseek fail.");
+		fprintf(stderr, "ERROR: %s: fseek fail: %s", __func__, strerror(errno));
 		return 1;
 	}
 
@@ -139,7 +139,7 @@ int procDeath (const int nodeAddr) {
 
 	// Validate DTH node.
 	if (validDth(pDth) == false) {
-		fprintf(stderr, "ERROR: Invalid DTH node @0x%X.\n", nodeAddr);
+		fprintf(stderr, "ERROR: %s: Invalid DTH node @0x%X.\n", __func__, nodeAddr);
 		return 1;
 	}
 
@@ -159,7 +159,7 @@ int procWin (const int nodeAddr) {
 
 	// Seek to the specified offset in the file.
 	if (fseek(g_pGameState->fpStory, nodeAddr, SEEK_SET)) {
-		perror("ERROR: procWin: fseek fail.");
+		fprintf(stderr, "ERROR: %s: fseek fail: %s", __func__, strerror(errno));
 		return 1;
 	}
 
@@ -180,7 +180,7 @@ int procWin (const int nodeAddr) {
 
 	// Validate WIN node.
 	if (validWin(pWin) == false) {
-		fprintf(stderr, "ERROR: Invalid WIN node @0x%X.\n", nodeAddr);
+		fprintf(stderr, "ERROR: %s: Invalid WIN node @0x%X.\n", __func__, nodeAddr);
 		return 1;
 	}
 
@@ -207,7 +207,7 @@ int getStrsFromStoryFile () {
 	} else {
 		// Use default string if none specified.
 		if ((g_pGameState->pszPromptString = malloc(strlen(pszDefPrompt) + 1)) == NULL) {
-			perror("Failed to allocate space for prompt string");
+			fprintf(stderr, "ERROR: %s: Failed to allocate space for prompt string: %s\n", __func__, strerror(errno));
 			return 1;
 		}
 		strcpy(g_pGameState->pszPromptString, pszDefPrompt);
@@ -229,7 +229,7 @@ int getStrsFromStoryFile () {
 #endif
 
 		if (fseek(g_pGameState->fpStory, g_pGameState->pStory->uItemNameAddr, SEEK_SET)) {
-			perror("Unable to seek to item names.");
+			fprintf(stderr, "ERROR: %s: Failed to seek to item names: %s\n", __func__, strerror(errno));
 			return 1;
 		}
 
@@ -237,7 +237,7 @@ int getStrsFromStoryFile () {
 		g_pGameState->pcchItemName = calloc(g_pGameState->pStory->cItems, sizeof(size_t));
 		g_pGameState->ppszItemName = calloc(g_pGameState->pStory->cItems, sizeof(char *));
 		if ((g_pGameState->pcchItemName == NULL) || (g_pGameState->ppszItemName == NULL)) {
-			perror("Failed to allocate space for item names");
+			fprintf(stderr, "ERROR: %s: Failed to allocate space for item names: %s\n", __func__, strerror(errno));
 			return 1;
 		}
 

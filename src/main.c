@@ -30,6 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Nightcrawler Engine - Main Module
 // (C) 2022-2024 Lethal Lisa
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -115,26 +116,27 @@ int main (int argc, char *argv[]) {
 					// This is determined by "X.nst", or any character as well
 					// as the file extension.
 					if ((cchStoryFileName = strlen(optarg)) < 5) {
-						fprintf(stderr, "ERROR: Invalid file: File name too short.\n");
+						fprintf(stderr, "ERROR: %s: Invalid file: File name too short.\n", __func__);
 						exit(EXIT_FAILURE);
 					}
 
 					// Allocate space for the name.
 					if ((pszStoryFileName = malloc(cchStoryFileName * sizeof(char))) == NULL) {
-						perror("Failed to obtain file name: malloc");
+						fprintf(stderr, "ERROR: %s: Failed create space for file name: %s\n", __func__, strerror(errno));
 						exit(EXIT_FAILURE);
 					}
 
 					// Copy the name into the allocated buffer.
 					if (!strncpy(pszStoryFileName, optarg, cchStoryFileName)) {
-						perror("Failed to obtain file name: strncpy");
+						//perror("Failed to obtain file name: strncpy");
+						fprintf(stderr, "ERROR: %s: Failed to copy string: %s\n", __func__, strerror(errno));
 						free(pszStoryFileName);
 						exit(EXIT_FAILURE);
 					}
 					break;
 
 				default:
-					fprintf(stderr, "Error: Unhandled getopt result (%d).\n", nOpt);
+					fprintf(stderr, "ERROR: %s: Unhandled getopt result (%d).\n", __func__, nOpt);
 					if (pszStoryFileName) free(pszStoryFileName);
 					return 1;
 					break;
@@ -163,7 +165,7 @@ int main (int argc, char *argv[]) {
 
 	// Validate NST header.
 	if (validNst(g_pGameState->pStory) == false) {
-		fprintf(stderr, "ERROR: Invalid NST node!\n");
+		fprintf(stderr, "ERROR: %s: Invalid NST node!\n", __func__);
 		killGameState();
 		exit(EXIT_FAILURE);
 	}
@@ -171,7 +173,7 @@ int main (int argc, char *argv[]) {
 	// Display launch string.
 	if (g_pGameState->pStory->uLaunchStrAddr) {
 		if (printStrFromStory(g_pGameState->fpStory, g_pGameState->pStory->uLaunchStrAddr)) {
-			fprintf(stderr, "ERROR: Could not print launch string.\n");
+			fprintf(stderr, "ERROR: %s: Could not print launch string.\n", __func__);
 			killGameState();
 			exit(EXIT_FAILURE);
 		}
@@ -201,7 +203,7 @@ int main (int argc, char *argv[]) {
 
 	// Validate initial scene.
 	if (validNsc(g_pGameState->pScene) == false) {
-		fprintf(stderr, "ERROR: Invalid initial NSC node @0x%X.\n", g_pGameState->pStory->uInitSceneAddr);
+		fprintf(stderr, "ERROR: %s: Invalid initial NSC node @0x%X.\n", __func__, g_pGameState->pStory->uInitSceneAddr);
 		killGameState();
 		exit(EXIT_FAILURE);
 	}
@@ -213,8 +215,8 @@ int main (int argc, char *argv[]) {
 
 	// Main game loop.
 	while (1) {
-		static char *pszUserInput; // Buffer for user input.
-		static size_t cchUserInput; // Bytes allocated by getline.
+		static char *pszUserInput;      // Buffer for user input.
+		static size_t cchUserInput;     // Bytes allocated by getline.
 		static ssize_t cbReadUserInput; // Bytes read from user.
 
 		// (re)initialize the user input buffer to NULL (free()'d at end-of-loop).
@@ -225,17 +227,18 @@ int main (int argc, char *argv[]) {
 		cbReadUserInput = wingetline(&pszUserInput, &cchUserInput, stdin);
 		if (cbReadUserInput == -1) {
 			if (feof(stdin)) {
-				fprintf(stderr, "ERROR: Exiting due to EOF character.\n");
+				fprintf(stderr, "ERROR: %s: Exiting due to EOF character.\n", __func__);
 				free(pszUserInput);
 				break;
 			}
 			if (ferror(stdin)) {
-				fprintf(stderr, "ERROR: Standard input error. Try again.\n");
+				fprintf(stderr, "ERROR: %s: Standard input error. Try again.\n", __func__);
 				clearerr(stdin);
 				free(pszUserInput);
 				continue;
 			}
 		}
+
 #ifdef _DEBUG
 		printf("DEBUG: Allocated %zu chars & read %zu bytes from user: \"%s\".\n", cchUserInput, cbReadUserInput, pszUserInput);
 #endif
@@ -245,6 +248,7 @@ int main (int argc, char *argv[]) {
 		static char *pszParamSubstr; // Buffer for an optional parameter.
 		pszCmdSubstr = strtok(pszUserInput, " \t\n");
 		pszParamSubstr = strtok(NULL, "\t\n");
+
 #ifdef _DEBUG
 		printf("DEBUG: CmdSubstr: \"%s\", ParamSubstr: \"%s\".\n", pszCmdSubstr, pszParamSubstr);
 #endif
@@ -258,7 +262,7 @@ int main (int argc, char *argv[]) {
 		// Process command.
 		static struct parserCmd *pparserCmd;
 		if ((pparserCmd = (struct parserCmd *)parserCmd_inWordSet(pszCmdSubstr, strlen(pszCmdSubstr))) == NULL) {
-			fprintf(stderr, "\"%s\" is not a valid command. Try HELP.\n", pszCmdSubstr);
+			printf("\"%s\" is not a valid command. Try HELP.\n", pszCmdSubstr);
 		} else {
 #ifdef _DEBUG
 			printf("DEBUG: Selected \"%s\" (ID: %d).\n", pparserCmd->name, pparserCmd->uId);

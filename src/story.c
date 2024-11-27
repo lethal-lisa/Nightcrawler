@@ -50,7 +50,7 @@ FILE *openStoryFile (char *pszFileName) {
 
 	// Open the file spec'd by pszFileName.
 	if ((fp = fopen(pszFileName, "rb")) == NULL) {
-		perror("Failed to open story file");
+		fprintf(stderr, "ERROR: %s: Failed to open story file: %s\n", __func__, strerror(errno));
 		return NULL;
 	}
 
@@ -61,7 +61,7 @@ FILE *openStoryFile (char *pszFileName) {
 int closeStoryFile (FILE *fp) {
 
 	if (fclose(fp) != 0) {
-		perror("Failed to close story file");
+		fprintf(stderr, "ERROR: %s: Failed to close story file: %s\n", __func__, strerror(errno));
 		return 1;
 	}
 
@@ -92,13 +92,13 @@ void *loadNode (FILE *fpStory, const int nodeAddr, const int nodeType) {
 
 	// Allocate space for the node.
 	if ((pNode = malloc(cbNode)) == NULL) {
-		perror("ERROR: loadNode: malloc fail.");
+		fprintf(stderr, "ERROR: %s: Failed to allocate space for the node: %s\n", __func__, strerror(errno));
 		return NULL;
 	}
 
 	// Seek to the specified offset in the file.
 	if (fseek(fpStory, nodeAddr, SEEK_SET)) {
-		perror("ERROR: loadNode: fseek fail.");
+		fprintf(stderr, "ERROR: %s: Failed to seek to node position 0x%X: %s\n", __func__, nodeAddr, strerror(errno));
 		return NULL;
 	}
 
@@ -127,13 +127,13 @@ int loadStrFromStory (FILE *fpStory, const int nStrAddr, size_t *pcchStr, char *
 #endif
 
 	if (fseek(fpStory, nStrAddr, SEEK_SET)) {
-		perror("Failed seeking while trying to load a string");
+		fprintf(stderr, "ERROR: %s: Failed to seek to the string start: %s\n", __func__, strerror(errno));
 		return 1;
 	}
 
 	if (wingetdelim(ppszStr, pcchStr, '\0', fpStory) == -1) {
 		if (ferror(fpStory)) fprintf(stderr, "ERROR: %s: Error reading string: %s.\n", __func__, strerror(errno));
-		if (feof(fpStory)) fprintf(stderr, "WARN: %s: Error reading string: End of file reached.\n", __func__);
+		if (feof(fpStory)) fprintf(stderr, "ERROR: %s: Error reading string: End of file reached.\n", __func__);
 		return 1;
 	}
 

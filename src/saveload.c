@@ -1,8 +1,10 @@
 
 // Nightcrawler Engine - Save/Load module.
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h> // access
 
 #include "gamestate.h"
@@ -40,7 +42,7 @@ int saveGame (void) {
 
 	// Actually open the file.
 	if ((fp = fopen(s_pszNcSaveFile, "w")) == NULL) {
-		perror("Failed to open Nightcrawler save file");
+		fprintf(stderr, "ERROR: %s: Failed to open Nightcrawler save file: %s\n", __func__, strerror(errno));
 		return 0;
 	}
 
@@ -56,7 +58,10 @@ int saveGame (void) {
 		return 1;
 	}
 
-	fclose(fp);
+	if (fclose(fp) != 0) {
+		fprintf(stderr, "ERROR: %s: Failed to close/flush Nightcrawler save file: %s\n", __func__, strerror(errno));
+		return 1;
+	}
 
 	puts("Save successful...");
 
@@ -69,7 +74,7 @@ int loadGame (void) {
 	struct l_saveGameData sgd;
 
 	if ((fp = fopen(s_pszNcSaveFile, "r")) == NULL) {
-		perror("Failed to open Nightcrawler save file");
+		fprintf(stderr, "ERROR: %s: Failed to open Nightcrawler save file: %s\n", __func__, strerror(errno));
 		return 0;
 	}
 
@@ -83,7 +88,7 @@ int loadGame (void) {
 
 	// Verify save file version.
 	if (sgd.uSaveGameVer != s_uSaveGameVersion) {
-		fprintf(stderr, "ERROR: Save game is for a different version of Nightcrawler!\nThis version expects 0x%X\n", s_uSaveGameVersion);
+		fprintf(stderr, "ERROR: %s: Save game is for a different version of Nightcrawler!\nThis version expects 0x%X\n", __func__, s_uSaveGameVersion);
 		return 1;
 	}
 
