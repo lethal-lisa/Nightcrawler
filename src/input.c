@@ -116,7 +116,6 @@ int promptUserForOpt (unsigned int *puUserInput) {
 		errno = 0;
 		*puUserInput = strtoul(pszUserInput, &endptr, 10);
 		if (errno != 0) {
-			//perror("Unable to convert user input.");
 			fprintf(stderr, "ERROR: %s: Unable to convert user input: %s\n", __func__, strerror(errno));
 			free(pszUserInput);
 			return 1;

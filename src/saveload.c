@@ -84,7 +84,10 @@ int loadGame (void) {
 		return 1;
 	}
 
-	fclose(fp);
+	if (fclose(fp) != 0) {
+		fprintf(stderr, "ERROR: %s: Failed to close Nightcrawler save file: %s\n", __func__, strerror(errno));
+		return 1;
+	}
 
 	// Verify save file version.
 	if (sgd.uSaveGameVer != s_uSaveGameVersion) {
